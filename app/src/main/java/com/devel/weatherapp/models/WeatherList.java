@@ -21,47 +21,46 @@ public class WeatherList {
 
     @SerializedName("dt")
     @Expose
-    @ColumnInfo(name ="date")
+    @ColumnInfo(name = "date")
     private Long dt;
 
     @SerializedName("main")
     @Expose
-    @ColumnInfo(name ="main")
+    @ColumnInfo(name = "main")
     @Embedded
     private Main main;
 
     @SerializedName("weather")
     @Expose
-    @ColumnInfo(name ="weather")
+    @ColumnInfo(name = "weather")
     @TypeConverters(ListConverter.class)
     private List<Weather> results;
 
     @SerializedName("clouds")
     @Expose
-    @ColumnInfo(name ="clouds")
+    @ColumnInfo(name = "clouds")
     @Embedded
     private Clouds clouds;
 
     @SerializedName("wind")
     @Expose
-    @ColumnInfo(name ="wind")
+    @ColumnInfo(name = "wind")
     @Embedded
     private Wind wind;
 
     @SerializedName("sys")
     @Expose
-    @ColumnInfo(name ="sys")
+    @ColumnInfo(name = "sys")
     @Embedded
     private Sys sys;
 
     @SerializedName("dt_txt")
     @Expose
-    @ColumnInfo(name ="dtTxt")
+    @ColumnInfo(name = "dtTxt")
     private String dtTxt;
 
     /**
      * No args constructor for use in serialization
-     *
      */
     @Ignore
     public WeatherList() {

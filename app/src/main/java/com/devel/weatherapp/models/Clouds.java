@@ -16,7 +16,7 @@ public class Clouds {
 
     @SerializedName("all")
     @Expose
-    @ColumnInfo(name ="all")
+    @ColumnInfo(name = "all")
     private int all;
 
     @Ignore

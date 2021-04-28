@@ -16,12 +16,12 @@ public class Coord {
 
     @SerializedName("lon")
     @Expose
-    @ColumnInfo(name ="lon")
+    @ColumnInfo(name = "lon")
     private double lon;
 
     @SerializedName("lat")
     @Expose
-    @ColumnInfo(name ="lat")
+    @ColumnInfo(name = "lat")
     private double lat;
 
     @Ignore

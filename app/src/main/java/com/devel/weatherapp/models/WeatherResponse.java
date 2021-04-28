@@ -22,22 +22,22 @@ public class WeatherResponse {
 
     @SerializedName("cod")
     @Expose
-    @ColumnInfo(name ="cod")
+    @ColumnInfo(name = "cod")
     private String cod;
 
     @SerializedName("message")
     @Expose
-    @ColumnInfo(name ="message")
+    @ColumnInfo(name = "message")
     private Long message;
 
     @SerializedName("cnt")
     @Expose
-    @ColumnInfo(name ="cnt")
+    @ColumnInfo(name = "cnt")
     private Long cnt;
 
     @SerializedName("list")
     @Expose
-    @ColumnInfo(name ="list")
+    @ColumnInfo(name = "list")
     @TypeConverters(ListConverter.class)
     private List<WeatherList> results;
 
@@ -46,13 +46,12 @@ public class WeatherResponse {
     @Embedded
     private City city;
 
-    @ColumnInfo(name ="timestamp")
+    @ColumnInfo(name = "timestamp")
     private int timestamp;
 
 
     /**
      * No args constructor for use in serialization
-     *
      */
     @Ignore
     public WeatherResponse() {
@@ -67,7 +66,6 @@ public class WeatherResponse {
         this.city = city;
         this.timestamp = timestamp;
     }
-
 
 
     public String getCod() {

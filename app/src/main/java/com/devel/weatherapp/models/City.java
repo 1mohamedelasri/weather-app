@@ -19,7 +19,7 @@ public class City {
 
     @SerializedName("name")
     @Expose
-    @ColumnInfo(name ="name")
+    @ColumnInfo(name = "name")
     private String name;
 
     @SerializedName("coord")
@@ -29,33 +29,31 @@ public class City {
 
     @SerializedName("country")
     @Expose
-    @ColumnInfo(name ="country")
+    @ColumnInfo(name = "country")
     private String country;
 
     @SerializedName("timezone")
     @Expose
-    @ColumnInfo(name ="timezone")
+    @ColumnInfo(name = "timezone")
     private Long timezone;
 
     @SerializedName("sunrise")
     @Expose
-    @ColumnInfo(name ="sunrise")
+    @ColumnInfo(name = "sunrise")
     private Long sunrise;
 
     @SerializedName("sunset")
     @Expose
-    @ColumnInfo(name ="sunset")
+    @ColumnInfo(name = "sunset")
     private Long sunset;
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public City() {
     }
 
     /**
-     *
      * @param country
      * @param coord
      * @param sunrise

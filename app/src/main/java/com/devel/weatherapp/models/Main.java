@@ -16,59 +16,57 @@ public class Main {
 
     @SerializedName("temp")
     @Expose
-    @ColumnInfo(name ="temp")
+    @ColumnInfo(name = "temp")
     private Double temp;
 
     @SerializedName("feels_like")
     @Expose
-    @ColumnInfo(name ="feelsLike")
+    @ColumnInfo(name = "feelsLike")
     private Double feelsLike;
 
     @SerializedName("temp_min")
     @Expose
-    @ColumnInfo(name ="tempMin")
+    @ColumnInfo(name = "tempMin")
     private Double tempMin;
 
     @SerializedName("temp_max")
     @Expose
-    @ColumnInfo(name ="tempMax")
+    @ColumnInfo(name = "tempMax")
     private Double tempMax;
 
     @SerializedName("pressure")
     @Expose
-    @ColumnInfo(name ="pressure")
+    @ColumnInfo(name = "pressure")
     private Long pressure;
 
     @SerializedName("sea_level")
     @Expose
-    @ColumnInfo(name ="seaLevel")
+    @ColumnInfo(name = "seaLevel")
     private Long seaLevel;
 
     @SerializedName("grnd_level")
     @Expose
-    @ColumnInfo(name ="grndLevel")
+    @ColumnInfo(name = "grndLevel")
     private Long grndLevel;
 
     @SerializedName("humidity")
     @Expose
-    @ColumnInfo(name ="humidity")
+    @ColumnInfo(name = "humidity")
     private Long humidity;
 
     @SerializedName("temp_kf")
     @Expose
-    @ColumnInfo(name ="tempKf")
+    @ColumnInfo(name = "tempKf")
     private Double tempKf;
 
     /**
      * No args constructor for use in serialization
-     *
      */
     @Ignore
     public Main() {
     }
 
     /**
-     *
      * @param feelsLike
      * @param tempMax
      * @param temp
@@ -171,7 +169,6 @@ public class Main {
     public void setTempKf(Double tempKf) {
         this.tempKf = tempKf;
     }
-
 
 
     @Override

@@ -18,17 +18,17 @@ public class Weather {
 
     @SerializedName("main")
     @Expose
-    @ColumnInfo(name ="main")
+    @ColumnInfo(name = "main")
     private String main;
 
     @SerializedName("description")
     @Expose
-    @ColumnInfo(name ="description")
+    @ColumnInfo(name = "description")
     private String description;
 
     @SerializedName("icon")
     @Expose
-    @ColumnInfo(name ="icon")
+    @ColumnInfo(name = "icon")
     private String icon;
 
     @Ignore

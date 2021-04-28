@@ -10,24 +10,22 @@ public class Wind {
 
     @SerializedName("speed")
     @Expose
-    @ColumnInfo(name ="speed")
+    @ColumnInfo(name = "speed")
     private Double speed;
 
     @SerializedName("deg")
     @Expose
-    @ColumnInfo(name ="deg")
+    @ColumnInfo(name = "deg")
     private Long deg;
 
     /**
      * No args constructor for use in serialization
-     *
      */
     @Ignore
     public Wind() {
     }
 
     /**
-     *
      * @param deg
      * @param speed
      */

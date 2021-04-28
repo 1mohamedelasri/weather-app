@@ -16,19 +16,17 @@ public class Sys {
 
     @SerializedName("pod")
     @Expose
-    @ColumnInfo(name ="pod")
+    @ColumnInfo(name = "pod")
     private String pod;
 
     /**
      * No args constructor for use in serialization
-     *
      */
     @Ignore
     public Sys() {
     }
 
     /**
-     *
      * @param pod
      */
     public Sys(String pod) {
