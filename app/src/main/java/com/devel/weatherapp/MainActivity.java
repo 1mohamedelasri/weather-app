@@ -1,5 +1,7 @@
 package com.devel.weatherapp;
 
+import android.animation.AnimatorInflater;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,10 +44,6 @@ public class MainActivity extends AppCompatActivity {
     IntroViewPagerAdapter introViewPagerAdapter ;
     TabLayout tabIndicator;
 
-    private RecyclerView recyclerView;
-    private RecyclerAdapter recyclerAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-    ArrayList<String> title, subTitle;
 
 
     @Override
@@ -67,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         introViewPagerAdapter = new IntroViewPagerAdapter(this,mList);
         screenPager.setAdapter(introViewPagerAdapter);
 
+        // hide the action bar
+
+        getSupportActionBar().hide();
 
 
 
@@ -75,29 +77,18 @@ public class MainActivity extends AppCompatActivity {
         screenPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-                title = new ArrayList<>();
-                subTitle = new ArrayList<>();
 
-                title.add("Alpha");
-                title.add("Beta");
-                title.add("Gamma");
-                title.add("Delta");
-                title.add("Epsilon");
-                title.add("Zeta");
-                title.add("Eta");
-                title.add("Theta");
-                title.add("Lambda");
-                title.add("Kappa");
-                title.add("Mu");
-                title.add("Nu");
 
-                layoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerAdapter = new RecyclerAdapter(title);
-                recyclerView.setAdapter(recyclerAdapter);
-                recyclerView.setHasFixedSize(true);
+                TextView title = findViewById(R.id.intro_title);
+
+                ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.flipping);
+                anim.setTarget(title);
+                anim.setDuration(500);
+                anim.start();
+
+                title.setText(mList.get(position).getTitle());
+
 
             }
             @Override
