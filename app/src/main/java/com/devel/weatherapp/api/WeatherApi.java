@@ -3,8 +3,10 @@ package com.devel.weatherapp.api;
 import androidx.lifecycle.LiveData;
 
 import com.devel.weatherapp.models.ApiResponse;
+import com.devel.weatherapp.models.WeatherRes;
 import com.devel.weatherapp.models.WeatherResponse;
 
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -18,6 +20,12 @@ public interface WeatherApi {
             @Query("units") String metric,
             @Query("cnt") int count
     );
+
+    @GET("data/2.5/weather?")
+    Call<WeatherRes> getCurrentWeatherData(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);
+
+    @GET("data/2.5/weather?")
+    Call<WeatherRes> getCurrentWeatherDataOfCity(@Query("q") String city, @Query("APPID") String app_id);
 
 
 }
