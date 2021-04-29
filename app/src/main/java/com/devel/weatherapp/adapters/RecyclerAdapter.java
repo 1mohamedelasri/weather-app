@@ -12,7 +12,7 @@ import com.devel.weatherapp.R;
 
 import java.util.ArrayList;
 
-class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     private ArrayList<String> data;
 
@@ -34,7 +34,7 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(data.get(position));
-        holder.initial.setText(data.get(position).substring(0,1));
+        //holder.initial.setText(data.get(position).substring(0,1));
     }
 
     @Override
@@ -51,7 +51,6 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.title);
-            initial = (TextView) itemView.findViewById(R.id.txt_initial);
             icon = (ImageView) itemView.findViewById(R.id.bg_date_time);
         }
     }

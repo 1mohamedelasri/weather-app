@@ -19,9 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.adapters.IntroViewPagerAdapter;
+import com.devel.weatherapp.adapters.RecyclerAdapter;
 import com.devel.weatherapp.models.ScreenItem;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 import com.google.android.material.tabs.TabLayout;
@@ -37,11 +40,12 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager screenPager;
     IntroViewPagerAdapter introViewPagerAdapter ;
     TabLayout tabIndicator;
-    Button btnNext;
-    int position = 0 ;
-    Button btnGetStarted;
-    Animation btnAnim ;
-    TextView tvSkip;
+
+    private RecyclerView recyclerView;
+    private RecyclerAdapter recyclerAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    ArrayList<String> title, subTitle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +68,36 @@ public class MainActivity extends AppCompatActivity {
         screenPager.setAdapter(introViewPagerAdapter);
 
 
+
+
+
+
         screenPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                ConstraintLayout rlayout=(ConstraintLayout)findViewById(R.id.main_activity);
-                AppCompatResources.getDrawable(MainActivity.this, R.drawable.btn_gradient_style);
+                recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+                title = new ArrayList<>();
+                subTitle = new ArrayList<>();
+
+                title.add("Alpha");
+                title.add("Beta");
+                title.add("Gamma");
+                title.add("Delta");
+                title.add("Epsilon");
+                title.add("Zeta");
+                title.add("Eta");
+                title.add("Theta");
+                title.add("Lambda");
+                title.add("Kappa");
+                title.add("Mu");
+                title.add("Nu");
+
+                layoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerAdapter = new RecyclerAdapter(title);
+                recyclerView.setAdapter(recyclerAdapter);
+                recyclerView.setHasFixedSize(true);
 
             }
             @Override
