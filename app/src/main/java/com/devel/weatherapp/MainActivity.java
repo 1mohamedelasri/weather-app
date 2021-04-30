@@ -27,7 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.adapters.IntroViewPagerAdapter;
-import com.devel.weatherapp.adapters.RecyclerAdapter;
 import com.devel.weatherapp.models.ScreenItem;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 import com.google.android.material.tabs.TabLayout;
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         initialiseVariables();
 
-        mWeatherListViewModel.getCityData("GRenoble",API_KEY);
+
 
         final List<ScreenItem> mList = new ArrayList<>();
         mList.add(new ScreenItem("10", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit",R.drawable.img1));
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
                 title.setText(mList.get(position).getTitle());
 
-
+                mWeatherListViewModel.getCityDataWeeklyData("GRenoble", "5", API_KEY);
             }
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -123,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
+
+
 
 
 

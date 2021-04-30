@@ -14,6 +14,8 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.devel.weatherapp.MainActivity;
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.DailyForecast;
+import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.ScreenItem;
 
 import java.util.ArrayList;
@@ -24,10 +26,8 @@ public class IntroViewPagerAdapter extends PagerAdapter {
    Context mContext ;
    List<ScreenItem> mListScreen;
     private RecyclerView recyclerView;
-    private RecyclerAdapter recyclerAdapter;
+    private WeeklyAdapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    ArrayList<String> title, subTitle;
-
     public IntroViewPagerAdapter(Context mContext, List<ScreenItem> mListScreen) {
         this.mContext = mContext;
         this.mListScreen = mListScreen;
@@ -45,26 +45,15 @@ public class IntroViewPagerAdapter extends PagerAdapter {
         container.addView(layoutScreen);
 
         recyclerView = (RecyclerView) container.findViewById(R.id.recyclerView);
-
-        title = new ArrayList<>();
-        subTitle = new ArrayList<>();
-
-        title.add("Alpha");
-        title.add("Beta");
-        title.add("Gamma");
-        title.add("Delta");
-        title.add("Epsilon");
-        title.add("Zeta");
-        title.add("Eta");
-        title.add("Theta");
-        title.add("Lambda");
-        title.add("Kappa");
-        title.add("Mu");
-        title.add("Nu");
-
         layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerAdapter = new RecyclerAdapter(title);
+        recyclerAdapter = new WeeklyAdapter(mContext);
+
+        List<SavedDailyForecast> dailyForecasts = new ArrayList();
+        dailyForecasts.add(new SavedDailyForecast());
+        dailyForecasts.add(new SavedDailyForecast());
+        recyclerAdapter.setForecasts(dailyForecasts);
+
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setHasFixedSize(true);
 
