@@ -5,26 +5,17 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
 
-import com.devel.weatherapp.api.ServiceGenerator;
-import com.devel.weatherapp.api.WeatherApi;
-import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.WeatherRes;
 import com.devel.weatherapp.models.WeatherResponse;
 import com.devel.weatherapp.repositories.WeatherRepository;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Resource;
 
-import java.util.Observable;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WeatherViewModel extends AndroidViewModel {
 

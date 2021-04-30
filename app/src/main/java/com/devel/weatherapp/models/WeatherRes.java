@@ -1,10 +1,16 @@
 package com.devel.weatherapp.models;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.devel.weatherapp.utils.CoordConverter;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class WeatherRes {
+public class WeatherRes implements Serializable {
 
     @SerializedName("coord")
     public Coord coord;
@@ -22,15 +28,13 @@ public class WeatherRes {
     public Clouds clouds;
     @SerializedName("dt")
     public float dt;
+
+    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     public int id;
     @SerializedName("name")
     public String name;
     @SerializedName("cod")
     public float cod;
-}
-class Rain {
-    @SerializedName("3h")
-    public float h3;
 }
 
