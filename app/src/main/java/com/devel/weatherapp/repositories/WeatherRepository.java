@@ -8,15 +8,19 @@ import androidx.lifecycle.LiveData;
 
 import com.devel.weatherapp.api.ServiceGenerator;
 import com.devel.weatherapp.api.WeatherApi;
+import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.DailyForecast;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.models.WeatherRes;
 import com.devel.weatherapp.persistence.WeatherDao;
 import com.devel.weatherapp.persistence.WeatherDatabase;
+import com.devel.weatherapp.utils.AppExecutors;
 import com.devel.weatherapp.utils.Constants;
 
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -27,6 +31,7 @@ public class WeatherRepository {
 
     private WeatherDatabase database;
     private LiveData<List<SavedDailyForecast>> savedDailyForecast;
+    private WeatherApi service;
 
     public WeatherRepository(Application application)
     {
@@ -36,11 +41,6 @@ public class WeatherRepository {
 
     public void insert(List<SavedDailyForecast> actorList){
         new InsertAsynTask(database).execute(actorList);
-    }
-
-    public LiveData<List<SavedDailyForecast>> getAllSavedDailyForecast()
-    {
-        return savedDailyForecast;
     }
 
     static class InsertAsynTask extends AsyncTask<List<SavedDailyForecast>,Void,Void> {
@@ -57,31 +57,26 @@ public class WeatherRepository {
     }
 
 
-
     public Call<WeatherRes> getWeather(String lat, String lon, String apiKey) {
         return ServiceGenerator.getWeatherApi().getCurrentWeatherData(lat,lon,apiKey);
     }
 
     public Call<WeatherRes> getWeatherByCity(String city, String apiKey)
     {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        WeatherApi service = retrofit.create(WeatherApi.class);
         return service.getCurrentWeatherDataOfCity(
                 city,
                 apiKey
         );
     }
 
-    public Call<WeatherForecast> getWeatherWeeklyCityData(String city, String days, String apiKey)
+    public Call<WeatherForecast>  getWeatherWeeklyCityData(String city, String days, String apiKey)
     {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        WeatherApi service = retrofit.create(WeatherApi.class);
+        service = retrofit.create(WeatherApi.class);
+
         return service.getWeatherForecast(
                 city,
                 days,
@@ -108,7 +103,5 @@ public class WeatherRepository {
         }
         return instance;
     }
-
-
 
 }

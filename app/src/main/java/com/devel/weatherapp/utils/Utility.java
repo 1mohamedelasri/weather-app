@@ -87,7 +87,7 @@ public class Utility {
         return String.format(context.getString(windFormat), windSpeed);
     }
 
-    public static int getIconResourceForWeatherCondition(int weatherId) {
+    public static int getIconResourceForWeatherCondition(Long weatherId) {
         // Based on weather code data found at:
         // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
         if (weatherId >= 200 && weatherId <= 232) {

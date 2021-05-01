@@ -31,7 +31,7 @@ public interface WeatherApi {
     Call<WeatherRes> getCurrentWeatherDataOfCity(@Query("q") String city, @Query("APPID") String app_id);
 
     @GET("data/2.5/forecast/daily/?")
-    Call<WeatherForecast> getWeatherForecast(@Query("q") String city,
+    Call<WeatherForecast>  getWeatherForecast(@Query("q") String city,
                                                    @Query("cnt") String numDays,
                                                    @Query("APPID") String apiKey);
 }

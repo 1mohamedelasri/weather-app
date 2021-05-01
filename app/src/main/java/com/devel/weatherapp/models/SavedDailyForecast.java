@@ -1,15 +1,14 @@
 package com.devel.weatherapp.models;
 
 
+import android.util.Log;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.devel.weatherapp.utils.Utility;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class SavedDailyForecast implements Serializable {
@@ -49,7 +48,7 @@ public class SavedDailyForecast implements Serializable {
     @SerializedName("description")
     public String mdescription;
     @SerializedName("weatherid")
-    public int weatherid;
+    public Long weatherid;
     @SerializedName("imageUrl")
     public String imageUrl;
 
@@ -198,11 +197,11 @@ public class SavedDailyForecast implements Serializable {
         this.mdescription = description;
     }
 
-    public int getWeatherid() {
+    public Long getWeatherid() {
         return weatherid;
     }
 
-    public void setWeatherid(int weatherid) {
+    public void setWeatherid(Long weatherid) {
         this.weatherid = weatherid;
     }
 
