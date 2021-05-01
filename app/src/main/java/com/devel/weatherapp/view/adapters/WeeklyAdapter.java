@@ -1,4 +1,4 @@
-package com.devel.weatherapp.adapters;
+package com.devel.weatherapp.view.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,7 +16,6 @@ import com.devel.weatherapp.utils.Utility;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyViewHolder> {
 
@@ -52,7 +51,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         //Set values
         holder.desc.setText(description);
         holder.temp.setText(Utility.formatTemperature(mContext, forecast.getMaxTemp()) + "/" + Utility.formatTemperature(mContext, forecast.getMinTemp()));
-        holder.imageView.setImageResource(Utility.getIconResourceForWeatherCondition(weather_id));
+        holder.imageView.setImageResource(Utility.getArtResourceForWeatherCondition(weather_id));
         holder.day.setText(Utility.format(forecast.getDate()));
 
     }

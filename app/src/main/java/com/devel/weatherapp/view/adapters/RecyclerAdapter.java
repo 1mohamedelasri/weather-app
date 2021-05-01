@@ -1,4 +1,4 @@
-package com.devel.weatherapp.adapters;
+package com.devel.weatherapp.view.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,16 +1,15 @@
-package com.devel.weatherapp.adapters;
+package com.devel.weatherapp.view.adapters;
 
 import android.content.Context;
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
@@ -19,7 +18,6 @@ import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.ScreenItem;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwner {
@@ -32,7 +30,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     public WeeklyAdapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
     LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-
+    private Location geoLocation;
 
     public IntroViewPagerAdapter(Context mContext, List<ScreenItem> mListScreen, WeatherViewModel weatherViewModel) {
         this.mContext = mContext;
@@ -84,7 +82,10 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
     private void subscribeObservers(){
 
-        weatherViewModel.getWeather(1,"","",4);
+        if(geoLocation != null){
+            weatherViewModel.getWeather(1,"","",4);
+
+        }
         /*
         weatherViewModel.data().observe(this::getLifecycle, new Observer<WeatherForecast>() {
             @Override
@@ -125,11 +126,20 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         */
     }
 
+    public void addNewPage(ScreenItem screenItem){
+        this.mListScreen.add(screenItem);
+        this.notifyDataSetChanged();
+    }
+
 
 
     @NonNull
     @Override
     public Lifecycle getLifecycle() {
         return lifecycleRegistry;
+    }
+
+    public void setCurrentLocation(Location location) {
+        this.geoLocation = location;
     }
 }

@@ -1,11 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="mainActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="colorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@color/teal_200</item>
-        <!--We will be using the toolbar so no need to show ActionBar-->
+    <!--    <style name="mainActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+          <item name="windowActionBar">false</item>
+          <item name="android:windowNoTitle">true</item>
+          <item name="colorPrimary">@android:color/white</item>
+          <item name="android:textColorSecondary">@color/teal_200</item>
         <item name="android:windowActionBar">false</item>
 
+    </style>
+    -->
+
+    <style name="mainActivityTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>
