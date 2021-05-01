@@ -51,7 +51,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.title);
-            icon = (ImageView) itemView.findViewById(R.id.bg_date_time);
+            //icon = (ImageView) itemView.findViewById(R.id.bg_date_time);
         }
     }
 }
