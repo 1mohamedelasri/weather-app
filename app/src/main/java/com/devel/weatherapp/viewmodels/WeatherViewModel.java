@@ -1,6 +1,7 @@
 package com.devel.weatherapp.viewmodels;
 
 import android.app.Application;
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -46,7 +47,7 @@ public class WeatherViewModel extends AndroidViewModel {
     /**
      * Constructor containing the weather repository instance.
      */
-    public void getCurrentData() {
+    /*public void getCurrentData() {
 
         Call call = mWeatherRepository.getWeather(Constants.lat, Constants.lon, Constants.API_KEY);
         Log.d(TAG, "getWeather: called.");
@@ -89,7 +90,7 @@ public class WeatherViewModel extends AndroidViewModel {
 
 
         });
-    }
+    } */
 
     public void getCityData(String city, String api_key) {
 
@@ -144,15 +145,52 @@ public class WeatherViewModel extends AndroidViewModel {
         call.enqueue(new Callback<WeatherForecast>() {
             @Override
             public void onResponse(Call<WeatherForecast> call, Response<WeatherForecast> response) {
-                _data.setValue(response.body());
+                _data.postValue(response.body());
             }
 
             @Override
             public void onFailure(Call<WeatherForecast> call, Throwable t) {
-                _data.setValue(null);
+                _data.postValue(null);
             }
         });
     }
+
+    public void getForecastByCurrentLocation(String lat , String lon , String apiKey) {
+
+        mWeatherRepository = WeatherRepository.getInstance(getApplication());
+
+        final Call<WeatherForecast> call = mWeatherRepository.getCurrentLocationForecast(lat,lon, apiKey);
+        call.enqueue(new Callback<WeatherForecast>() {
+            @Override
+            public void onResponse(Call<WeatherForecast> call, Response<WeatherForecast> response) {
+                _data.postValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<WeatherForecast> call, Throwable t) {
+                _data.postValue(null);
+            }
+        });
+    }
+
+    public void getForecastByCity(String city , String apiKey) {
+
+        mWeatherRepository = WeatherRepository.getInstance(getApplication());
+
+        final Call<WeatherForecast> call = mWeatherRepository.getCurrentLocationForecast("45.1667","5.7167", apiKey);
+        call.enqueue(new Callback<WeatherForecast>() {
+            @Override
+            public void onResponse(Call<WeatherForecast> call, Response<WeatherForecast> response) {
+                _data.postValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<WeatherForecast> call, Throwable t) {
+                _data.postValue(null);
+            }
+        });
+    }
+
 
 
 }

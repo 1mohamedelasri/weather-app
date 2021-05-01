@@ -24,14 +24,14 @@ public interface WeatherApi {
             @Query("cnt") int count
     );
 
-    @GET("data/2.5/weather?")
-    Call<WeatherRes> getCurrentWeatherData(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);
+    @GET("data/2.5/forecast/daily/?units=metric&")
+    Call<WeatherForecast> getCurrentLocationForecast(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);
 
-    @GET("data/2.5/weather?")
-    Call<WeatherRes> getCurrentWeatherDataOfCity(@Query("q") String city, @Query("APPID") String app_id);
+    @GET("data/2.5/forecast/daily/?units=metric&")
+    Call<WeatherForecast> getCurrentWeatherDataOfCity(@Query("q") String city, @Query("APPID") String app_id);
 
-    @GET("data/2.5/forecast/daily/?")
-    Call<WeatherForecast>  getWeatherForecast(@Query("q") String city,
-                                                   @Query("cnt") String numDays,
-                                                   @Query("APPID") String apiKey);
+    @GET("data/2.5/forecast/daily/?units=metric&")
+    Call<WeatherForecast> getWeeklyForecast(@Query("q") String city,
+                                            @Query("cnt") String numDays,
+                                            @Query("APPID") String apiKey);
 }

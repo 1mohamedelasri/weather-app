@@ -1,6 +1,7 @@
 package com.devel.weatherapp.utils;
 
 import android.content.Context;
+import android.location.Location;
 import android.text.format.Time;
 
 import com.devel.weatherapp.R;
@@ -122,7 +123,7 @@ public class Utility {
      * @param weatherId from OpenWeatherMap API response
      * @return resource id for the corresponding icon. -1 if no relation is found.
      */
-    public static int getArtResourceForWeatherCondition(int weatherId) {
+    public static int getArtResourceForWeatherCondition(Long weatherId) {
         // Based on weather code data found at:
         // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
         if (weatherId >= 200 && weatherId <= 232) {
@@ -149,5 +150,9 @@ public class Utility {
             return R.drawable.art_clouds;
         }
         return -1;
+    }
+
+    public static String[] geoLocToString(Location loc){
+        return new String[]{String.valueOf(loc.getLatitude()),String.valueOf(loc.getLongitude())};
     }
 }

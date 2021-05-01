@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp"
+    app:contentInsetEnd="0dp"
+    app:contentInsetRight="0dp"
+    android:theme="@style/mainActivityTheme"
     android:background="@drawable/btn_gradient_style"
-    tools:context=".MainActivity">
+    tools:context=".view.MainActivity">
 
-    <TextView
-        android:id="@+id/temperatureTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="sans-serif-black"
-        android:text="10"
-        android:textColor="@color/design_default_color_on_primary"
-        android:textSize="70dp"
-        android:textStyle="bold"
+
+    <ImageView
+        android:id="@+id/magnifyImgView"
+        android:layout_width="37dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cityTextView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/search_icon" />
 
     <TextView
         android:id="@+id/cityTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="28dp"
         android:text="Paris"
         android:textColor="@android:color/white"
         android:textSize="18sp"
@@ -36,41 +37,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/magnifyImgView"
-        android:layout_width="37dp"
-        android:layout_height="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.042"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/search_icon"
-        tools:layout_editor_absoluteY="16dp" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="72dp" />
 
-    <ScrollView
-        android:id="@+id/scrollView2"
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/screen_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@+id/temperatureTextView">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/screen_viewpager"
-                android:layout_width="400dp"
-                android:layout_height="524dp"
-                android:layout_marginTop="176dp"
-                android:background="#00000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.454"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></androidx.viewpager.widget.ViewPager>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
-
-
+        android:layout_height="0dp"
+        android:background="#00000000"
+        android:fadeScrollbars="true"
+        android:isScrollContainer="true"
+        android:overScrollMode="always"
+        android:persistentDrawingCache="scrolling"
+        android:nestedScrollingEnabled="true"
+        android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

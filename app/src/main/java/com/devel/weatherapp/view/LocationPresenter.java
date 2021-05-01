@@ -1,13 +1,9 @@
 package com.devel.weatherapp.view;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.location.Location;
-import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.devel.weatherapp.MainActivity;
 import com.yayandroid.locationmanager.constants.FailType;
 import com.yayandroid.locationmanager.constants.ProcessType;
 
