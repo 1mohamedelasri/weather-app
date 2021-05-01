@@ -14,6 +14,7 @@
     tools:context=".view.MainActivity">
 
 
+
     <ImageView
         android:id="@+id/magnifyImgView"
         android:layout_width="37dp"
@@ -44,19 +45,20 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="72dp" />
 
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/screen_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="#00000000"
-        android:fadeScrollbars="true"
-        android:isScrollContainer="true"
-        android:overScrollMode="always"
-        android:persistentDrawingCache="scrolling"
-        android:nestedScrollingEnabled="true"
-        android:scrollbars="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/screen_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#00000000"
+            android:fadeScrollbars="true"
+            android:isScrollContainer="true"
+            android:nestedScrollingEnabled="true"
+            android:overScrollMode="always"
+            android:persistentDrawingCache="scrolling"
+            android:scrollbars="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline3" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

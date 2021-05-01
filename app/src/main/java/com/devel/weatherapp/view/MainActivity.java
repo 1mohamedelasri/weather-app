@@ -3,6 +3,7 @@ package com.devel.weatherapp.view;
 import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,7 +68,7 @@ public class MainActivity extends LocationBaseActivity {
 
         getSupportActionBar().hide();
 
-        initialiseVariables();
+        SetupObservers();
         getLocation();
 
 
@@ -103,7 +104,7 @@ public class MainActivity extends LocationBaseActivity {
     }
 
 
-    private void initialiseVariables() {
+    private void SetupObservers() {
 
         // Instantiate the weather View Model.
         mWeatherListViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
@@ -138,7 +139,7 @@ public class MainActivity extends LocationBaseActivity {
                             savedDailyForecast.setImageUrl(data.getDailyForecasts().get(i).getWeather().get(0).getIcon());
                             savedDailyForecasts.add(savedDailyForecast);
                         }
-                        introViewPagerAdapter.addNewPage(new ScreenItem(String.valueOf(data.getDailyForecasts().get(0).getTemp().getDay()), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit", R.drawable.img3));
+                        //introViewPagerAdapter.addNewPage(new ScreenItem(String.valueOf(data.getDailyForecasts().get(0).getTemp().getDay()), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit", R.drawable.img3));
                         introViewPagerAdapter.recyclerAdapter.setForecasts(savedDailyForecasts);
 
                         TextView temperatureTextView = (TextView) findViewById(R.id.temperatureTextView);
@@ -227,6 +228,8 @@ public class MainActivity extends LocationBaseActivity {
         }
         return false;
     }
+
+
 
     private class CheckInternet extends AsyncTask<String, String,String> {
         protected String doInBackground(String... urls) {

@@ -1,6 +1,7 @@
 package com.devel.weatherapp.view.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.ScreenItem;
+import com.devel.weatherapp.view.MyActivity;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.List;
@@ -49,6 +51,14 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
         container.addView(layoutScreen);
 
+        layoutScreen.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent myIntent = new Intent(mContext, MyActivity.class);
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(myIntent);
+            }
+        });
         recyclerView = (RecyclerView) container.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
