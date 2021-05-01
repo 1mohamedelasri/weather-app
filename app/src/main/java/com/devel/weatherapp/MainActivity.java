@@ -3,50 +3,40 @@ package com.devel.weatherapp;
 import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.adapters.IntroViewPagerAdapter;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.ScreenItem;
 import com.devel.weatherapp.models.WeatherForecast;
+import com.devel.weatherapp.view.LocationPresenter;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 import com.google.android.material.tabs.TabLayout;
+import com.yayandroid.locationmanager.base.LocationBaseActivity;
+import com.yayandroid.locationmanager.configuration.Configurations;
+import com.yayandroid.locationmanager.configuration.LocationConfiguration;
+import com.yayandroid.locationmanager.constants.FailType;
+import com.yayandroid.locationmanager.constants.ProcessType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.devel.weatherapp.utils.Constants.*;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends LocationBaseActivity {
 
     private WeatherViewModel mWeatherListViewModel;
     private ViewPager screenPager;
-    IntroViewPagerAdapter introViewPagerAdapter ;
+    private IntroViewPagerAdapter introViewPagerAdapter;
+    private LocationPresenter locationPresenter;
     TabLayout tabIndicator;
-
 
 
     @Override
@@ -56,16 +46,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
-
         final List<ScreenItem> mList = new ArrayList<>();
-        mList.add(new ScreenItem("10", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit",R.drawable.img1));
-        mList.add(new ScreenItem("20","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit",R.drawable.img2));
-        mList.add(new ScreenItem("30","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit",R.drawable.img3));
+        mList.add(new ScreenItem("10", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit", R.drawable.img1));
+        mList.add(new ScreenItem("20", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit", R.drawable.img2));
+        mList.add(new ScreenItem("30", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit", R.drawable.img3));
 
         // setup viewpager
-        screenPager =findViewById(R.id.screen_viewpager);
-        introViewPagerAdapter = new IntroViewPagerAdapter(getApplicationContext(),mList,ViewModelProviders.of(this).get(WeatherViewModel.class));
+        screenPager = findViewById(R.id.screen_viewpager);
+        introViewPagerAdapter = new IntroViewPagerAdapter(getApplicationContext(), mList, ViewModelProviders.of(this).get(WeatherViewModel.class));
         screenPager.setAdapter(introViewPagerAdapter);
 
         // hide the action bar
@@ -74,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         initialiseVariables();
 
+        getLocation();
 
+        locationPresenter = new LocationPresenter(this);
 
 
         screenPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -82,8 +72,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
 
 
-
-                TextView title = findViewById(R.id.intro_title);
+                TextView title = findViewById(R.id.temperatureTextView);
 
                 ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.flipping);
                 anim.setTarget(title);
@@ -94,18 +83,16 @@ public class MainActivity extends AppCompatActivity {
 
                 //mWeatherListViewModel.getCityDataWeeklyData("GRenoble", "5", API_KEY);
             }
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 // if you want some fade in / fade out anim, you may want the values provided here
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
-
-
-
-
     }
 
 
@@ -117,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(WeatherForecast data) {
                 Log.d("TEST", "subscribeObservers: ");
-                if(data != null) {
+                if (data != null) {
                     if (data != null && data.getDailyForecasts() != null) {
 
                         List<SavedDailyForecast> savedDailyForecasts = new ArrayList<SavedDailyForecast>();
@@ -162,4 +149,35 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
+
+    @Override
+    public LocationConfiguration getLocationConfiguration() {
+        return Configurations.defaultConfiguration("Gimme the permission!", "Would you mind to turn GPS on?");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        locationPresenter.onLocationChanged();
+    }
+
+    @Override
+    public void onLocationFailed(@FailType int failType) {
+        locationPresenter.onLocationFailed(failType);
+
+    }
+
+    @Override
+    public void onProcessTypeChanged(@ProcessType int processType) {
+        locationPresenter.onProcessTypeChanged(processType);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (getLocationManager().isWaitingForLocation()
+                && !getLocationManager().isAnyDialogShowing()) {
+            //displayProgress();
+        }
+    }
 }
