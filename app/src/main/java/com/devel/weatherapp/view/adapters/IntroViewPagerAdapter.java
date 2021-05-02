@@ -118,6 +118,10 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         container.removeView((View)object);
 
     }
+    @Override
+    public int getItemPosition(Object object){
+        return PagerAdapter.POSITION_NONE;
+    }
 
     private void subscribeObservers(){
 

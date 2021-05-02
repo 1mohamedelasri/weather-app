@@ -33,7 +33,7 @@ public class FavouriteItem {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return (int) (id*city.hashCode());
     }
 
 }

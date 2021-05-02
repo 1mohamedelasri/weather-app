@@ -74,7 +74,7 @@ public class MainActivity extends LocationBaseActivity {
             @Override
             public void onPageSelected(int position) {
 
-
+                TextView cityTextView = findViewById(R.id.temperatureTextView);
                 TextView temperatureTextView = findViewById(R.id.temperatureTextView);
                 TextView tempDescTextView = findViewById(R.id.TempDescTextView);
 
@@ -86,8 +86,8 @@ public class MainActivity extends LocationBaseActivity {
                 temperatureTextView.setText(mWeatherListViewModel.getFavourtieItems().get(position).temperature);
                 introViewPagerAdapter.notifyChange();
 
-                //cityTextView.setText(Utility.toTitleCase(mList.get(position).city));
-                //tempDescTextView.setText(Utility.toTitleCase(mList.get(position).description));
+                cityTextView.setText(Utility.toTitleCase(mWeatherListViewModel.getFavourtieItems().get(position).city));
+                tempDescTextView.setText(Utility.toTitleCase(mWeatherListViewModel.getFavourtieItems().get(position).description));
 
                 //introViewPagerAdapter.recyclerAdapter.setForecasts(mList.get(position).savedDailyForecast);
                 //introViewPagerAdapter.recyclerAdapter.notifyDataSetChanged();
