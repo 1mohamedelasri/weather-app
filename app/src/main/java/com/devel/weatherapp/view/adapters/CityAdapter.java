@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.City;
-import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.utils.Utility;
 
 import java.util.Calendar;
 import java.util.List;
@@ -91,8 +88,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
         CityViewHolder(View itemView) {
             super(itemView);
 
-            searchResCity = itemView.findViewById(R.id.searchResCity);
-            SearchResCountry = itemView.findViewById(R.id.SearchResCountry);
+            searchResCity = itemView.findViewById(R.id.FavCity);
+            SearchResCountry = itemView.findViewById(R.id.FavCountry);
             itemView.setOnClickListener(this);
         }
 

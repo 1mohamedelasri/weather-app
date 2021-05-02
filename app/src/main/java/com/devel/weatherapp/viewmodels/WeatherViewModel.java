@@ -104,7 +104,7 @@ public class WeatherViewModel extends AndroidViewModel {
             @Override
             public void onResponse(Call<WeatherForecast> call, Response<WeatherForecast> response) {
                 _searchedCity.postValue(response.body());
-                _data.postValue(response.body());
+                //_data.postValue(response.body());
 
             }
 
@@ -116,6 +116,6 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     public void addSearchCityToFavorties() {
-       // _data.postValue(_searchedCity.getValue());
+        _data.postValue(_searchedCity.getValue());
     }
 }

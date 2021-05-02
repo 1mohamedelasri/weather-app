@@ -8,8 +8,11 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,7 @@ public class MainActivity extends LocationBaseActivity {
     TabLayout tabIndicator;
     Location currentLocation = null;
     private ImageView searchButton;
+    private ImageView baselineBtn;
 
 
     @Override
@@ -62,6 +66,7 @@ public class MainActivity extends LocationBaseActivity {
         introViewPagerAdapter = new IntroViewPagerAdapter(this, getApplication(), mWeatherListViewModel);
         screenPager.setAdapter(introViewPagerAdapter);
         searchButton = findViewById(R.id.magnifyImgView);
+        baselineBtn = findViewById(R.id.baselineBtn);
         // hide the action bar
 
         getSupportActionBar().hide();
@@ -77,21 +82,16 @@ public class MainActivity extends LocationBaseActivity {
                 introViewPagerAdapter.setCurrentPos(position);
                 introViewPagerAdapter.notifyChange();
 
- /*               TextView cityTextView = findViewById(R.id.temperatureTextView);
                 TextView temperatureTextView = findViewById(R.id.temperatureTextView);
-                TextView tempDescTextView = findViewById(R.id.TempDescTextView);
+                temperatureTextView.setText(mWeatherListViewModel.getFavourtieItems().get(position).temperature);
 
 
                 ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.flipping);
                 anim.setTarget(temperatureTextView);
                 anim.setDuration(500);
                 anim.start();
-                temperatureTextView.setText(mWeatherListViewModel.getFavourtieItems().get(position).temperature);
-                introViewPagerAdapter.notifyChange();
 
-                cityTextView.setText(Utility.toTitleCase(mWeatherListViewModel.getFavourtieItems().get(position).city));
-                tempDescTextView.setText(Utility.toTitleCase(mWeatherListViewModel.getFavourtieItems().get(position).description));
-*/
+
                 //introViewPagerAdapter.recyclerAdapter.setForecasts(mList.get(position).savedDailyForecast);
                 //introViewPagerAdapter.recyclerAdapter.notifyDataSetChanged();
 
@@ -122,6 +122,35 @@ public class MainActivity extends LocationBaseActivity {
                 getApplication().startActivity(myIntent);
             }
         });
+        baselineBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(MainActivity.this, baselineBtn);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.poupup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        String title = (String) item.getTitle();
+                        if ("share".equals(title)) {
+                        } else if ("Favorites".equals(title)) {
+                            Intent myIntent = new Intent(getApplication(), FavouriteActivity.class);
+                            myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplication().startActivity(myIntent);
+
+                        }
+
+                        Toast.makeText(MainActivity.this,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
+            }
+        });//closing the setOnClickListener method
 
     }
 
@@ -256,8 +285,9 @@ public class MainActivity extends LocationBaseActivity {
                 int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
                 String temperatureText = "";
                 if (timeOfDay >= 0 && timeOfDay < 12) {
-                } else if (timeOfDay >= 12 && timeOfDay < 16) {
                     temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getMorningTemp()));
+                } else if (timeOfDay >= 12 && timeOfDay < 16) {
+                    temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getDayTemp()));
                 } else if (timeOfDay >= 16 && timeOfDay < 21) {
                     temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getEveningTemp()));
                 } else if (timeOfDay >= 21 && timeOfDay < 24) {
@@ -267,7 +297,7 @@ public class MainActivity extends LocationBaseActivity {
                 mWeatherListViewModel.insertInFavourtieItems(new FavouriteItem(data.getCity().getId(),
                         data.getCity().getName(),
                         temperatureText,
-                        savedDailyForecasts.get(0).getDescription(),
+                        savedDailyForecasts.get(0).getDescription(), data.getCity().getName(),
                         savedDailyForecasts));
             }
 

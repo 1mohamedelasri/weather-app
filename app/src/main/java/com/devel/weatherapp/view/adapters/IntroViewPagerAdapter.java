@@ -13,10 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
-import androidx.lifecycle.OnLifecycleEvent;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
@@ -25,7 +23,7 @@ import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Utility;
-import com.devel.weatherapp.view.MyActivity;
+import com.devel.weatherapp.view.FavouriteActivity;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.List;
@@ -72,7 +70,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         layoutScreen.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent myIntent = new Intent(mContext, MyActivity.class);
+                    Intent myIntent = new Intent(mContext, FavouriteActivity.class);
                     myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(myIntent);
             }

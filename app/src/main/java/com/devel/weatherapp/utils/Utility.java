@@ -8,7 +8,10 @@ import com.devel.weatherapp.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Optional;
 
 public class Utility {
 
@@ -154,5 +157,10 @@ public class Utility {
 
     public static String[] geoLocToString(Location loc){
         return new String[]{String.valueOf(loc.getLatitude()),String.valueOf(loc.getLongitude())};
+    }
+
+    public static String getCountryName(String name){
+        Locale loc = new Locale("en",name);
+        return loc.getDisplayCountry();
     }
 }

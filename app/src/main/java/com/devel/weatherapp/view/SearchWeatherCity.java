@@ -11,11 +11,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.Constants;
+import com.devel.weatherapp.utils.Utility;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.ArrayList;
@@ -34,17 +34,18 @@ public class SearchWeatherCity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         getSupportActionBar().hide();
-
         searchProgress      = findViewById(R.id.searchProgress);
         searchView = (SearchView)findViewById(R.id.search_view);
-        searchResCity       = findViewById(R.id.searchResCity);
-        SearchResCountry    = findViewById(R.id.SearchResCountry);
+        searchResCity       = findViewById(R.id.FavCity);
+        SearchResCountry    = findViewById(R.id.FavCountry);
         addCityToFav        = (ImageButton)findViewById(R.id.AddCityToFav);
         mWeatherListViewModel =  WeatherViewModel.getInstance(getApplication());
+        searchView.requestFocus();
         addCityToFav.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
                                                 mWeatherListViewModel.addSearchCityToFavorties();
+                                                finish();
                                             }
                                         }
         );
@@ -71,10 +72,11 @@ public class SearchWeatherCity extends AppCompatActivity {
                 Log.d("TEST", "subscribeObservers: ");
                 if (data != null) {
                     searchResCity.setText(data.getCity().getName());
-                    SearchResCountry.setText(data.getCity().getCountry());
+                    SearchResCountry.setText(Utility.getCountryName(data.getCity().getCountry()));
                     searchResCity.setVisibility(View.VISIBLE);
                     SearchResCountry.setVisibility(View.VISIBLE);
                     addCityToFav.setVisibility(View.VISIBLE);
+                    findViewById(R.id.countryTag).setVisibility(View.VISIBLE);
                 }else{
                     searchResCity.setText("No city match your search criteria");
                     SearchResCountry.setText("");

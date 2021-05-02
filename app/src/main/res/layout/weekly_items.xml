@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/searchResCity"
+        android:id="@+id/FavCity"
         android:layout_width="29dp"
         android:layout_height="21dp"
         android:layout_marginTop="8dp"
@@ -37,14 +37,14 @@
         android:layout_width="35dp"
         android:layout_height="21dp"
         android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/searchResCity"
-        android:layout_toRightOf="@+id/searchResCity"
+        android:layout_toEndOf="@+id/FavCity"
+        android:layout_toRightOf="@+id/FavCity"
         android:gravity="center"
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchResCity"
+        app:layout_constraintTop_toBottomOf="@+id/FavCity"
         tools:text="32/26" />
 
     <TextView

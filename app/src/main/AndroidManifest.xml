@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MyActivity"></activity>
+        <activity android:name=".view.FavouriteActivity" ></activity>
         <activity android:name=".view.SearchWeatherCity"></activity>
 
     </application>

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MyActivity">
+    tools:context=".view.FavouriteActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -17,7 +16,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="338dp"
+            android:layout_width="373dp"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways">
 
@@ -39,7 +38,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
-        android:id="@+id/searchResCity"
+        android:id="@+id/FavCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -51,32 +50,49 @@
         android:textStyle="bold"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintHorizontal_bias="0.08"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         tools:text="Paris" />
 
     <TextView
-        android:id="@+id/SearchResCountry"
+        android:id="@+id/FavCountry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="106dp"
+        android:layout_marginRight="106dp"
         android:text="ville de france"
+        android:textColor="@color/white"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/searchResCity"
-        app:layout_constraintTop_toBottomOf="@+id/searchResCity" />
+        app:layout_constraintEnd_toStartOf="@+id/AddCityToFav"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/countryTag"
+        app:layout_constraintTop_toTopOf="@+id/countryTag" />
 
     <ImageButton
         android:id="@+id/AddCityToFav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginRight="35dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.739"
+        app:layout_constraintHorizontal_bias="0.896"
+        app:layout_constraintStart_toEndOf="@+id/FavCountry"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         app:srcCompat="@android:drawable/ic_input_add" />
+
+    <TextView
+        android:id="@+id/countryTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Country : "
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/FavCity"
+        app:layout_constraintTop_toBottomOf="@+id/FavCity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
