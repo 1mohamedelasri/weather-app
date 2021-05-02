@@ -44,7 +44,7 @@ public class SearchWeatherCity extends AppCompatActivity {
         addCityToFav.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-                                               // mWeatherListViewModel.addSearchCityToFavorties();
+                                                mWeatherListViewModel.addSearchCityToFavorties();
                                             }
                                         }
         );

@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,8 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     private TextView cityNameText;
     private TextView cityTempText;
     private TextView cityDescText;
-
+    private View layoutScreen;
+    private int currentPos = 0;
     public IntroViewPagerAdapter(Context mContext, Application application, WeatherViewModel weatherViewModel) {
         this.mContext = mContext;
         this.application = application;
@@ -59,7 +61,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-
+        Log.d("URGENT", "position ==" + position);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layoutScreen = inflater.inflate(R.layout.layout_screen,container,false);
 
@@ -75,20 +77,20 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
                     mContext.startActivity(myIntent);
             }
         });
-
+        List<FavouriteItem> favItems = weatherViewModel.getFavourtieItems();
         Activity hostActivity = (Activity)mContext;
         cityNameText = hostActivity.findViewById(R.id.cityTextView);
         cityTempText = layoutScreen.findViewById(R.id.temperatureTextView);
         cityDescText = layoutScreen.findViewById(R.id.TempDescTextView);
 
-        cityNameText.setText(weatherViewModel.getFavourtieItems().get(position).city);
-        cityTempText.setText(weatherViewModel.getFavourtieItems().get(position).temperature);
-        cityDescText.setText(weatherViewModel.getFavourtieItems().get(position).description);
+        cityNameText.setText(weatherViewModel.getFavourtieItems().get(currentPos).city);
+        cityTempText.setText(weatherViewModel.getFavourtieItems().get(currentPos).temperature);
+        cityDescText.setText(weatherViewModel.getFavourtieItems().get(currentPos).description);
 
         recyclerView = (RecyclerView) container.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerAdapter = new WeeklyAdapter(mContext,weatherViewModel.getFavourtieItems().get(position).savedDailyForecast);
+        recyclerAdapter = new WeeklyAdapter(mContext,weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setHasFixedSize(true);
 
@@ -100,7 +102,9 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     public void notifyChange(){
         this.notifyDataSetChanged();
         if(this.recyclerAdapter != null)
-        this.recyclerAdapter.notifyDataSetChanged();
+        {
+            this.recyclerAdapter.notifyDataSetChanged();
+        }
     }
     @Override
     public int getCount() {
@@ -109,7 +113,11 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
-        return view == o;
+        return view.equals(o);
+    }
+
+    public void setCurrentPos(int pos){
+        this.currentPos = pos;
     }
 
     @Override

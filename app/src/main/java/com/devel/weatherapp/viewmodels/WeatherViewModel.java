@@ -69,6 +69,13 @@ public class WeatherViewModel extends AndroidViewModel {
         return _favouriteItems;
     }
 
+    public void insertInFavourtieItems(FavouriteItem wf){
+        for(FavouriteItem ele : this.getFavourtieItems())
+            if(ele.equals(wf)) return;
+
+            this.getFavourtieItems().add(wf);
+    }
+
     public void getForecastByCurrentLocation(String lat , String lon , String apiKey) {
 
         mWeatherRepository = WeatherRepository.getInstance(getApplication());
@@ -96,8 +103,9 @@ public class WeatherViewModel extends AndroidViewModel {
         call.enqueue(new Callback<WeatherForecast>() {
             @Override
             public void onResponse(Call<WeatherForecast> call, Response<WeatherForecast> response) {
-                _data.postValue(response.body());
                 _searchedCity.postValue(response.body());
+                _data.postValue(response.body());
+
             }
 
             @Override
@@ -107,4 +115,7 @@ public class WeatherViewModel extends AndroidViewModel {
         });
     }
 
+    public void addSearchCityToFavorties() {
+       // _data.postValue(_searchedCity.getValue());
+    }
 }

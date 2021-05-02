@@ -73,8 +73,11 @@ public class MainActivity extends LocationBaseActivity {
         screenPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+                Log.d("PageChangeListener","posistion = "+position );
+                introViewPagerAdapter.setCurrentPos(position);
+                introViewPagerAdapter.notifyChange();
 
-                TextView cityTextView = findViewById(R.id.temperatureTextView);
+ /*               TextView cityTextView = findViewById(R.id.temperatureTextView);
                 TextView temperatureTextView = findViewById(R.id.temperatureTextView);
                 TextView tempDescTextView = findViewById(R.id.TempDescTextView);
 
@@ -88,7 +91,7 @@ public class MainActivity extends LocationBaseActivity {
 
                 cityTextView.setText(Utility.toTitleCase(mWeatherListViewModel.getFavourtieItems().get(position).city));
                 tempDescTextView.setText(Utility.toTitleCase(mWeatherListViewModel.getFavourtieItems().get(position).description));
-
+*/
                 //introViewPagerAdapter.recyclerAdapter.setForecasts(mList.get(position).savedDailyForecast);
                 //introViewPagerAdapter.recyclerAdapter.notifyDataSetChanged();
 
@@ -103,12 +106,12 @@ public class MainActivity extends LocationBaseActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 // if you want some fade in / fade out anim, you may want the values provided here
+                //introViewPagerAdapter.notifyChange();
 
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -167,14 +170,12 @@ public class MainActivity extends LocationBaseActivity {
 
         //String[] res = Utility.geoLocToString(currentLocation);
         //mWeatherListViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
-       //if(mWeatherListViewModel.getFavourtieItems().size() <1)
-        //{
+       if(mWeatherListViewModel.getFavourtieItems().size() <1)
+        {
             String[] res = Utility.geoLocToString(currentLocation);
             mWeatherListViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
             introViewPagerAdapter.notifyChange();
-
-
-        // }
+        }
     }
 
     @Override
@@ -263,7 +264,7 @@ public class MainActivity extends LocationBaseActivity {
                     temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getNightTemp()));
                 }
 
-                mWeatherListViewModel.getFavourtieItems().add(new FavouriteItem(data.getCity().getId(),
+                mWeatherListViewModel.insertInFavourtieItems(new FavouriteItem(data.getCity().getId(),
                         data.getCity().getName(),
                         temperatureText,
                         savedDailyForecasts.get(0).getDescription(),

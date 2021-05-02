@@ -24,16 +24,10 @@ public class FavouriteItem {
         if(!(o instanceof FavouriteItem) ) return false;
 
         FavouriteItem other = (FavouriteItem) o;
-        if(this.id != other.id)      return false;
-        if(! this.id.equals(other.id)) return false;
+        if(this.id != other.id && !city.equals(other.city))      return false;
 
         return true;
 
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (id*city.hashCode());
     }
 
 }
