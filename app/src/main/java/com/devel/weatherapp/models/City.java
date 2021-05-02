@@ -4,9 +4,14 @@ import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
+import com.devel.weatherapp.utils.IdsConverter;
+import com.devel.weatherapp.utils.ListConverter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 @Entity(tableName = "city")
 public class City {
@@ -46,6 +51,13 @@ public class City {
     @Expose
     @ColumnInfo(name = "sunset")
     private Long sunset;
+
+    @SerializedName("dailyForcast")
+    @Expose
+    @ColumnInfo(name = "dailyForcast")
+    @TypeConverters(IdsConverter.class)
+    private List<Long> dailyForcastIds;
+
 
     /**
      * No args constructor for use in serialization
@@ -127,6 +139,14 @@ public class City {
 
     public void setSunset(Long sunset) {
         this.sunset = sunset;
+    }
+
+    public List<Long> getDailyForcastIds() {
+        return dailyForcastIds;
+    }
+
+    public void setDailyForcastIds(List<Long> dailyForcastIds) {
+        this.dailyForcastIds = dailyForcastIds;
     }
 
     @Override

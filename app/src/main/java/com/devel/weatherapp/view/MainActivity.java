@@ -9,16 +9,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
 import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.models.ScreenItem;
+import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Utility;
@@ -44,8 +45,8 @@ public class MainActivity extends LocationBaseActivity {
     private IntroViewPagerAdapter introViewPagerAdapter;
     private LocationPresenter locationPresenter;
     TabLayout tabIndicator;
-    final List<ScreenItem> mList = new ArrayList<>();
     Location currentLocation = null;
+    private ImageView searchButton;
 
 
     @Override
@@ -54,16 +55,12 @@ public class MainActivity extends LocationBaseActivity {
         setContentView(R.layout.activity_main);
         locationPresenter = new LocationPresenter(this);
 
-
-        mList.add(new ScreenItem("10", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit", R.drawable.img1));
-        mList.add(new ScreenItem("20", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit", R.drawable.img2));
-        mList.add(new ScreenItem("30", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit", R.drawable.img3));
-
         // setup viewpager
         screenPager = findViewById(R.id.screen_viewpager);
-        introViewPagerAdapter = new IntroViewPagerAdapter(getApplicationContext(), mList, ViewModelProviders.of(this).get(WeatherViewModel.class));
+        mWeatherListViewModel = WeatherViewModel.getInstance(getApplication());
+        introViewPagerAdapter = new IntroViewPagerAdapter(this, getApplication(), mWeatherListViewModel);
         screenPager.setAdapter(introViewPagerAdapter);
-
+        searchButton = findViewById(R.id.magnifyImgView);
         // hide the action bar
 
         getSupportActionBar().hide();
@@ -72,93 +69,69 @@ public class MainActivity extends LocationBaseActivity {
         getLocation();
 
 
-
         screenPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
 
 
-                TextView title = findViewById(R.id.temperatureTextView);
+                TextView temperatureTextView = findViewById(R.id.temperatureTextView);
+                TextView tempDescTextView = findViewById(R.id.TempDescTextView);
+
 
                 ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.flipping);
-                anim.setTarget(title);
+                anim.setTarget(temperatureTextView);
                 anim.setDuration(500);
                 anim.start();
+                temperatureTextView.setText(mWeatherListViewModel.getFavourtieItems().get(position).temperature);
+                introViewPagerAdapter.notifyDataSetChanged();
 
-                title.setText(mList.get(position).getTitle());
+                //cityTextView.setText(Utility.toTitleCase(mList.get(position).city));
+                //tempDescTextView.setText(Utility.toTitleCase(mList.get(position).description));
+
+                //introViewPagerAdapter.recyclerAdapter.setForecasts(mList.get(position).savedDailyForecast);
+                //introViewPagerAdapter.recyclerAdapter.notifyDataSetChanged();
+
+
+                // cityTextView.setText(mList.get(posintroViewPagerAdapter.recyclerAdapterition).city);
+                //tempDescTextView.setText(mList.get(position).description);
 
                 //mWeatherListViewModel.getCityDataWeeklyData("GRenoble", "5", API_KEY);
+
             }
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 // if you want some fade in / fade out anim, you may want the values provided here
+
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getApplication(), SearchWeatherCity.class);
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplication().startActivity(myIntent);
             }
         });
 
-
     }
-
 
     private void SetupObservers() {
 
         // Instantiate the weather View Model.
-        mWeatherListViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
         mWeatherListViewModel.data().observe(this::getLifecycle, new Observer<WeatherForecast>() {
             @Override
             public void onChanged(WeatherForecast data) {
                 Log.d("TEST", "subscribeObservers: ");
-                List<SavedDailyForecast> savedDailyForecasts = new ArrayList<SavedDailyForecast>();
 
-                if (data != null) {
-                    if (data != null && data.getDailyForecasts() != null) {
+                        introViewPagerAdapter.notifyDataSetChanged();
 
-                        for (int i = 0; i < data.getDailyForecasts().size()-1; i++) {
-                            SavedDailyForecast savedDailyForecast = new SavedDailyForecast();
-                            savedDailyForecast.setLat(data.getCity().getCoord().getLat());
-                            savedDailyForecast.setLon(data.getCity().getCoord().getLon());
-                            savedDailyForecast.setDate(data.getDailyForecasts().get(i).getDt());
-                            savedDailyForecast.setMaxTemp(data.getDailyForecasts().get(i).getTemp().getMax());
-                            savedDailyForecast.setMinTemp(data.getDailyForecasts().get(i).getTemp().getMin());
-                            savedDailyForecast.setDayTemp(data.getDailyForecasts().get(i).getTemp().getDay());
-                            savedDailyForecast.setEveningTemp(data.getDailyForecasts().get(i).getTemp().getEve());
-                            savedDailyForecast.setMorningTemp(data.getDailyForecasts().get(i).getTemp().getMorn());
-                            savedDailyForecast.setNightTemp(data.getDailyForecasts().get(i).getTemp().getNight());
-                            savedDailyForecast.setFeelslikeDay(data.getDailyForecasts().get(i).getFeelsLike().getDay());
-                            savedDailyForecast.setFeelslikeEve(data.getDailyForecasts().get(i).getFeelsLike().getEve());
-                            savedDailyForecast.setFeelslikeMorning(data.getDailyForecasts().get(i).getFeelsLike().getMorn());
-                            savedDailyForecast.setFeelslikeNight(data.getDailyForecasts().get(i).getFeelsLike().getNight());
-                            savedDailyForecast.setHumidity(data.getDailyForecasts().get(i).getHumidity());
-                            savedDailyForecast.setWind(data.getDailyForecasts().get(i).getSpeed());
-                            savedDailyForecast.setDescription(data.getDailyForecasts().get(i).getWeather().get(0).getDescription());
-                            savedDailyForecast.setWeatherid(data.getDailyForecasts().get(i).getWeather().get(0).getId());
-                            savedDailyForecast.setImageUrl(data.getDailyForecasts().get(i).getWeather().get(0).getIcon());
-                            savedDailyForecasts.add(savedDailyForecast);
-                        }
-                        //introViewPagerAdapter.addNewPage(new ScreenItem(String.valueOf(data.getDailyForecasts().get(0).getTemp().getDay()), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit", R.drawable.img3));
-                        introViewPagerAdapter.recyclerAdapter.setForecasts(savedDailyForecasts);
-
-                        TextView temperatureTextView = (TextView) findViewById(R.id.temperatureTextView);
-                        TextView cityTextView = (TextView) findViewById(R.id.cityTextView);
-                        cityTextView.setText(Utility.toTitleCase(data.getCity().getName()));
-                        Calendar c = Calendar.getInstance();
-                        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-
-                        if(timeOfDay >= 0 && timeOfDay < 12){
-                        }else if(timeOfDay >= 12 && timeOfDay < 16){
-                            temperatureTextView.setText(Utility.formatTemperature(getApplicationContext(), savedDailyForecasts.get(0).getMorningTemp()));
-                        }else if(timeOfDay >= 16 && timeOfDay < 21){
-                            temperatureTextView.setText(Utility.formatTemperature(getApplicationContext(), savedDailyForecasts.get(0).getEveningTemp()));
-                        }else if(timeOfDay >= 21 && timeOfDay < 24){
-                            temperatureTextView.setText(Utility.formatTemperature(getApplicationContext(), savedDailyForecasts.get(0).getNightTemp()));
-                        }
-
-                    }
-                }
+                        //introViewPagerAdapter.recyclerAdapter.notifyDataSetChanged();
             }
         });
 
@@ -189,9 +162,15 @@ public class MainActivity extends LocationBaseActivity {
         introViewPagerAdapter.setCurrentLocation(location);
         //mWeatherListViewModel.getForecastByCity("Grenoble",Constants.API_KEY);
 
-        String[] res = Utility.geoLocToString(currentLocation);
-        mWeatherListViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
+        //String[] res = Utility.geoLocToString(currentLocation);
+        //mWeatherListViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
+       //if(mWeatherListViewModel.getFavourtieItems().size() <1)
+        //{
+            String[] res = Utility.geoLocToString(currentLocation);
+            mWeatherListViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
+            this.introViewPagerAdapter.notifyDataSetChanged();
 
+       // }
     }
 
     @Override
@@ -229,8 +208,6 @@ public class MainActivity extends LocationBaseActivity {
         return false;
     }
 
-
-
     private class CheckInternet extends AsyncTask<String, String,String> {
         protected String doInBackground(String... urls) {
 
@@ -240,4 +217,6 @@ public class MainActivity extends LocationBaseActivity {
         }
 
     }
+
+
 }

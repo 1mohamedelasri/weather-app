@@ -18,7 +18,7 @@ public class Constants {
     public static final int READ_TIMEOUT = 2; // 2 seconds
     public static final int WRITE_TIMEOUT = 2; // 2 seconds
 
-    public static final int RECIPE_REFRESH_TIME = 10800; // 3 hours
+    public static final int WEATHER_REFRESH_TIME = 3600; // 3 hours
 
     public static String lat = "35";
     public static String lon = "139";

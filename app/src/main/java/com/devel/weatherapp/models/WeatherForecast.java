@@ -1,5 +1,7 @@
 package com.devel.weatherapp.models;
 
+import androidx.room.ColumnInfo;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -23,6 +25,10 @@ public class WeatherForecast {
     @SerializedName("list")
     @Expose
     private List<DailyForecast> dailyForecasts = null;
+
+    @ColumnInfo(name = "timestamp")
+    private int timestamp;
+
 
     public City getCity() {
         return city;
@@ -62,5 +68,13 @@ public class WeatherForecast {
 
     public void setDailyForecasts(List<DailyForecast> dailyForecasts) {
         this.dailyForecasts = dailyForecasts;
+    }
+
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
     }
 }

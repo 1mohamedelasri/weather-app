@@ -1,22 +1,29 @@
 package com.devel.weatherapp.view.adapters;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.ScreenItem;
+import com.devel.weatherapp.models.FavouriteItem;
+import com.devel.weatherapp.utils.Constants;
+import com.devel.weatherapp.utils.Utility;
 import com.devel.weatherapp.view.MyActivity;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
@@ -26,18 +33,26 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     private static final String TAG = "IntroViewPagerAdapter";
 
     private final WeatherViewModel weatherViewModel;
+    private Application application ;
     private Context mContext ;
-    private List<ScreenItem> mListScreen;
+
     private RecyclerView recyclerView;
     public WeeklyAdapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
     LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     private Location geoLocation;
+    private TextView cityNameText;
+    private TextView cityTempText;
+    private TextView cityDescText;
 
-    public IntroViewPagerAdapter(Context mContext, List<ScreenItem> mListScreen, WeatherViewModel weatherViewModel) {
+    public IntroViewPagerAdapter(Context mContext, Application application, WeatherViewModel weatherViewModel) {
         this.mContext = mContext;
-        this.mListScreen = mListScreen;
-        this.weatherViewModel = weatherViewModel;
+        this.application = application;
+        this.weatherViewModel = WeatherViewModel.getInstance(application);
+        //subscribeObservers();
+
+
+
     }
 
 
@@ -51,6 +66,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
         container.addView(layoutScreen);
 
+
         layoutScreen.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,14 +75,22 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
                     mContext.startActivity(myIntent);
             }
         });
+
+        Activity hostActivity = (Activity)mContext;
+        cityNameText = hostActivity.findViewById(R.id.cityTextView);
+        cityTempText = layoutScreen.findViewById(R.id.temperatureTextView);
+        cityDescText = layoutScreen.findViewById(R.id.TempDescTextView);
+
+        cityNameText.setText(weatherViewModel.getFavourtieItems().get(position).city);
+        cityTempText.setText(weatherViewModel.getFavourtieItems().get(position).temperature);
+        cityDescText.setText(weatherViewModel.getFavourtieItems().get(position).description);
+
         recyclerView = (RecyclerView) container.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerAdapter = new WeeklyAdapter(mContext);
-
+        recyclerAdapter = new WeeklyAdapter(mContext,weatherViewModel.getFavourtieItems().get(position).savedDailyForecast);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setHasFixedSize(true);
-        subscribeObservers();
 
         return layoutScreen;
 
@@ -75,7 +99,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
     @Override
     public int getCount() {
-        return mListScreen.size();
+        return this.weatherViewModel.getFavourtieItems().size();
     }
 
     @Override
@@ -93,55 +117,10 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     private void subscribeObservers(){
 
         if(geoLocation != null){
-            weatherViewModel.getWeather(1,"","",4);
-
+            String[] res = Utility.geoLocToString(geoLocation);
+            weatherViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
         }
-        /*
-        weatherViewModel.data().observe(this::getLifecycle, new Observer<WeatherForecast>() {
-            @Override
-            public void onChanged(WeatherForecast data) {
-                Log.d(TAG, "subscribeObservers: " + weatherViewModel);
-
-                if(data != null) {
-                    if (data != null && data.getDailyForecasts() != null) {
-
-                        List<SavedDailyForecast> savedDailyForecasts = new ArrayList<SavedDailyForecast>();
-                        for (int i = 0; i < data.getDailyForecasts().size(); i++) {
-                            SavedDailyForecast savedDailyForecast = new SavedDailyForecast();
-                            savedDailyForecast.setLat(data.getCity().getCoord().getLat());
-                            savedDailyForecast.setLon(data.getCity().getCoord().getLon());
-                            savedDailyForecast.setDate(data.getDailyForecasts().get(i).getDt());
-                            savedDailyForecast.setMaxTemp(data.getDailyForecasts().get(i).getTemp().getMax());
-                            savedDailyForecast.setMinTemp(data.getDailyForecasts().get(i).getTemp().getMin());
-                            savedDailyForecast.setDayTemp(data.getDailyForecasts().get(i).getTemp().getDay());
-                            savedDailyForecast.setEveningTemp(data.getDailyForecasts().get(i).getTemp().getEve());
-                            savedDailyForecast.setMorningTemp(data.getDailyForecasts().get(i).getTemp().getMorn());
-                            savedDailyForecast.setNightTemp(data.getDailyForecasts().get(i).getTemp().getNight());
-                            savedDailyForecast.setFeelslikeDay(data.getDailyForecasts().get(i).getFeelsLike().getDay());
-                            savedDailyForecast.setFeelslikeEve(data.getDailyForecasts().get(i).getFeelsLike().getEve());
-                            savedDailyForecast.setFeelslikeMorning(data.getDailyForecasts().get(i).getFeelsLike().getMorn());
-                            savedDailyForecast.setFeelslikeNight(data.getDailyForecasts().get(i).getFeelsLike().getNight());
-                            savedDailyForecast.setHumidity(data.getDailyForecasts().get(i).getHumidity());
-                            savedDailyForecast.setWind(data.getDailyForecasts().get(i).getSpeed());
-                            savedDailyForecast.setDescription(data.getDailyForecasts().get(i).getWeather().get(0).getDescription());
-                            savedDailyForecast.setWeatherid(data.getDailyForecasts().get(i).getWeather().get(0).getId());
-                            savedDailyForecast.setImageUrl(data.getDailyForecasts().get(i).getWeather().get(0).getIcon());
-                            savedDailyForecasts.add(savedDailyForecast);
-                        }
-                        recyclerAdapter.setForecasts(savedDailyForecasts);
-                    }
-                }
-            }
-        });
-        */
     }
-
-    public void addNewPage(ScreenItem screenItem){
-        this.mListScreen.add(screenItem);
-        this.notifyDataSetChanged();
-    }
-
-
 
     @NonNull
     @Override
@@ -152,4 +131,6 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     public void setCurrentLocation(Location location) {
         this.geoLocation = location;
     }
+
+
 }

@@ -14,6 +14,7 @@ import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.utils.Utility;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -23,8 +24,12 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
     private List<SavedDailyForecast> forecasts;
     private Context mContext;
 
-    public WeeklyAdapter(Context context) {
+    public WeeklyAdapter(Context context, List<SavedDailyForecast> savedDailyForecast) {
         mContext = context;
+        forecasts= new ArrayList<>();
+        forecasts.add(new SavedDailyForecast());
+        forecasts.add(new SavedDailyForecast());
+        forecasts.add(new SavedDailyForecast());
     }
 
     @NonNull
@@ -102,7 +107,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         WeeklyViewHolder(View itemView) {
             super(itemView);
 
-            day = itemView.findViewById(R.id.day);
+            day = itemView.findViewById(R.id.searchResCity);
             temp = itemView.findViewById(R.id.temp);
             desc = itemView.findViewById(R.id.desc);
             imageView = itemView.findViewById(R.id.weather_img);
