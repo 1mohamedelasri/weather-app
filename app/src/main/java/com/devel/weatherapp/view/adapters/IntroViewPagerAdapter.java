@@ -61,7 +61,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layoutScreen = inflater.inflate(R.layout.layout_screen,null);
+        View layoutScreen = inflater.inflate(R.layout.layout_screen,container,false);
 
 
         container.addView(layoutScreen);
@@ -97,6 +97,11 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
     }
 
+    public void notifyChange(){
+        this.notifyDataSetChanged();
+        if(this.recyclerAdapter != null)
+        this.recyclerAdapter.notifyDataSetChanged();
+    }
     @Override
     public int getCount() {
         return this.weatherViewModel.getFavourtieItems().size();

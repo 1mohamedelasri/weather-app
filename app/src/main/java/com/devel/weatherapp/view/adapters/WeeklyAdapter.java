@@ -26,10 +26,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
 
     public WeeklyAdapter(Context context, List<SavedDailyForecast> savedDailyForecast) {
         mContext = context;
-        forecasts= new ArrayList<>();
-        forecasts.add(new SavedDailyForecast());
-        forecasts.add(new SavedDailyForecast());
-        forecasts.add(new SavedDailyForecast());
+        forecasts= savedDailyForecast;
     }
 
     @NonNull

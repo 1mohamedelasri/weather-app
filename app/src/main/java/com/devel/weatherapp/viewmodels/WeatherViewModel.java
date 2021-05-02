@@ -78,7 +78,6 @@ public class WeatherViewModel extends AndroidViewModel {
             @Override
             public void onResponse(Call<WeatherForecast> call, Response<WeatherForecast> response) {
                _data.postValue(response.body());
-                mapWeatherToFavortie(response.body());
 
             }
 
@@ -99,7 +98,6 @@ public class WeatherViewModel extends AndroidViewModel {
             public void onResponse(Call<WeatherForecast> call, Response<WeatherForecast> response) {
                 _data.postValue(response.body());
                 _searchedCity.postValue(response.body());
-                mapWeatherToFavortie(response.body());
             }
 
             @Override
@@ -107,57 +105,6 @@ public class WeatherViewModel extends AndroidViewModel {
                 _searchedCity.postValue(null);
             }
         });
-    }
-
-    public void mapWeatherToFavortie(WeatherForecast data) {
-
-        if (data != null) {
-            if (data != null && data.getDailyForecasts() != null) {
-                List<SavedDailyForecast> savedDailyForecasts = new ArrayList<SavedDailyForecast>();
-
-                for (int i = 0; i < data.getDailyForecasts().size() - 1; i++) {
-                    SavedDailyForecast savedDailyForecast = new SavedDailyForecast();
-                    savedDailyForecast.setLat(data.getCity().getCoord().getLat());
-                    savedDailyForecast.setLon(data.getCity().getCoord().getLon());
-                    savedDailyForecast.setDate(data.getDailyForecasts().get(i).getDt());
-                    savedDailyForecast.setMaxTemp(data.getDailyForecasts().get(i).getTemp().getMax());
-                    savedDailyForecast.setMinTemp(data.getDailyForecasts().get(i).getTemp().getMin());
-                    savedDailyForecast.setDayTemp(data.getDailyForecasts().get(i).getTemp().getDay());
-                    savedDailyForecast.setEveningTemp(data.getDailyForecasts().get(i).getTemp().getEve());
-                    savedDailyForecast.setMorningTemp(data.getDailyForecasts().get(i).getTemp().getMorn());
-                    savedDailyForecast.setNightTemp(data.getDailyForecasts().get(i).getTemp().getNight());
-                    savedDailyForecast.setFeelslikeDay(data.getDailyForecasts().get(i).getFeelsLike().getDay());
-                    savedDailyForecast.setFeelslikeEve(data.getDailyForecasts().get(i).getFeelsLike().getEve());
-                    savedDailyForecast.setFeelslikeMorning(data.getDailyForecasts().get(i).getFeelsLike().getMorn());
-                    savedDailyForecast.setFeelslikeNight(data.getDailyForecasts().get(i).getFeelsLike().getNight());
-                    savedDailyForecast.setHumidity(data.getDailyForecasts().get(i).getHumidity());
-                    savedDailyForecast.setWind(data.getDailyForecasts().get(i).getSpeed());
-                    savedDailyForecast.setDescription(data.getDailyForecasts().get(i).getWeather().get(0).getDescription());
-                    savedDailyForecast.setWeatherid(data.getDailyForecasts().get(i).getWeather().get(0).getId());
-                    savedDailyForecast.setImageUrl(data.getDailyForecasts().get(i).getWeather().get(0).getIcon());
-                    savedDailyForecasts.add(savedDailyForecast);
-                }
-
-                Calendar c = Calendar.getInstance();
-                int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-                String temperatureText = "";
-                if (timeOfDay >= 0 && timeOfDay < 12) {
-                } else if (timeOfDay >= 12 && timeOfDay < 16) {
-                    temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getMorningTemp()));
-                } else if (timeOfDay >= 16 && timeOfDay < 21) {
-                    temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getEveningTemp()));
-                } else if (timeOfDay >= 21 && timeOfDay < 24) {
-                    temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getNightTemp()));
-                }
-
-                        _favouriteItems.add(new FavouriteItem(data.getCity().getId(),
-                        data.getCity().getName(),
-                        temperatureText,
-                        savedDailyForecasts.get(0).getDescription(),
-                        savedDailyForecasts));
-            }
-
-        }
     }
 
 }

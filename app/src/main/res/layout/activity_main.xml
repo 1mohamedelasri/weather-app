@@ -48,7 +48,7 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/screen_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="#00000000"
             android:fadeScrollbars="true"
             android:isScrollContainer="true"
