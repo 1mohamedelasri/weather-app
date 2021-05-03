@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 
 import com.devel.weatherapp.api.WeatherApi;
 import com.devel.weatherapp.models.DailyForecast;
+import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.models.WeatherRes;
@@ -26,7 +27,7 @@ public class WeatherRepository {
     private final static String TAG = "WeatherRepository";
 
     private WeatherDatabase database;
-    private LiveData<List<SavedDailyForecast>> savedDailyForecast;
+    private LiveData<List<FavouriteItem>> savedDailyForecast;
     private WeatherApi service;
 
     public Call<WeatherForecast>  getCurrentLocationForecast(String lat, String lon, String apiKey)
@@ -47,7 +48,6 @@ public class WeatherRepository {
     private WeatherRepository(Context context) {
         weatherDao = WeatherDatabase.getInstance(context).getWeatherDao();
         database= WeatherDatabase.getInstance(context);
-        savedDailyForecast = database.getWeatherDao().loadForecast();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -63,23 +63,23 @@ public class WeatherRepository {
         return instance;
     }
 
-    public void insert(List<SavedDailyForecast> actorList){
+  /*  public void insert(List<FavouriteItem> actorList){
         new InsertAsynTask(database).execute(actorList);
     }
 
-    static class InsertAsynTask extends AsyncTask<List<SavedDailyForecast>,Void,Void> {
+    static class InsertAsynTask extends AsyncTask<List<FavouriteItem>,Void,Void> {
         private WeatherDao weatherDao;
         InsertAsynTask(WeatherDatabase weatherDatabase)
         {
             weatherDao= weatherDatabase.getWeatherDao();
         }
         @Override
-        protected Void doInBackground(List<SavedDailyForecast>... lists) {
+        protected Void doInBackground(List<FavouriteItem>... lists) {
             weatherDao.insertForecastList(lists[0]);
             return null;
         }
     }
-
+*/
 
     public Call<WeatherForecast> getWeatherByCity(String city, String apiKey)
     {

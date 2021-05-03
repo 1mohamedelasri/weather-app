@@ -9,10 +9,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherResponse;
 
-@Database(entities = {WeatherResponse.class, SavedDailyForecast.class}, version = 1 )
+@Database(entities = {SavedDailyForecast.class,}, version = 1 )
 public abstract class WeatherDatabase extends RoomDatabase {
 
 

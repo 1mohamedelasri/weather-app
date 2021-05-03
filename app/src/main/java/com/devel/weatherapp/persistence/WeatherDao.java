@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherResponse;
 
@@ -17,22 +18,16 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 public interface WeatherDao {
 
     @Insert(onConflict = REPLACE)
-    long[] insertWeather(WeatherResponse... weather);
-
-    @Query("UPDATE weatherResponse SET cod = :cod, message = :message, cnt = :cnt, timestamp = :timestamp")
-    void updateWeather (String cod, Long message, Long cnt, int timestamp);
-
-    @Query("SELECT * FROM weatherResponse")
-    LiveData<List<WeatherResponse>> searchWeather ();
+    long[] insertWeather(SavedDailyForecast... F);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertForecastList(List<SavedDailyForecast> savedDailyForecasts);
 
 
-    @Query("SELECT * FROM saveddailyforecast ORDER BY mdate ASC")
+    @Query("SELECT * FROM SavedDailyForecast")
     LiveData<List<SavedDailyForecast>> loadForecast();
 
-    @Query("DELETE FROM saveddailyforecast")
+    @Query("DELETE FROM SavedDailyForecast")
     void deleteAll();
 
 }

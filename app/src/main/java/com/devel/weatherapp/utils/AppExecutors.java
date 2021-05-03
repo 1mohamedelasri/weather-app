@@ -1,5 +1,6 @@
 package com.devel.weatherapp.utils;
 
+
 import android.os.Handler;
 import android.os.Looper;
 
@@ -7,31 +8,16 @@ import androidx.annotation.NonNull;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class AppExecutors {
 
-    /**
-     * Instantiate an instance of the AppExecutor
-     */
     private static AppExecutors instance;
 
-    /**
-     * Use a Singleton of the AppExecutor
-     *
-     * @return
-     */
     public static AppExecutors getInstance(){
         if(instance == null){
             instance = new AppExecutors();
         }
         return instance;
-    }
-
-    private final ScheduledExecutorService networkIO = Executors.newScheduledThreadPool(3);
-
-    public ScheduledExecutorService NetworkIO() {
-        return networkIO;
     }
 
     private final Executor mDiskIO = Executors.newSingleThreadExecutor();

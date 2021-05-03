@@ -19,6 +19,7 @@ import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.repositories.ForecastRepository;
 import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.FavouriteItem;
@@ -50,6 +51,7 @@ public class MainActivity extends LocationBaseActivity {
     Location currentLocation = null;
     private ImageView searchButton;
     private ImageView baselineBtn;
+    private ForecastRepository forecastRepository ;
 
 
     @Override
@@ -125,6 +127,9 @@ public class MainActivity extends LocationBaseActivity {
 
             @Override
             public void onClick(View v) {
+
+                Log.d("MAIN ACTIVTY !","onTheTest");
+                onTheTest();
                 //Creating the instance of PopupMenu
                 PopupMenu popup = new PopupMenu(MainActivity.this, baselineBtn);
                 //Inflating the Popup using xml file
@@ -151,12 +156,30 @@ public class MainActivity extends LocationBaseActivity {
             }
         });//closing the setOnClickListener method
 
+        forecastRepository = ForecastRepository.getInstance(getApplication());
+        onTheTest();
     }
 
+    public void onTheTest(){
+        Log.d("MAINACTIIVTY","testRepository");
+
+        //mWeatherRepository = WeatherRepository.getInstance(getApplication());
+
+        forecastRepository.fetchForecast("grenoble","").observe(this, result -> {
+            Log.d("MAINACTIIVTY","2");
+            if(result != null) {
+                if(result.data != null) {
+                    Log.d("MAINACTIIVTY",  "3" + result.data.get(0).getDescription());
+
+                }
+            }
+
+        });
+    }
     private void SetupObservers() {
 
         // Instantiate the weather View Model.
-        mWeatherListViewModel.data().observe(this::getLifecycle, new Observer<WeatherForecast>() {
+        mWeatherListViewModel.data().observe(this, new Observer<WeatherForecast>() {
             @Override
             public void onChanged(WeatherForecast data) {
                 Log.d("TEST", "subscribeObservers: ");

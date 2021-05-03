@@ -34,4 +34,8 @@ public interface WeatherApi {
     Call<WeatherForecast> getWeeklyForecast(@Query("q") String city,
                                             @Query("cnt") String numDays,
                                             @Query("APPID") String apiKey);
+
+    @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
+    LiveData<ApiResponse<WeatherForecast>> getCurrentWeatherDataOfCityV2(@Query("q") String city, @Query("APPID") String app_id);
+
 }

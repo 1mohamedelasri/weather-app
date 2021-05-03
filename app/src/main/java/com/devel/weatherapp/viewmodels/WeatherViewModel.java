@@ -7,7 +7,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,6 +22,7 @@ import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.models.WeatherRes;
 import com.devel.weatherapp.models.WeatherResponse;
+import com.devel.weatherapp.repositories.ForecastRepository;
 import com.devel.weatherapp.repositories.WeatherRepository;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Resource;
@@ -32,9 +36,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WeatherViewModel extends AndroidViewModel {
+public class WeatherViewModel extends AndroidViewModel  {
 
-    private String TAG ="AppDebug";
+    private String TAG ="WeatherViewModel";
 
     /**
      * Instantiate the weather repository.
@@ -44,13 +48,13 @@ public class WeatherViewModel extends AndroidViewModel {
     private final MutableLiveData<WeatherForecast> _data = new MutableLiveData<>();
     private final MutableLiveData<WeatherForecast> _searchedCity= new MutableLiveData<>();
     private static WeatherViewModel instance;
-
-
+    private ForecastRepository forecastRepository = ForecastRepository.getInstance(getApplication());
     public WeatherViewModel(@NonNull Application application) {
         super(application);
         mWeatherRepository = WeatherRepository.getInstance(application);
 
     }
+    List<FavouriteItem> test;
 
     public static WeatherViewModel getInstance(Application application) {
         if (instance == null) {
@@ -118,4 +122,42 @@ public class WeatherViewModel extends AndroidViewModel {
     public void addSearchCityToFavorties() {
         _data.postValue(_searchedCity.getValue());
     }
+
+    public void testRepository(){
+
+/*
+        mWeatherRepository.getWeatherByCity("grenoble",Constants.API_KEY).enqueue(new Callback<WeatherForecast>() {
+            @Override
+            public void onResponse(Call<WeatherForecast> call, Response<WeatherForecast> response) {
+
+                Log.d(TAG, "onResponse: server response " + response.toString());
+
+                // response code 200 means a successful request
+                // if successful store the response body in the lod
+                if (response.code() == 200) {
+                    // mWeatherResponseList = response.body();
+                    Log.d(TAG, "onResponse: " + response.body().toString());
+                    //  Log.d(TAG, "onResponse: " + mWeatherResponse.toString());
+
+
+                } else {
+                    Log.d(TAG, "onResponse: " + response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WeatherForecast> call, Throwable t) {
+                Log.d(TAG, "onResponse: ERROR: " + t.getMessage());
+
+            }
+        });
+
+        /
+ */
+    }
+
+    public LiveData<Resource<List<SavedDailyForecast>>> fetchResults(String city, String numDays) {
+        return forecastRepository.fetchForecast(city, numDays);
+    }
+
 }
