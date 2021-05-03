@@ -36,6 +36,15 @@ public class DailyForecast {
     @Expose
     private Double rain;
 
+    @SerializedName("sunrise")
+    @Expose
+    private Double sunrise;
+
+    @SerializedName("sunset")
+    @Expose
+    private Double sunset;
+
+
     public Long getDt() {
         return dt;
     }
@@ -114,5 +123,21 @@ public class DailyForecast {
 
     public void setRain(Double rain) {
         this.rain = rain;
+    }
+
+    public Double getSunrise() {
+        return sunrise;
+    }
+
+    public void setSunrise(Double sunrise) {
+        this.sunrise = sunrise;
+    }
+
+    public Double getSunset() {
+        return sunset;
+    }
+
+    public void setSunset(Double sunset) {
+        this.sunset = sunset;
     }
 }

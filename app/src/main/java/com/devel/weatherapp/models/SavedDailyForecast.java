@@ -4,6 +4,7 @@ package com.devel.weatherapp.models;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -56,6 +57,15 @@ public class SavedDailyForecast implements Serializable {
 
     @SerializedName("imageUrl")
     public String imageUrl;
+
+    @SerializedName("sunrise")
+    @Expose
+    private Double sunrise;
+
+    @SerializedName("sunset")
+    @Expose
+    private Double sunset;
+
 
     public SavedDailyForecast() {
         this.mdescription = "feelslikeshiit";
@@ -241,5 +251,21 @@ public class SavedDailyForecast implements Serializable {
 
     public void setClouds(Integer clouds) {
         this.clouds = clouds;
+    }
+
+    public Double getSunrise() {
+        return sunrise;
+    }
+
+    public void setSunrise(Double sunrise) {
+        this.sunrise = sunrise;
+    }
+
+    public Double getSunset() {
+        return sunset;
+    }
+
+    public void setSunset(Double sunset) {
+        this.sunset = sunset;
     }
 }

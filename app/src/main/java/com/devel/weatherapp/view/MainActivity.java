@@ -280,6 +280,8 @@ public class MainActivity extends LocationBaseActivity {
                     savedDailyForecast.setPressure(data.getDailyForecasts().get(i).getHumidity());
                     savedDailyForecast.setMain(data.getDailyForecasts().get(i).getWeather().get(0).getMain());
                     savedDailyForecast.setClouds(data.getDailyForecasts().get(i).getClouds());
+                    savedDailyForecast.setSunrise(data.getDailyForecasts().get(i).getSunrise());
+                    savedDailyForecast.setSunset(data.getDailyForecasts().get(i).getSunset());
                     savedDailyForecasts.add(savedDailyForecast);
                 }
 

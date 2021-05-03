@@ -26,7 +26,6 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
     public WeeklyAdapter(Context context, List<SavedDailyForecast> savedDailyForecast) {
         mContext = context;
         forecasts= savedDailyForecast;
-        forecasts.remove(0);
     }
 
     @NonNull
@@ -43,7 +42,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
         // Determine the values of the wanted data
-        SavedDailyForecast forecast = forecasts.get(position);
+        SavedDailyForecast forecast = forecasts.get(position+1);
         Double max_temp = forecast.getMaxTemp();
         Double min_temp = forecast.getMinTemp();
         Long date = forecast.getDate();
@@ -66,7 +65,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         if (forecasts == null) {
             return 0;
         }
-        return forecasts.size();
+        return forecasts.size()-1;
     }
 
     public List<SavedDailyForecast> getForecasts() {

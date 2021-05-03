@@ -26,6 +26,7 @@ import com.devel.weatherapp.view.SunView;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwner {
@@ -110,10 +111,13 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
 
         SunView sv = hostActivity.findViewById(R.id.sv);
+        Date sunRisedate = new Date((long) (weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast.get(0).getSunrise() * 1000));
+        Date sunSetdate = new Date((long) (weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast.get(0).getSunset() * 1000));
+
         // Set sunrise time
-        sv.setSunrise(05, 39);
+        sv.setSunrise(sunRisedate.getHours(), sunRisedate.getMinutes());
         // Set the sunset time
-        sv.setSunset(18, 48);
+        sv.setSunset(sunSetdate.getHours(), sunSetdate.getMinutes());
         // Get system time
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
