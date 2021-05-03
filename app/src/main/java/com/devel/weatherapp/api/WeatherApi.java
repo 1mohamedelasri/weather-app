@@ -24,10 +24,10 @@ public interface WeatherApi {
             @Query("cnt") int count
     );
 
-    @GET("data/2.5/forecast/daily/?units=metric&cnt=6&")
+    @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
     Call<WeatherForecast> getCurrentLocationForecast(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);
 
-    @GET("data/2.5/forecast/daily/?units=metric&cnt=6&")
+    @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
     Call<WeatherForecast> getCurrentWeatherDataOfCity(@Query("q") String city, @Query("APPID") String app_id);
 
     @GET("data/2.5/forecast/daily/?units=metric&")

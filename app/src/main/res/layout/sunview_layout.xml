@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sun="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/corners_bg_cardview">
+    <com.devel.weatherapp.view.SunView
+        android:id="@+id/sv"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        sun:svMainColor="#FE8109"
+        sun:svTrackColor="#FE8109"
+        sun:svSunColor="#FED300"
+        sun:svSunRadius="9dp"
+        sun:svTrackWidth="1dp"
+        sun:svTextSize="10sp"
+        sun:svTextOffset="20dp"
+        sun:svPadding="10dp"/>
+
+</RelativeLayout>

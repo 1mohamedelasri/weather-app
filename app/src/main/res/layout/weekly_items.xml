@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/FavCity"
-        android:layout_width="29dp"
+        android:layout_width="wrap_content"
         android:layout_height="21dp"
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/weather_img"
@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/temp"
-        android:layout_width="35dp"
+        android:layout_width="wrap_content"
         android:layout_height="21dp"
         android:layout_marginTop="4dp"
         android:layout_toEndOf="@+id/FavCity"

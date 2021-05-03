@@ -100,5 +100,22 @@ public class SearchWeatherCity extends AppCompatActivity {
                 return false;
             }
         });
+
+        searchProgress.setVisibility(View.INVISIBLE);
+        searchResCity.setVisibility(View.INVISIBLE);
+        SearchResCountry.setVisibility(View.INVISIBLE);
+        addCityToFav.setVisibility(View.INVISIBLE);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        searchProgress.setVisibility(View.INVISIBLE);
+        searchResCity.setVisibility(View.INVISIBLE);
+        SearchResCountry.setVisibility(View.INVISIBLE);
+        addCityToFav.setVisibility(View.INVISIBLE);
+        findViewById(R.id.countryTag).setVisibility(View.INVISIBLE);
+
     }
 }

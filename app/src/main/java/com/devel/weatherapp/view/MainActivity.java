@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -83,7 +82,7 @@ public class MainActivity extends LocationBaseActivity {
                 introViewPagerAdapter.notifyChange();
 
                 TextView temperatureTextView = findViewById(R.id.temperatureTextView);
-                temperatureTextView.setText(mWeatherListViewModel.getFavourtieItems().get(position).temperature);
+                //temperatureTextView.setText(mWeatherListViewModel.getFavourtieItems().get(position).temperature);
 
 
                 ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.flipping);
@@ -278,25 +277,39 @@ public class MainActivity extends LocationBaseActivity {
                     savedDailyForecast.setDescription(data.getDailyForecasts().get(i).getWeather().get(0).getDescription());
                     savedDailyForecast.setWeatherid(data.getDailyForecasts().get(i).getWeather().get(0).getId());
                     savedDailyForecast.setImageUrl(data.getDailyForecasts().get(i).getWeather().get(0).getIcon());
+                    savedDailyForecast.setPressure(data.getDailyForecasts().get(i).getHumidity());
+                    savedDailyForecast.setMain(data.getDailyForecasts().get(i).getWeather().get(0).getMain());
+                    savedDailyForecast.setClouds(data.getDailyForecasts().get(i).getClouds());
                     savedDailyForecasts.add(savedDailyForecast);
                 }
 
                 Calendar c = Calendar.getInstance();
                 int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
                 String temperatureText = "";
+                String feelsLike = "";
+                String date = String.format("%s, %s", Utility.format(savedDailyForecasts.get(0).getDate()), Utility.formatDate(savedDailyForecasts.get(0).getDate()));
+
+
+                String humidity_value=(savedDailyForecasts.get(0).getHumidity() + "%");
+
+
                 if (timeOfDay >= 0 && timeOfDay < 12) {
                     temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getMorningTemp()));
+                    feelsLike = Utility.formatTemperature(getApplication(),savedDailyForecasts.get(0).getFeelslikeMorning());
                 } else if (timeOfDay >= 12 && timeOfDay < 16) {
+                    feelsLike = Utility.formatTemperature(getApplication(),savedDailyForecasts.get(0).getDayTemp());
                     temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getDayTemp()));
                 } else if (timeOfDay >= 16 && timeOfDay < 21) {
+                    feelsLike = Utility.formatTemperature(getApplication(),savedDailyForecasts.get(0).getFeelslikeMorning());
                     temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getEveningTemp()));
                 } else if (timeOfDay >= 21 && timeOfDay < 24) {
+                    feelsLike = Utility.formatTemperature(getApplication(),savedDailyForecasts.get(0).getFeelslikeNight());
                     temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getNightTemp()));
                 }
 
                 mWeatherListViewModel.insertInFavourtieItems(new FavouriteItem(data.getCity().getId(),
                         data.getCity().getName(),
-                        temperatureText,
+                        temperatureText,feelsLike,date,
                         savedDailyForecasts.get(0).getDescription(), data.getCity().getName(),
                         savedDailyForecasts));
             }

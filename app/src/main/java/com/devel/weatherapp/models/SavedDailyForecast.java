@@ -1,8 +1,6 @@
 package com.devel.weatherapp.models;
 
 
-import android.util.Log;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -45,10 +43,17 @@ public class SavedDailyForecast implements Serializable {
     public int mhumidity;
     @SerializedName("wind")
     public double mwind;
+    @SerializedName("pressure")
+    public double pressure;
     @SerializedName("description")
     public String mdescription;
     @SerializedName("weatherid")
     public Long weatherid;
+    @SerializedName("main")
+    public String main;
+    @SerializedName("clouds")
+    public Integer clouds;
+
     @SerializedName("imageUrl")
     public String imageUrl;
 
@@ -212,5 +217,29 @@ public class SavedDailyForecast implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public double getPressure() {
+        return pressure;
+    }
+
+    public void setPressure(double pressure) {
+        this.pressure = pressure;
+    }
+
+    public String getMain() {
+        return main;
+    }
+
+    public void setMain(String main) {
+        this.main = main;
+    }
+
+    public Integer getClouds() {
+        return clouds;
+    }
+
+    public void setClouds(Integer clouds) {
+        this.clouds = clouds;
     }
 }

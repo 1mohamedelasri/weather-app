@@ -1,150 +1,164 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/corners_bg_cardview"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/UvTxt"
+        android:id="@+id/WindSpeedTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:text="Pressure"
+        android:layout_marginEnd="92dp"
+        android:layout_marginRight="92dp"
+        android:layout_marginBottom="1dp"
+        android:text="Wind Speed"
         android:textColor="@android:color/darker_gray"
-        app:layout_constraintStart_toStartOf="@+id/PressureValue"
-        app:layout_constraintTop_toBottomOf="@+id/PressureValue" />
-
-    <TextView
-        android:id="@+id/UvIndexValue"
-        android:layout_width="61dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="4dp"
-        android:text="1013mbar"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/WindSpeedValue"
-        app:layout_constraintStart_toStartOf="@+id/UvTxt"
-        app:layout_constraintTop_toBottomOf="@+id/UvTxt" />
-
-    <TextView
-        android:id="@+id/PressureTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:text="Pressure"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintStart_toStartOf="@+id/HumidityValue"
+        app:layout_constraintBottom_toTopOf="@+id/WindSpeedValue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/CloudinessTxt"
         app:layout_constraintTop_toBottomOf="@+id/HumidityValue" />
 
     <TextView
-        android:id="@+id/PressureValue"
+        android:id="@+id/WindSpeedValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:text="1013mbar"
+        android:layout_marginEnd="132dp"
+        android:layout_marginRight="132dp"
+        android:text="100%"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/PressureTxt"
-        app:layout_constraintTop_toBottomOf="@+id/PressureTxt" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/WindSpeedTxt" />
+
+    <TextView
+        android:id="@+id/CloudinessTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="96dp"
+        android:layout_marginRight="96dp"
+        android:text="Cloudiness"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintEnd_toStartOf="@+id/WindSpeedTxt"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <TextView
+        android:id="@+id/CloudinessValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="87dp"
+        android:layout_marginRight="87dp"
+        android:layout_marginBottom="2dp"
+        android:text="100%"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/imageView4" />
+
+    <TextView
+        android:id="@+id/realFeelTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Real feel"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintStart_toStartOf="@+id/feelLikeValue"
+        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+    <TextView
+        android:id="@+id/feelLikeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="83dp"
+        android:layout_marginRight="83dp"
+        android:text="4.4 °C"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/imageView2" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
+        app:layout_constraintEnd_toStartOf="@+id/HumidityValue"
+        app:layout_constraintStart_toEndOf="@+id/feelLikeValue"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/humidity" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/WindSpeedValue"
+        app:layout_constraintStart_toEndOf="@+id/CloudinessValue"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:srcCompat="@drawable/wind" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/CloudinessTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:srcCompat="@drawable/cloudy" />
 
     <TextView
         android:id="@+id/HumidityTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="153dp"
-        android:layout_marginRight="153dp"
         android:text="Humidity"
         android:textColor="@android:color/darker_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/HumidityValue"
+        app:layout_constraintStart_toStartOf="@+id/HumidityValue"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/HumidityValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="132dp"
+        android:layout_marginRight="132dp"
+        android:layout_marginBottom="23dp"
         android:text="100%"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/HumidityTxt"
+        app:layout_constraintBottom_toTopOf="@+id/WindSpeedTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/HumidityTxt" />
 
-    <TextView
-        android:id="@+id/WindSpeedTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="23dp"
-        android:text="Wind Speed"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ChanceRainValue" />
-
-    <TextView
-        android:id="@+id/WindSpeedValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="100%"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/WindSpeedTxt"
-        app:layout_constraintTop_toBottomOf="@+id/WindSpeedTxt" />
-
-    <TextView
-        android:id="@+id/chanceRainTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chance of rain"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintBaseline_toBaselineOf="@+id/ChanceRainTxt"
-        app:layout_constraintEnd_toEndOf="@+id/feelLikeValue"
-        app:layout_constraintStart_toEndOf="@+id/feelLikeValue" />
-
-    <TextView
-        android:id="@+id/ChanceRainTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:text="Chance of rain"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintEnd_toEndOf="@+id/feelLikeValue"
-        app:layout_constraintStart_toEndOf="@+id/feelLikeValue"
-        app:layout_constraintTop_toBottomOf="@+id/feelLikeValue" />
-
-    <TextView
-        android:id="@+id/ChanceRainValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="100%"
-        app:layout_constraintStart_toStartOf="@+id/ChanceRainTxt"
-        app:layout_constraintTop_toBottomOf="@+id/chanceRainTxt" />
-
-    <TextView
-        android:id="@+id/realFeelTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="16dp"
-        android:text="Real feel"
-        android:textColor="@android:color/darker_gray"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView4"
+        app:layout_constraintEnd_toStartOf="@+id/feelLikeValue"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/feelLikeValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:text="4.4 °C"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/realFeelTxt"
-        app:layout_constraintTop_toBottomOf="@+id/realFeelTxt" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/thermometer" />
 </androidx.constraintlayout.widget.ConstraintLayout>

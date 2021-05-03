@@ -84,7 +84,7 @@ public class Utility {
         return monthDayString;
     }
 
-    public static String getFormattedWind(Context context, float windSpeed) {
+    public static String getFormattedWind(Context context, Double windSpeed) {
         int windFormat;
         windFormat = R.string.format_wind_kmh;
 

@@ -3,7 +3,6 @@ package com.devel.weatherapp.view.adapters;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,9 +22,10 @@ import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Utility;
-import com.devel.weatherapp.view.FavouriteActivity;
+import com.devel.weatherapp.view.SunView;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwner {
@@ -45,6 +45,11 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     private TextView cityDescText;
     private View layoutScreen;
     private int currentPos = 0;
+    private TextView feelLikeValue ;
+    private TextView HumidityValue;
+    private TextView cloudiness;
+    private TextView WindSpeedValue;
+
     public IntroViewPagerAdapter(Context mContext, Application application, WeatherViewModel weatherViewModel) {
         this.mContext = mContext;
         this.application = application;
@@ -67,30 +72,54 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         container.addView(layoutScreen);
 
 
-        layoutScreen.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        /*layoutScreen.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     Intent myIntent = new Intent(mContext, FavouriteActivity.class);
                     myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(myIntent);
             }
-        });
+        });*/
         List<FavouriteItem> favItems = weatherViewModel.getFavourtieItems();
         Activity hostActivity = (Activity)mContext;
         cityNameText = hostActivity.findViewById(R.id.cityTextView);
         cityTempText = layoutScreen.findViewById(R.id.temperatureTextView);
         cityDescText = layoutScreen.findViewById(R.id.TempDescTextView);
+        feelLikeValue   = layoutScreen.findViewById(R.id.feelLikeValue);
+        HumidityValue   = layoutScreen.findViewById(R.id.HumidityValue);
+        cloudiness = layoutScreen.findViewById(R.id.CloudinessValue);
+        WindSpeedValue  = layoutScreen.findViewById(R.id.WindSpeedValue);
+
+
 
         cityNameText.setText(weatherViewModel.getFavourtieItems().get(currentPos).city);
         cityTempText.setText(weatherViewModel.getFavourtieItems().get(currentPos).temperature);
         cityDescText.setText(weatherViewModel.getFavourtieItems().get(currentPos).description);
+        feelLikeValue.setText(weatherViewModel.getFavourtieItems().get(currentPos).feelsLike);
 
+        HumidityValue.setText(weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast.get(0).mhumidity+"%");
+        cloudiness.setText(weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast.get(0).clouds+"%");
+        WindSpeedValue.setText(Utility.getFormattedWind(mContext,weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast.get(position).getWind()));
+        feelLikeValue.setText(weatherViewModel.getFavourtieItems().get(position).feelsLike);
         recyclerView = (RecyclerView) container.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerAdapter = new WeeklyAdapter(mContext,weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setHasFixedSize(true);
+
+
+        SunView sv = hostActivity.findViewById(R.id.sv);
+        // Set sunrise time
+        sv.setSunrise(05, 39);
+        // Set the sunset time
+        sv.setSunset(18, 48);
+        // Get system time
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        // Set the current time
+        sv.setCurrentTime(hour, minute);
 
         return layoutScreen;
 
