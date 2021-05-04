@@ -44,5 +44,9 @@ public class Resource<T> {
         ((List)this.data).add(favouriteItem);
     }
 
+    public List getSourceData() {
+        return ((List)this.data);
+    }
+
     public enum Status { SUCCESS, ERROR, LOADING}
 }

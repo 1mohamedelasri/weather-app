@@ -1,12 +1,20 @@
 package com.devel.weatherapp.view;
 
+import android.Manifest;
 import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.Application;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,12 +24,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
+import com.devel.weatherapp.BuildConfig;
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.repositories.ForecastRepository;
 import com.devel.weatherapp.utils.Resource;
+import com.devel.weatherapp.utils.ScreenShotHelper;
 import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.FavouriteItem;
@@ -36,10 +48,16 @@ import com.yayandroid.locationmanager.configuration.LocationConfiguration;
 import com.yayandroid.locationmanager.constants.FailType;
 import com.yayandroid.locationmanager.constants.ProcessType;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.devel.weatherapp.viewmodels.WeatherViewModel.QUERY_EXHAUSTED;
@@ -143,7 +161,17 @@ public class MainActivity extends LocationBaseActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         String title = (String) item.getTitle();
-                        if ("share".equals(title)) {
+                        if ("Share".equals(title)) {
+                            FavouriteItem myItem = introViewPagerAdapter.getCurrentDisplayedWeather();
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, "I share with you the weather of  "+ myItem.city+ " the temperature is " + myItem.temperature+". It's " + myItem.savedDailyForecast.get(0).mdescription );
+                            sendIntent.setType("text/plain");
+
+                            if (sendIntent.resolveActivity(getPackageManager()) != null) {
+                                startActivity(sendIntent);
+                            }
+
                         } else if ("Favorites".equals(title)) {
                             Intent myIntent = new Intent(getApplication(), FavouriteActivity.class);
                             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -365,5 +393,6 @@ public class MainActivity extends LocationBaseActivity {
     public void refreshFromAnyWhere(){
         this.introViewPagerAdapter.notifyChange();
     }
+
 
 }

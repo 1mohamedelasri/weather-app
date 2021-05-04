@@ -9,7 +9,6 @@ import com.devel.weatherapp.utils.ListConverter;
 import com.google.gson.annotations.Expose;
 
 import java.security.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +34,7 @@ public class FavouriteItem {
     @ColumnInfo(name = "savedDailyForecast")
     @TypeConverters(ListConverter.class)
     @Expose
-    public List<SavedDailyForecast> savedDailyForecast = new ArrayList<>();
+    public List<SavedDailyForecast> savedDailyForecast;
 
     @ColumnInfo(name = "timestamp")
     public Long timestamp;

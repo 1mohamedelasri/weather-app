@@ -114,6 +114,10 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
     }
 
+    public FavouriteItem getCurrentDisplayedWeather(){
+        return favouriteItems.get(currentPos);
+    }
+
     private void fetchData() {
         if(favouriteItems.size() > 0 && favouriteItems.get(currentPos).savedDailyForecast.size() > 0) {
             SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
@@ -141,6 +145,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
                 temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getNightTemp()));
             }
 
+            favouriteItems.get(currentPos).temperature = temperatureText;
             cityNameText.setText(favouriteItems.get(currentPos).city);
             cityTempText.setText(temperatureText);
             cityDescText.setText(favouriteItems.get(currentPos).description);
