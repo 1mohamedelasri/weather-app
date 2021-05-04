@@ -2,6 +2,7 @@ package com.devel.weatherapp.api;
 
 import androidx.lifecycle.LiveData;
 
+import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.models.WeatherRes;
@@ -34,6 +35,12 @@ public interface WeatherApi {
     Call<WeatherForecast> getWeeklyForecast(@Query("q") String city,
                                             @Query("cnt") String numDays,
                                             @Query("APPID") String apiKey);
+
+    @GET("data/2.5/air_pollution?")
+    Call<AirQuality> getAirQuality(@Query("lat") String city,
+                                   @Query("lon") String numDays,
+                                   @Query("APPID") String apiKey);
+
 
     @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
     LiveData<ApiResponse<WeatherForecast>> getCurrentWeatherDataOfCityV2(@Query("q") String city, @Query("APPID") String app_id);

@@ -53,8 +53,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         //Set values
         holder.favCity.setText(favouriteItems.get(position).city);
         //holder.favTemperature.setText(favouriteItems.get(position).temperature);
-        holder.favImg.setImageResource(Utility.getArtResourceForWeatherCondition(favouriteItems.get(position).savedDailyForecast.get(0).weatherid));
-        holder.favCountry.setText(Utility.getCountryName(favouriteItems.get(0).country));
+        holder.favImg.setImageResource(Utility.getArtResourceForWeatherCondition(favouriteItems.get(currentPos).savedDailyForecast.get(0).weatherid));
+        holder.favCountry.setText(Utility.getCountryName(favouriteItems.get(currentPos).country));
 
     }
 

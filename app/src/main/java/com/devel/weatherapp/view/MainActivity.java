@@ -308,6 +308,11 @@ public class MainActivity extends LocationBaseActivity {
        //if(mWeatherListViewModel.getFavourtieItems().size() <1)
       //  {
       //  }
+        if(location != null) {
+            String[] res = Utility.geoLocToString(currentLocation);
+            mWeatherListViewModel.getAirQuality(res[0],res[1]);
+
+        }
 
     }
 

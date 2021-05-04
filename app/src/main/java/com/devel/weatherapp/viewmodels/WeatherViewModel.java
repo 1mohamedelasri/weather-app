@@ -11,6 +11,7 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
@@ -208,6 +209,26 @@ public class WeatherViewModel extends AndroidViewModel  {
 
     public void dropFravourtieItem(FavouriteItem favouriteItem){
         forecastRepository.dropFravourtieItem(favouriteItem);
+    }
+
+    private AirQuality obj;
+    public void getAirQuality(String lat , String lon) {
+
+        mWeatherRepository = WeatherRepository.getInstance(getApplication());
+        final Call<AirQuality> call = forecastRepository.getAirQuality(lat,lon);
+        call.enqueue(new Callback<AirQuality>() {
+            @Override
+            public void onResponse(Call<AirQuality> call, Response<AirQuality> response) {
+                obj = response.body();
+
+            }
+
+            @Override
+            public void onFailure(Call<AirQuality> call, Throwable t) {
+                //_data.postValue(null);
+                Log.d("getAirQuality",t.getMessage());
+            }
+        });
     }
 
 }

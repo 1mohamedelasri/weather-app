@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.devel.weatherapp.api.ServiceGenerator;
 import com.devel.weatherapp.api.WeatherApi;
+import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -199,6 +201,15 @@ public class ForecastRepository {
             weatherDao.deleteFavouriteItem(favouriteItem[0].id);
             return null;
         }
+    }
+
+    public Call<AirQuality> getAirQuality(String lat, String lon)
+    {
+        return weatherApi.getAirQuality(
+                lat,
+                lon,
+                Constants.API_KEY
+        );
     }
 }
 
