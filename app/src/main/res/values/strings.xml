@@ -1,5 +1,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">WeatherApp</string>
+    <string name="app_name">IWeather</string>
     <string name="title_today">Today</string>
     <string name="title_weekly">Weekly</string>
     <string name="title_share">Share</string>
@@ -9,7 +9,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Weather</string>
-    <string name="nav_header_subtitle">delaroy4u@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -36,90 +35,9 @@
     <string name="wind">Wind</string>
     <string name="uv_index">UV Index</string>
     <string name="search">Search</string>
-
-
-
-    <string name="test">sdssssf
-        ffffssssssssssssssssssssssdssssfffffsss
-        sssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffss
-        sdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssss
-        ssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssss
-        ssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssss
-        sssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssss
-        ssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssss
-        ssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssds
-        sssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffs
-        sssssssssssssssssssssdssss
-        sdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssss
-        fffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffss
-        ssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssss
-        sssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssss
-        sssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssds
-
-        sdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssd
-
-        ssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfff
-        ffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsss
-        sssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssss
-        sssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssss
-        ssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssssssss
-        sdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssss
-        fffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffss
-        ssssssssssssssssssssdsss
-        sfffffssssssssssssssssssssssdssssfffffsssssssssss
-        sssssssssssdssssfffffsssssssssssssssssssss
-        ssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssssssssvvv
-        fffffsssssssssssssssssssssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssss
-        sssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssd
-        ssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssff
-        fffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssss
-        ssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssss
-        sssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssssss
-        sssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssss
-        fffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffff
-        ssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssss
-        ssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssds
-        sssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssssssss
-            ffffssssssssssssssssssssssdssssfffffsss
-        sssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffss
-        sdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssss
-        ssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssss
-        ssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssss
-        sssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssss
-        ssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssss
-        ssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssds
-        sssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffs
-        sssssssssssssssssssssdssss
-        sdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssss
-        fffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffss
-        ssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssss
-        sssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssss
-        sssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssds
-
-        sdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssd
-
-        ssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfff
-        ffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsss
-        sssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssss
-        sssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssss
-        ssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssssssss
-        sdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssss
-        fffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffss
-        ssssssssssssssssssssdsss
-        sfffffssssssssssssssssssssssdssssfffffsssssssssss
-        sssssssssssdssssfffffsssssssssssssssssssss
-        ssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssssssssvvv
-        fffffsssssssssssssssssssssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssss
-        sssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssd
-        ssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssff
-        fffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssss
-        ssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssss
-        sssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssssss
-        sssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssss
-        fffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffff
-        ssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssss
-        ssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssds
-        sssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffssssssssssssssssssssssdssssfffffsssssssssssssssssssss</string>
+    <string name="title_activity_splash">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 
 </resources>

@@ -29,7 +29,7 @@ public abstract class WeatherDatabase extends RoomDatabase {
                     DATABASE_NAME
             ).build();
         }
-        
+
         return instance;
     }
 

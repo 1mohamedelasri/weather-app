@@ -131,13 +131,13 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
             String date = String.format("%s, %s", Utility.format(mSavedDailyForecast.getDate()), Utility.formatDate(mSavedDailyForecast.getDate()));
 
 
-            if (timeOfDay >= 5 && timeOfDay < 12) {
+            if (timeOfDay >= 5 && timeOfDay <= 12) {
                 temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getMorningTemp()));
                 feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
-            } else if (timeOfDay >= 12 && timeOfDay < 16) {
+            } else if (timeOfDay >= 12 && timeOfDay <= 16) {
                 feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getDayTemp());
                 temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getDayTemp()));
-            } else if (timeOfDay >= 16 && timeOfDay < 21) {
+            } else if (timeOfDay >= 16 && timeOfDay <= 21) {
                 feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
                 temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getEveningTemp()));
             } else if ((timeOfDay >= 21 || timeOfDay >= 0)  && timeOfDay < 5) {

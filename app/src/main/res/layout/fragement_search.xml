@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="15dp">
+
+    <TextView
+        android:id="@+id/searchCityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_toEndOf="@+id/weather_img"
+        android:layout_toRightOf="@+id/weather_img"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Paris" />
+
+    <TextView
+        android:id="@+id/searchCountyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="ville de france"
+        android:textColor="@color/white"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/countryTag"
+        app:layout_constraintTop_toTopOf="@+id/countryTag" />
+
+    <ImageButton
+        android:id="@+id/AddCityToFav"
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="192dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchCityTextView"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+    <TextView
+        android:id="@+id/countryTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:text="Country : "
+        android:textColor="@color/white"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@+id/searchTempTextView"
+        app:layout_constraintTop_toBottomOf="@+id/searchTempTextView" />
+
+    <ImageView
+        android:id="@+id/searchWeatherIcon"
+        android:layout_width="90dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchCityTextView"
+        app:srcCompat="@drawable/art_clear" />
+
+    <TextView
+        android:id="@+id/searchTempTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginLeft="28dp"
+        android:text="2 C°"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/searchWeatherIcon"
+        app:layout_constraintTop_toTopOf="@+id/searchWeatherIcon" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

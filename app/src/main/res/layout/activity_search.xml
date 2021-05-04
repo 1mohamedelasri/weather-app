@@ -37,62 +37,16 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/FavCity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_toEndOf="@+id/weather_img"
-        android:layout_toRightOf="@+id/weather_img"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:visibility="invisible"
+    <FrameLayout
+        android:id="@+id/searchFragment"
+        android:layout_width="390dp"
+        android:layout_height="745dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.08"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        tools:text="Paris" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-    <TextView
-        android:id="@+id/FavCountry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="106dp"
-        android:layout_marginRight="106dp"
-        android:text="ville de france"
-        android:textColor="@color/white"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/AddCityToFav"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/countryTag"
-        app:layout_constraintTop_toTopOf="@+id/countryTag" />
 
-    <ImageButton
-        android:id="@+id/AddCityToFav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginRight="35dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.896"
-        app:layout_constraintStart_toEndOf="@+id/FavCountry"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
-    <TextView
-        android:id="@+id/countryTag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Country : "
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/FavCity"
-        app:layout_constraintTop_toBottomOf="@+id/FavCity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

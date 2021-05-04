@@ -1,7 +1,10 @@
 package com.devel.weatherapp.view;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.R;
@@ -19,6 +23,7 @@ import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Resource;
 import com.devel.weatherapp.utils.Utility;
+import com.devel.weatherapp.view.adapters.SearchFragment;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.ArrayList;
@@ -29,9 +34,7 @@ public class SearchWeatherCity extends AppCompatActivity {
     final List<WeatherForecast> mList = new ArrayList<>();
     private ProgressBar searchProgress;
     private SearchView searchView;
-    private TextView    searchResCity;
-    private TextView    SearchResCountry ;
-    private ImageButton addCityToFav;
+    public enum STATUS {NOT_FOUND,FOUND};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,19 +42,9 @@ public class SearchWeatherCity extends AppCompatActivity {
         getSupportActionBar().hide();
         searchProgress      = findViewById(R.id.searchProgress);
         searchView = (SearchView)findViewById(R.id.search_view);
-        searchResCity       = findViewById(R.id.FavCity);
-        SearchResCountry    = findViewById(R.id.FavCountry);
-        addCityToFav        = (ImageButton)findViewById(R.id.AddCityToFav);
         mWeatherListViewModel =  WeatherViewModel.getInstance(getApplication());
         searchView.requestFocus();
-        addCityToFav.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                mWeatherListViewModel.fetchbyCity("");
-                                                finish();
-                                            }
-                                        }
-        );
+
 
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -69,21 +62,17 @@ public class SearchWeatherCity extends AppCompatActivity {
             }
         });
 
+
+
         mWeatherListViewModel.searchedResult().observe(this::getLifecycle, new Observer<WeatherForecast>() {
             @Override
             public void onChanged(WeatherForecast data) {
                 Log.d("TEST", "subscribeObservers: ");
                 if (data != null) {
-                    searchResCity.setText(data.getCity().getName());
-                    SearchResCountry.setText(Utility.getCountryName(data.getCity().getCountry()));
-                    searchResCity.setVisibility(View.VISIBLE);
-                    SearchResCountry.setVisibility(View.VISIBLE);
-                    addCityToFav.setVisibility(View.VISIBLE);
-                    findViewById(R.id.countryTag).setVisibility(View.VISIBLE);
+
+                    loadFragment(data,STATUS.FOUND);
                 }else{
-                    searchResCity.setText("No city match your search criteria");
-                    SearchResCountry.setText("");
-                    addCityToFav.setVisibility(View.INVISIBLE);
+                    loadFragment(data,STATUS.NOT_FOUND);
                 }
                 searchProgress.setVisibility(View.INVISIBLE);
                 searchView.clearFocus();
@@ -91,34 +80,34 @@ public class SearchWeatherCity extends AppCompatActivity {
             }
         });
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                Toast t = Toast.makeText(getApplication(), "close", Toast.LENGTH_SHORT);
-                searchProgress.setVisibility(View.INVISIBLE);
-                searchResCity.setVisibility(View.INVISIBLE);
-                SearchResCountry.setVisibility(View.INVISIBLE);
-                addCityToFav.setVisibility(View.INVISIBLE);
-
-                return false;
-            }
-        });
 
         searchProgress.setVisibility(View.INVISIBLE);
-        searchResCity.setVisibility(View.INVISIBLE);
-        SearchResCountry.setVisibility(View.INVISIBLE);
-        addCityToFav.setVisibility(View.INVISIBLE);
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         searchProgress.setVisibility(View.INVISIBLE);
-        searchResCity.setVisibility(View.INVISIBLE);
-        SearchResCountry.setVisibility(View.INVISIBLE);
-        addCityToFav.setVisibility(View.INVISIBLE);
-        findViewById(R.id.countryTag).setVisibility(View.INVISIBLE);
+    }
+
+
+    private void loadFragment(WeatherForecast favouriteItem, STATUS status) {
+
+        SearchFragment fg = new SearchFragment();
+        fg.setFavouriteItem(favouriteItem);
+        fg.setStatus(status);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.searchFragment, fg, "fragmentTag")
+                .disallowAddToBackStack()
+                .commit();
 
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+
+    }
+
 }

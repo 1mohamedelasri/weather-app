@@ -228,7 +228,6 @@ public class MainActivity extends LocationBaseActivity {
             @Override
             public void onChanged(@Nullable Resource<List<FavouriteItem>> listResource) {
                 introViewPagerAdapter.notifyChange();
-
                 if(listResource != null){
                     Log.d(TAG, "onChanged: status: " + listResource.status);
 
@@ -286,18 +285,23 @@ public class MainActivity extends LocationBaseActivity {
         locationPresenter.onLocationChanged();
         currentLocation = location;
         introViewPagerAdapter.setCurrentLocation(location);
+        fetchWeatherLocationChanged();
         //mWeatherListViewModel.getForecastByCity("Grenoble",Constants.API_KEY);
 
         //String[] res = Utility.geoLocToString(currentLocation);
         //mWeatherListViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
        //if(mWeatherListViewModel.getFavourtieItems().size() <1)
       //  {
+      //  }
+    }
+
+    public void fetchWeatherLocationChanged(){
+        if(currentLocation != null) {
             String[] res = Utility.geoLocToString(currentLocation);
             mWeatherListViewModel.fetchbyLocation(res[0],res[1]);
             introViewPagerAdapter.notifyChange();
-      //  }
 
-
+        }
     }
 
     @Override
@@ -314,6 +318,7 @@ public class MainActivity extends LocationBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        fetchWeatherLocationChanged();
         refreshFromAnyWhere();
         if (getLocationManager().isWaitingForLocation()
                 && !getLocationManager().isAnyDialogShowing()) {

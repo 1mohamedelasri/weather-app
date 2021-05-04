@@ -27,6 +27,8 @@
         android:layout_width="49dp"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:onClick="favReturn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.046"
         app:layout_constraintStart_toStartOf="parent"
