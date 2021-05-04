@@ -4,7 +4,9 @@ import android.Manifest;
 import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -32,8 +34,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.devel.weatherapp.BuildConfig;
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.repositories.ForecastRepository;
+import com.devel.weatherapp.utils.AlarmReceiver;
 import com.devel.weatherapp.utils.Resource;
 import com.devel.weatherapp.utils.ScreenShotHelper;
+import com.devel.weatherapp.utils.SharedPreferences;
 import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.FavouriteItem;
@@ -60,6 +64,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.devel.weatherapp.utils.SharedPreferences.LAT;
+import static com.devel.weatherapp.utils.SharedPreferences.LON;
 import static com.devel.weatherapp.viewmodels.WeatherViewModel.QUERY_EXHAUSTED;
 
 
@@ -188,6 +194,16 @@ public class MainActivity extends LocationBaseActivity {
             }
         });//closing the setOnClickListener method
         forecastRepository = ForecastRepository.getInstance(getApplication());
+
+        Calendar calendar = Calendar.getInstance();
+        //calendar.set(Calendar.HOUR_OF_DAY,23);
+        //calendar.set(Calendar.MINUTE,36);
+        //calendar.set(Calendar.SECOND,10);
+        Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager)this.getSystemService(this.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 4*60*60, pendingIntent);
+
         //onTheTest();
     }
 
@@ -252,7 +268,6 @@ public class MainActivity extends LocationBaseActivity {
                                 Log.d(TAG, "onChanged: status: SUCCESS, #Recipes: " + listResource.data.size());
                                 introViewPagerAdapter.setFavouriteItems(listResource.data);
                                 introViewPagerAdapter.notifyChange();
-
                                 break;
                             }
                         }
@@ -293,6 +308,7 @@ public class MainActivity extends LocationBaseActivity {
        //if(mWeatherListViewModel.getFavourtieItems().size() <1)
       //  {
       //  }
+
     }
 
     public void fetchWeatherLocationChanged(){

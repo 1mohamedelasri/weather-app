@@ -140,16 +140,16 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
             } else if (timeOfDay >= 16 && timeOfDay <= 21) {
                 feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
                 temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getEveningTemp()));
-            } else if ((timeOfDay >= 21 || timeOfDay >= 0)  && timeOfDay < 5) {
+            } else if ((timeOfDay >= 21 && timeOfDay <= 24 )|| ( timeOfDay >= 0  && timeOfDay <= 5) ) {
                 feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeNight());
                 temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getNightTemp()));
             }
 
-            favouriteItems.get(currentPos).temperature = temperatureText;
             cityNameText.setText(favouriteItems.get(currentPos).city);
             cityTempText.setText(temperatureText);
             cityDescText.setText(favouriteItems.get(currentPos).description);
             feelLikeValue.setText(feelsLike);
+            favouriteItems.get(currentPos).temperature = temperatureText;
 
 
             HumidityValue.setText(mSavedDailyForecast.mhumidity + "%");

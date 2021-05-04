@@ -21,6 +21,7 @@ import com.devel.weatherapp.utils.AppExecutors;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.NetworkBoundResource;
 import com.devel.weatherapp.utils.Resource;
+import com.devel.weatherapp.utils.SharedPreferences;
 import com.devel.weatherapp.utils.Utility;
 
 import java.util.ArrayList;
@@ -29,6 +30,10 @@ import java.util.List;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.devel.weatherapp.utils.SharedPreferences.LAT;
+import static com.devel.weatherapp.utils.SharedPreferences.NOT_BODY;
+import static com.devel.weatherapp.utils.SharedPreferences.NOT_TITLE;
 
 public class ForecastRepository {
 
@@ -119,8 +124,12 @@ public class ForecastRepository {
                     savedDailyForecast.setSunset(data.getDailyForecasts().get(i).getSunset());
                     savedDailyForecasts.add(savedDailyForecast);
                 }
+                SharedPreferences.getInstance(context).putStringValue(NOT_TITLE, savedDailyForecasts.get(0).getDescription());
+                SharedPreferences.getInstance(context).putStringValue(NOT_BODY,
+                        "the weather feels like " + savedDailyForecasts.get(0).getFeelslikeDay() + "C°"
+                );
 
-               return new FavouriteItem(data.getCity().getId(),
+                return new FavouriteItem(data.getCity().getId(),
                         data.getCity().getName(),
                         savedDailyForecasts.get(0).getDescription(),
                         data.getCity().getCountry(),

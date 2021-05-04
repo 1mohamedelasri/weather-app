@@ -34,7 +34,7 @@ public class SearchWeatherCity extends AppCompatActivity {
     final List<WeatherForecast> mList = new ArrayList<>();
     private ProgressBar searchProgress;
     private SearchView searchView;
-    public enum STATUS {NOT_FOUND,FOUND};
+    public enum STATUS {NOT_FOUND,FOUND,NONE};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,9 +96,10 @@ public class SearchWeatherCity extends AppCompatActivity {
         SearchFragment fg = new SearchFragment();
         fg.setFavouriteItem(favouriteItem);
         fg.setStatus(status);
+        fg.setContext(this);
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.searchFragment, fg, "fragmentTag")
+                .replace(R.id.searchFragment, fg, "fragmentTag")
                 .disallowAddToBackStack()
                 .commit();
 

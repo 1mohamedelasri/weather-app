@@ -1,6 +1,8 @@
 package com.devel.weatherapp.view.adapters;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,7 @@ public class SearchFragment extends Fragment {
     private ImageView searchWeatherIcon;
     private WeatherViewModel mWeatherListViewModel;
     private SearchWeatherCity.STATUS status;
+    private Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +55,9 @@ public class SearchFragment extends Fragment {
                                                     @Override
                                                     public void onClick(View v) {
                                                         mWeatherListViewModel.fetchbyCity("");
+                                                        getParentFragmentManager().popBackStack();
                                                         getActivity().finish();
+
                                                     }
                                                 }
                 );
@@ -66,7 +71,6 @@ public class SearchFragment extends Fragment {
                  view = inflater.inflate(R.layout.fragement_notfound, container, false);
                 break;
         }
-
 
         return view;
     }
@@ -97,5 +101,8 @@ public class SearchFragment extends Fragment {
         return temperatureText;
     }
 
+    public void setContext(Context cx){
+        this.context = cx;
+    }
 
 }

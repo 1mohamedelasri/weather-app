@@ -17,6 +17,8 @@ public class SharedPreferences {
     public static final String LAT = "lat";
     public static final String LON = "lon";
     public static final String TEMP = "temp";
+    public static final String NOT_TITLE = "not_title";
+    public static final String NOT_BODY = "not_body";
 
 
 
@@ -74,4 +76,13 @@ public class SharedPreferences {
     public String getTemp() {
         return preferences.getString(TEMP, "");
     }
+
+    public String getNotificationTitle() {
+        return preferences.getString(NOT_TITLE, " IWeather notification");
+    }
+
+    public String getNotificationBody() {
+        return preferences.getString(NOT_BODY, "Weather is alaways beautiful");
+    }
+
 }
