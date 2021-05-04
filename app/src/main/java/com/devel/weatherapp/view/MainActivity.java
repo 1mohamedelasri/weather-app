@@ -159,7 +159,6 @@ public class MainActivity extends LocationBaseActivity {
                 popup.show();//showing popup menu
             }
         });//closing the setOnClickListener method
-
         forecastRepository = ForecastRepository.getInstance(getApplication());
         //onTheTest();
     }
@@ -200,10 +199,13 @@ public class MainActivity extends LocationBaseActivity {
         mWeatherListViewModel.getDataSource().observe(this, new Observer<Resource<List<FavouriteItem>>>() {
             @Override
             public void onChanged(@Nullable Resource<List<FavouriteItem>> listResource) {
+                introViewPagerAdapter.notifyChange();
+
                 if(listResource != null){
                     Log.d(TAG, "onChanged: status: " + listResource.status);
 
                     if(listResource.data != null){
+
                         switch (listResource.status){
                             case LOADING:{
                             }
@@ -284,7 +286,7 @@ public class MainActivity extends LocationBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        refreshFromAnyWhere();
         if (getLocationManager().isWaitingForLocation()
                 && !getLocationManager().isAnyDialogShowing()) {
             //displayProgress();
@@ -360,5 +362,8 @@ public class MainActivity extends LocationBaseActivity {
         }
     }
 
+    public void refreshFromAnyWhere(){
+        this.introViewPagerAdapter.notifyChange();
+    }
 
 }

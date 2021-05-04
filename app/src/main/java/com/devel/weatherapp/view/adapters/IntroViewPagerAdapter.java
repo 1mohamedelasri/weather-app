@@ -115,7 +115,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     }
 
     private void fetchData() {
-        if(favouriteItems.size() > 0 ) {
+        if(favouriteItems.size() > 0 && favouriteItems.get(currentPos).savedDailyForecast.size() > 0) {
             SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
             recyclerAdapter.setForecasts(favouriteItems.get(currentPos).savedDailyForecast);
             recyclerAdapter.notifyDataSetChanged();

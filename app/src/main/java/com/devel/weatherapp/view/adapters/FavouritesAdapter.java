@@ -94,7 +94,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     }
 
     // Inner class for creating ViewHolders
-    public class FavouritesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class FavouritesViewHolder extends RecyclerView.ViewHolder {
 
         TextView favCity;
         TextView favCountry;
@@ -109,14 +109,15 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
             favCountry = itemView.findViewById(R.id.FavCountry);
             favImg = itemView.findViewById(R.id.FavImg);
             favDelete = itemView.findViewById(R.id.favDelete);
-            favDelete.setOnClickListener(this);
-        }
+            favDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mViewModel.dropFravourtieItem(favouriteItems.get(currentPos));
+                    favouriteItems.remove(currentPos);
+                    notifyDataSetChanged();
 
-        @Override
-        public void onClick(View v) {
-            mViewModel.dropFravourtieItem(favouriteItems.get(currentPos));
-            favouriteItems.remove(currentPos);
-            notifyDataSetChanged();
+                }
+            });
         }
     }
 }

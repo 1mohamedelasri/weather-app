@@ -73,7 +73,6 @@ public class SavedDailyForecast implements Serializable {
         this.dayTemp = 565554;
         this.mhumidity = 44;
         this.weatherid= Long.valueOf(200);
-
     }
 
     public int getId() {

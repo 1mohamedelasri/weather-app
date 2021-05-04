@@ -1,6 +1,7 @@
 package com.devel.weatherapp.repositories;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -175,7 +176,20 @@ public class ForecastRepository {
     }
 
     public void dropFravourtieItem(FavouriteItem favouriteItem) {
-        this.weatherDao.deleteFavouriteItem(favouriteItem.id);
+        new InsertAsynTask(WeatherDatabase.getInstance(context)).execute(favouriteItem);
+    }
+
+    static class InsertAsynTask extends AsyncTask<FavouriteItem,Void,Void> {
+        private WeatherDao weatherDao;
+        InsertAsynTask(WeatherDatabase weatherDatabase)
+        {
+            weatherDao= weatherDatabase.getWeatherDao();
+        }
+        @Override
+        protected Void doInBackground(FavouriteItem... favouriteItem) {
+            weatherDao.deleteFavouriteItem(favouriteItem[0].id);
+            return null;
+        }
     }
 }
 
