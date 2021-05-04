@@ -13,6 +13,7 @@ import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherForecast;
+import com.devel.weatherapp.models.WeatherResponse;
 import com.devel.weatherapp.persistence.WeatherDao;
 import com.devel.weatherapp.persistence.WeatherDatabase;
 import com.devel.weatherapp.utils.AppExecutors;
@@ -58,7 +59,6 @@ public class ForecastRepository {
 
             @Override
             protected void saveCallResult(@NonNull WeatherForecast item) {
-                weatherDao.deleteAll();
                 if (item != null && item.getDailyForecasts() != null) {
 
                     weatherDao.insertWeather(mapWeatherToFavortie(item));
@@ -67,7 +67,7 @@ public class ForecastRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<FavouriteItem> data) {
-                return data == null || data.isEmpty();
+                return true;
             }
 
             @NonNull
@@ -129,14 +129,6 @@ public class ForecastRepository {
         return null;
     }
 
-    public LiveData<ApiResponse<WeatherForecast>> getWeatherByCity(String city, String apiKey)
-    {
-        return weatherApi.getCurrentWeatherDataOfCityV2(
-                city,
-                apiKey
-        );
-    }
-
     public LiveData<Resource<List<FavouriteItem>>> fetchForecastByLocation(String lat, String lon) {
         return new NetworkBoundResource<List<FavouriteItem>, WeatherForecast>(AppExecutors.getInstance()) {
 
@@ -169,7 +161,17 @@ public class ForecastRepository {
         }.getAsLiveData();
     }
 
+    public LiveData<ApiResponse<WeatherForecast>> getWeatherByCity(String city, String apiKey)
+    {
+        return weatherApi.getCurrentWeatherDataOfCityV2(
+                city,
+                apiKey
+        );
+    }
 
+    public void insertFavouriteDb(WeatherForecast favouriteItem) {
+        this.weatherDao.insertWeather(mapWeatherToFavortie(favouriteItem));
+    }
 }
 
 

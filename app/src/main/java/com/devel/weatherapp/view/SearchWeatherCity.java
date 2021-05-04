@@ -47,7 +47,7 @@ public class SearchWeatherCity extends AppCompatActivity {
         addCityToFav.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-                                                mWeatherListViewModel.addSearchCityToFavorties();
+                                                mWeatherListViewModel.fetchbyCity("");
                                                 finish();
                                             }
                                         }
@@ -59,7 +59,7 @@ public class SearchWeatherCity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String s) {
 
                 searchProgress.setVisibility(View.VISIBLE);
-                mWeatherListViewModel.fetchbyCity(s);
+                mWeatherListViewModel.getForecastByCity(s,Constants.API_KEY);
                 return false;
             }
 

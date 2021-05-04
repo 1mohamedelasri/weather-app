@@ -134,7 +134,6 @@ public class MainActivity extends LocationBaseActivity {
             public void onClick(View v) {
 
                 Log.d("MAIN ACTIVTY !","onTheTest");
-                onTheTest();
                 //Creating the instance of PopupMenu
                 PopupMenu popup = new PopupMenu(MainActivity.this, baselineBtn);
                 //Inflating the Popup using xml file
@@ -162,7 +161,7 @@ public class MainActivity extends LocationBaseActivity {
         });//closing the setOnClickListener method
 
         forecastRepository = ForecastRepository.getInstance(getApplication());
-        onTheTest();
+        //onTheTest();
     }
 
     public void onTheTest(){
@@ -214,6 +213,7 @@ public class MainActivity extends LocationBaseActivity {
                                 Log.e(TAG, "onChanged: ERROR message: " + listResource.message );
                                 Log.e(TAG, "onChanged: status: ERROR, #recipes: " + listResource.data.size());
                                 introViewPagerAdapter.setFavouriteItems(listResource.data);
+                                introViewPagerAdapter.notifyChange();
 
                                 break;
                             }
@@ -222,6 +222,8 @@ public class MainActivity extends LocationBaseActivity {
                                 Log.d(TAG, "onChanged: cache has been refreshed.");
                                 Log.d(TAG, "onChanged: status: SUCCESS, #Recipes: " + listResource.data.size());
                                 introViewPagerAdapter.setFavouriteItems(listResource.data);
+                                introViewPagerAdapter.notifyChange();
+
                                 break;
                             }
                         }

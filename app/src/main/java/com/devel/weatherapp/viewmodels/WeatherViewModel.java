@@ -11,10 +11,12 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.repositories.ForecastRepository;
 import com.devel.weatherapp.repositories.WeatherRepository;
+import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Resource;
 
 import java.util.ArrayList;
@@ -39,8 +41,14 @@ public class WeatherViewModel extends AndroidViewModel  {
     private static WeatherViewModel instance;
     private ForecastRepository forecastRepository = ForecastRepository.getInstance(getApplication());
     private MediatorLiveData<Resource<List<FavouriteItem>>> _dataSource = new MediatorLiveData<>();
+    private MediatorLiveData<Resource<List<FavouriteItem>>> _searchedData = new MediatorLiveData<>();
+
     public MediatorLiveData<Resource<List<FavouriteItem>>> getDataSource(){
         return _dataSource;
+    }
+
+    public MediatorLiveData<Resource<List<FavouriteItem>>> getSearchedDataSource(){
+        return _searchedData;
     }
     // query extras
     private boolean isQueryExhausted;
@@ -121,58 +129,27 @@ public class WeatherViewModel extends AndroidViewModel  {
     }
 
     public void addSearchCityToFavorties() {
+
         _data.postValue(_searchedCity.getValue());
-    }
-
-    public void testRepository(){
-
-/*
-        mWeatherRepository.getWeatherByCity("grenoble",Constants.API_KEY).enqueue(new Callback<WeatherForecast>() {
-            @Override
-            public void onResponse(Call<WeatherForecast> call, Response<WeatherForecast> response) {
-
-                Log.d(TAG, "onResponse: server response " + response.toString());
-
-                // response code 200 means a successful request
-                // if successful store the response body in the lod
-                if (response.code() == 200) {
-                    // mWeatherResponseList = response.body();
-                    Log.d(TAG, "onResponse: " + response.body().toString());
-                    //  Log.d(TAG, "onResponse: " + mWeatherResponse.toString());
-
-
-                } else {
-                    Log.d(TAG, "onResponse: " + response.errorBody().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<WeatherForecast> call, Throwable t) {
-                Log.d(TAG, "onResponse: ERROR: " + t.getMessage());
-
-            }
-        });
-
-        /
- */
+        forecastRepository.insertFavouriteDb(_searchedCity.getValue());
     }
 
 
     public void fetchbyCity(String city){
-        final LiveData<Resource<List<FavouriteItem>>> repositorySource = forecastRepository.fetchForecast(city);
-        fetchWithCaching(repositorySource);
+        final LiveData<Resource<List<FavouriteItem>>> repositorySource = forecastRepository.fetchForecast(_searchedCity.getValue().getCity().getName());
+        fetchWithCaching(repositorySource,_dataSource);
     }
 
     public void fetchbyLocation(String lat, String lon){
         final LiveData<Resource<List<FavouriteItem>>> repositorySource = forecastRepository.fetchForecastByLocation(lat,lon);
-        fetchWithCaching(repositorySource);
+        fetchWithCaching(repositorySource, _dataSource);
     }
 
-    public void fetchWithCaching(LiveData<Resource<List<FavouriteItem>>> repositorySource  ){
+    public void fetchWithCaching(LiveData<Resource<List<FavouriteItem>>> repositorySource,MediatorLiveData<Resource<List<FavouriteItem>>> usedRepo   ){
         requestStartTime = System.currentTimeMillis();
         cancelRequest = false;
         isPerformingQuery = true;
-        _dataSource.addSource(repositorySource, new Observer<Resource<List<FavouriteItem>>>() {
+        usedRepo.addSource(repositorySource, new Observer<Resource<List<FavouriteItem>>>() {
             @Override
             public void onChanged(@Nullable Resource<List<FavouriteItem>> listResource) {
                 if(!cancelRequest){
@@ -186,7 +163,7 @@ public class WeatherViewModel extends AndroidViewModel  {
                             if(listResource.data != null){
                                 if(listResource.data.size() == 0 ){
                                     Log.d(TAG, "onChanged: query is exhausted...");
-                                    _dataSource.setValue(
+                                    usedRepo.setValue(
                                             new Resource<List<FavouriteItem>>(
                                                     Resource.Status.ERROR,
                                                     listResource.data,
@@ -196,7 +173,7 @@ public class WeatherViewModel extends AndroidViewModel  {
                                     isQueryExhausted = true;
                                 }
                             }
-                            _dataSource.removeSource(repositorySource);
+                            usedRepo.removeSource(repositorySource);
                         }
                         else if(listResource.status == Resource.Status.ERROR){
                             Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds.");
@@ -204,16 +181,16 @@ public class WeatherViewModel extends AndroidViewModel  {
                             if(listResource.message.equals(QUERY_EXHAUSTED)){
                                 isQueryExhausted = true;
                             }
-                            _dataSource.removeSource(repositorySource);
+                            usedRepo.removeSource(repositorySource);
                         }
-                        _dataSource.setValue(listResource);
+                        usedRepo.setValue(listResource);
                     }
                     else{
-                        _dataSource.removeSource(repositorySource);
+                        usedRepo.removeSource(repositorySource);
                     }
                 }
                 else{
-                    _dataSource.removeSource(repositorySource);
+                    usedRepo.removeSource(repositorySource);
                 }
             }
         });
@@ -223,5 +200,10 @@ public class WeatherViewModel extends AndroidViewModel  {
    /* public LiveData<Resource<List<SavedDailyForecast>>> fetchResults(String city, String numDays) {
         return forecastRepository.fetchForecast(city, numDays);
     }*/
+
+    public void searchWeatherOfCity(String city){
+        final LiveData<Resource<List<FavouriteItem>>> repositorySource = forecastRepository.fetchForecast(city);
+        fetchWithCaching(repositorySource,_searchedData);
+    }
 
 }
