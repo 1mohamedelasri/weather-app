@@ -53,54 +53,27 @@ public class ForecastRepository {
         weatherApi = ServiceGenerator.getWeatherApi();
     }
 
-    public LiveData<Resource<List<SavedDailyForecast>>> fetchForecast(String city, String numDays) {
-        return new NetworkBoundResource<List<SavedDailyForecast>, WeatherForecast>(AppExecutors.getInstance()) {
+    public LiveData<Resource<List<FavouriteItem>>> fetchForecast(String city) {
+        return new NetworkBoundResource<List<FavouriteItem>, WeatherForecast>(AppExecutors.getInstance()) {
 
             @Override
             protected void saveCallResult(@NonNull WeatherForecast item) {
                 weatherDao.deleteAll();
                 if (item != null && item.getDailyForecasts() != null) {
-                    List<SavedDailyForecast> savedDailyForecasts = new ArrayList<SavedDailyForecast>();
-                    for (int i = 0; i < item.getDailyForecasts().size(); i++) {
-                        SavedDailyForecast savedDailyForecast = new SavedDailyForecast();
-                        savedDailyForecast.setLat(item.getCity().getCoord().getLat());
-                        savedDailyForecast.setLon(item.getCity().getCoord().getLon());
-                        savedDailyForecast.setDate(item.getDailyForecasts().get(i).getDt());
-                        savedDailyForecast.setMaxTemp(item.getDailyForecasts().get(i).getTemp().getMax());
-                        savedDailyForecast.setMinTemp(item.getDailyForecasts().get(i).getTemp().getMin());
-                        savedDailyForecast.setDayTemp(item.getDailyForecasts().get(i).getTemp().getDay());
-                        savedDailyForecast.setEveningTemp(item.getDailyForecasts().get(i).getTemp().getEve());
-                        savedDailyForecast.setMorningTemp(item.getDailyForecasts().get(i).getTemp().getMorn());
-                        savedDailyForecast.setNightTemp(item.getDailyForecasts().get(i).getTemp().getNight());
-                        savedDailyForecast.setFeelslikeDay(item.getDailyForecasts().get(i).getFeelsLike().getDay());
-                        savedDailyForecast.setFeelslikeEve(item.getDailyForecasts().get(i).getFeelsLike().getEve());
-                        savedDailyForecast.setFeelslikeMorning(item.getDailyForecasts().get(i).getFeelsLike().getMorn());
-                        savedDailyForecast.setFeelslikeNight(item.getDailyForecasts().get(i).getFeelsLike().getNight());
-                        savedDailyForecast.setHumidity(item.getDailyForecasts().get(i).getHumidity());
-                        savedDailyForecast.setWind(item.getDailyForecasts().get(i).getSpeed());
-                        savedDailyForecast.setDescription(item.getDailyForecasts().get(i).getWeather().get(0).getDescription());
-                        savedDailyForecast.setWeatherid(item.getDailyForecasts().get(i).getWeather().get(0).getId());
-                        savedDailyForecast.setImageUrl(item.getDailyForecasts().get(i).getWeather().get(0).getIcon());
-                        savedDailyForecasts.add(savedDailyForecast);
-                    }
-                    weatherDao.insertForecastList(savedDailyForecasts);
+
+                    weatherDao.insertWeather(mapWeatherToFavortie(item));
                 }
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable List<SavedDailyForecast> data) {
-                return true;
+            protected boolean shouldFetch(@Nullable List<FavouriteItem> data) {
+                return data == null || data.isEmpty();
             }
 
             @NonNull
             @Override
-            protected LiveData<List<SavedDailyForecast>> loadFromDb() {
-                List<SavedDailyForecast> source = new ArrayList<>();
-                source.add(new SavedDailyForecast());
-                MutableLiveData<List<SavedDailyForecast>>  data = new MutableLiveData<>();
-                data.postValue(source);
-                return data;
-                //return weatherDao.loadForecast();
+            protected LiveData<List<FavouriteItem>> loadFromDb() {
+                return weatherDao.loadForecast();
             }
 
             @NonNull
@@ -146,19 +119,8 @@ public class ForecastRepository {
                     savedDailyForecasts.add(savedDailyForecast);
                 }
 
-                Calendar c = Calendar.getInstance();
-                int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-                String temperatureText = "";
-                String feelsLike = "";
-                String date = String.format("%s, %s", Utility.format(savedDailyForecasts.get(0).getDate()), Utility.formatDate(savedDailyForecasts.get(0).getDate()));
-
-
-                String humidity_value=(savedDailyForecasts.get(0).getHumidity() + "%");
-
-
                return new FavouriteItem(data.getCity().getId(),
                         data.getCity().getName(),
-                        temperatureText,feelsLike,date,
                         savedDailyForecasts.get(0).getDescription(), data.getCity().getName(),
                         savedDailyForecasts);
             }
@@ -173,6 +135,38 @@ public class ForecastRepository {
                 city,
                 apiKey
         );
+    }
+
+    public LiveData<Resource<List<FavouriteItem>>> fetchForecastByLocation(String lat, String lon) {
+        return new NetworkBoundResource<List<FavouriteItem>, WeatherForecast>(AppExecutors.getInstance()) {
+
+            @Override
+            protected void saveCallResult(@NonNull WeatherForecast item) {
+                weatherDao.deleteAll();
+                if (item != null && item.getDailyForecasts() != null) {
+
+                    weatherDao.insertWeather(mapWeatherToFavortie(item));
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<FavouriteItem> data) {
+                return data == null || data.isEmpty();
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<FavouriteItem>> loadFromDb() {
+                return weatherDao.loadForecast();
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<WeatherForecast>> createCall() {
+                return weatherApi.getCurrentLocationForecastV2(lat,lon, Constants.API_KEY);
+            }
+
+        }.getAsLiveData();
     }
 
 

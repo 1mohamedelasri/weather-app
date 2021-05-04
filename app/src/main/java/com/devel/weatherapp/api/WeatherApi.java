@@ -38,4 +38,7 @@ public interface WeatherApi {
     @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
     LiveData<ApiResponse<WeatherForecast>> getCurrentWeatherDataOfCityV2(@Query("q") String city, @Query("APPID") String app_id);
 
+    @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
+    LiveData<ApiResponse<WeatherForecast>> getCurrentLocationForecastV2(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);
+
 }

@@ -18,16 +18,16 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 public interface WeatherDao {
 
     @Insert(onConflict = REPLACE)
-    long[] insertWeather(SavedDailyForecast... F);
+    long[] insertWeather(FavouriteItem... FavouriteItem);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertForecastList(List<SavedDailyForecast> savedDailyForecasts);
+    void insertForecastList(List<FavouriteItem> FavouriteItem);
 
 
-    @Query("SELECT * FROM SavedDailyForecast")
-    LiveData<List<SavedDailyForecast>> loadForecast();
+    @Query("SELECT * FROM FavouriteItem")
+    LiveData<List<FavouriteItem>> loadForecast();
 
-    @Query("DELETE FROM SavedDailyForecast")
+    @Query("DELETE FROM FavouriteItem")
     void deleteAll();
 
 }

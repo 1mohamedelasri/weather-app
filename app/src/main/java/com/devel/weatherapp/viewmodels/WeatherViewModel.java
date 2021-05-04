@@ -1,35 +1,23 @@
 package com.devel.weatherapp.viewmodels;
 
 import android.app.Application;
-import android.content.Context;
-import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.FavouriteItem;
-import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherForecast;
-import com.devel.weatherapp.models.WeatherRes;
-import com.devel.weatherapp.models.WeatherResponse;
 import com.devel.weatherapp.repositories.ForecastRepository;
 import com.devel.weatherapp.repositories.WeatherRepository;
-import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Resource;
-import com.devel.weatherapp.utils.Utility;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -39,6 +27,7 @@ import retrofit2.Response;
 public class WeatherViewModel extends AndroidViewModel  {
 
     private String TAG ="WeatherViewModel";
+    public static final String QUERY_EXHAUSTED = "No more results.";
 
     /**
      * Instantiate the weather repository.
@@ -49,10 +38,22 @@ public class WeatherViewModel extends AndroidViewModel  {
     private final MutableLiveData<WeatherForecast> _searchedCity= new MutableLiveData<>();
     private static WeatherViewModel instance;
     private ForecastRepository forecastRepository = ForecastRepository.getInstance(getApplication());
+    private MediatorLiveData<Resource<List<FavouriteItem>>> _dataSource = new MediatorLiveData<>();
+    public MediatorLiveData<Resource<List<FavouriteItem>>> getDataSource(){
+        return _dataSource;
+    }
+    // query extras
+    private boolean isQueryExhausted;
+    private boolean isPerformingQuery;
+    private int pageNumber;
+    private String query;
+    private boolean cancelRequest;
+    private long requestStartTime;
+
+
     public WeatherViewModel(@NonNull Application application) {
         super(application);
         mWeatherRepository = WeatherRepository.getInstance(application);
-
     }
     List<FavouriteItem> test;
 
@@ -156,8 +157,71 @@ public class WeatherViewModel extends AndroidViewModel  {
  */
     }
 
-    public LiveData<Resource<List<SavedDailyForecast>>> fetchResults(String city, String numDays) {
-        return forecastRepository.fetchForecast(city, numDays);
+
+    public void fetchbyCity(String city){
+        final LiveData<Resource<List<FavouriteItem>>> repositorySource = forecastRepository.fetchForecast(city);
+        fetchWithCaching(repositorySource);
     }
+
+    public void fetchbyLocation(String lat, String lon){
+        final LiveData<Resource<List<FavouriteItem>>> repositorySource = forecastRepository.fetchForecastByLocation(lat,lon);
+        fetchWithCaching(repositorySource);
+    }
+
+    public void fetchWithCaching(LiveData<Resource<List<FavouriteItem>>> repositorySource  ){
+        requestStartTime = System.currentTimeMillis();
+        cancelRequest = false;
+        isPerformingQuery = true;
+        _dataSource.addSource(repositorySource, new Observer<Resource<List<FavouriteItem>>>() {
+            @Override
+            public void onChanged(@Nullable Resource<List<FavouriteItem>> listResource) {
+                if(!cancelRequest){
+                    if(listResource != null){
+                        if(listResource.status == Resource.Status.SUCCESS){
+                            Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds.");
+                            Log.d(TAG, "onChanged: page number: " + pageNumber);
+                            Log.d(TAG, "onChanged: " + listResource.data);
+
+                            isPerformingQuery = false;
+                            if(listResource.data != null){
+                                if(listResource.data.size() == 0 ){
+                                    Log.d(TAG, "onChanged: query is exhausted...");
+                                    _dataSource.setValue(
+                                            new Resource<List<FavouriteItem>>(
+                                                    Resource.Status.ERROR,
+                                                    listResource.data,
+                                                    QUERY_EXHAUSTED
+                                            )
+                                    );
+                                    isQueryExhausted = true;
+                                }
+                            }
+                            _dataSource.removeSource(repositorySource);
+                        }
+                        else if(listResource.status == Resource.Status.ERROR){
+                            Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds.");
+                            isPerformingQuery = false;
+                            if(listResource.message.equals(QUERY_EXHAUSTED)){
+                                isQueryExhausted = true;
+                            }
+                            _dataSource.removeSource(repositorySource);
+                        }
+                        _dataSource.setValue(listResource);
+                    }
+                    else{
+                        _dataSource.removeSource(repositorySource);
+                    }
+                }
+                else{
+                    _dataSource.removeSource(repositorySource);
+                }
+            }
+        });
+
+    }
+
+   /* public LiveData<Resource<List<SavedDailyForecast>>> fetchResults(String city, String numDays) {
+        return forecastRepository.fetchForecast(city, numDays);
+    }*/
 
 }

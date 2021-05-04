@@ -9,12 +9,15 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.Constants;
+import com.devel.weatherapp.utils.Resource;
 import com.devel.weatherapp.utils.Utility;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
@@ -56,7 +59,7 @@ public class SearchWeatherCity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String s) {
 
                 searchProgress.setVisibility(View.VISIBLE);
-                mWeatherListViewModel.getForecastByCity(s, Constants.API_KEY);
+                mWeatherListViewModel.fetchbyCity(s);
                 return false;
             }
 

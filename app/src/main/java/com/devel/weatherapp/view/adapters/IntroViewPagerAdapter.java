@@ -20,11 +20,13 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.FavouriteItem;
+import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Utility;
 import com.devel.weatherapp.view.SunView;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +52,8 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     private TextView HumidityValue;
     private TextView cloudiness;
     private TextView WindSpeedValue;
+    private SunView sv;
+    private List<FavouriteItem> favouriteItems = new ArrayList<>();
 
     public IntroViewPagerAdapter(Context mContext, Application application, WeatherViewModel weatherViewModel) {
         this.mContext = mContext;
@@ -81,7 +85,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
                     mContext.startActivity(myIntent);
             }
         });*/
-        List<FavouriteItem> favItems = weatherViewModel.getFavourtieItems();
+
         Activity hostActivity = (Activity)mContext;
         cityNameText = hostActivity.findViewById(R.id.cityTextView);
         cityTempText = layoutScreen.findViewById(R.id.temperatureTextView);
@@ -90,44 +94,78 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         HumidityValue   = layoutScreen.findViewById(R.id.HumidityValue);
         cloudiness = layoutScreen.findViewById(R.id.CloudinessValue);
         WindSpeedValue  = layoutScreen.findViewById(R.id.WindSpeedValue);
+        sv = hostActivity.findViewById(R.id.sv);
 
 
-
-        cityNameText.setText(weatherViewModel.getFavourtieItems().get(currentPos).city);
-        cityTempText.setText(weatherViewModel.getFavourtieItems().get(currentPos).temperature);
-        cityDescText.setText(weatherViewModel.getFavourtieItems().get(currentPos).description);
-        feelLikeValue.setText(weatherViewModel.getFavourtieItems().get(currentPos).feelsLike);
-
-        HumidityValue.setText(weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast.get(0).mhumidity+"%");
-        cloudiness.setText(weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast.get(0).clouds+"%");
-        WindSpeedValue.setText(Utility.getFormattedWind(mContext,weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast.get(position).getWind()));
-        feelLikeValue.setText(weatherViewModel.getFavourtieItems().get(position).feelsLike);
         recyclerView = (RecyclerView) container.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerAdapter = new WeeklyAdapter(mContext,weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast);
+        recyclerAdapter = new WeeklyAdapter(mContext,new ArrayList<>());
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setHasFixedSize(true);
 
 
-        SunView sv = hostActivity.findViewById(R.id.sv);
-        Date sunRisedate = new Date((long) (weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast.get(0).getSunrise() * 1000));
-        Date sunSetdate = new Date((long) (weatherViewModel.getFavourtieItems().get(currentPos).savedDailyForecast.get(0).getSunset() * 1000));
+        fetchData();
 
-        // Set sunrise time
-        sv.setSunrise(sunRisedate.getHours(), sunRisedate.getMinutes());
-        // Set the sunset time
-        sv.setSunset(sunSetdate.getHours(), sunSetdate.getMinutes());
-        // Get system time
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        // Set the current time
-        sv.setCurrentTime(hour, minute);
+
 
         return layoutScreen;
 
 
+    }
+
+    private void fetchData() {
+        if(favouriteItems.size() > 0 ) {
+            SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
+            recyclerAdapter.setForecasts(favouriteItems.get(currentPos).savedDailyForecast);
+            recyclerAdapter.notifyDataSetChanged();
+
+            Calendar c = Calendar.getInstance();
+            int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+            String temperatureText = "";
+            String feelsLike = "";
+            String date = String.format("%s, %s", Utility.format(mSavedDailyForecast.getDate()), Utility.formatDate(mSavedDailyForecast.getDate()));
+
+
+            if (timeOfDay >= 5 && timeOfDay < 12) {
+                temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getMorningTemp()));
+                feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
+            } else if (timeOfDay >= 12 && timeOfDay < 16) {
+                feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getDayTemp());
+                temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getDayTemp()));
+            } else if (timeOfDay >= 16 && timeOfDay < 21) {
+                feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
+                temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getEveningTemp()));
+            } else if ((timeOfDay >= 21 || timeOfDay >= 0)  && timeOfDay < 5) {
+                feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeNight());
+                temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getNightTemp()));
+            }
+
+            cityNameText.setText(favouriteItems.get(currentPos).city);
+            cityTempText.setText(temperatureText);
+            cityDescText.setText(favouriteItems.get(currentPos).description);
+            feelLikeValue.setText(feelsLike);
+
+
+            HumidityValue.setText(mSavedDailyForecast.mhumidity + "%");
+            cloudiness.setText(mSavedDailyForecast.clouds + "%");
+            WindSpeedValue.setText(Utility.getFormattedWind(mContext, favouriteItems.get(currentPos).savedDailyForecast.get(0).getWind()));
+
+
+            Date sunRisedate = new Date((long) (favouriteItems.get(currentPos).savedDailyForecast.get(0).getSunrise() * 1000));
+            Date sunSetdate = new Date((long) (favouriteItems.get(currentPos).savedDailyForecast.get(0).getSunset() * 1000));
+
+            // Set sunrise time
+            sv.setSunrise(sunRisedate.getHours(), sunRisedate.getMinutes());
+            // Set the sunset time
+            sv.setSunset(sunSetdate.getHours(), sunSetdate.getMinutes());
+            // Get system time
+            Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+            // Set the current time
+            sv.setCurrentTime(hour, minute);
+        }
     }
 
     public void notifyChange(){
@@ -139,7 +177,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     }
     @Override
     public int getCount() {
-        return this.weatherViewModel.getFavourtieItems().size();
+        return favouriteItems.size();
     }
 
     @Override
@@ -149,6 +187,11 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
     public void setCurrentPos(int pos){
         this.currentPos = pos;
+    }
+
+    public void setFavouriteItems(List<FavouriteItem> favouriteItemsList){
+        this.favouriteItems = favouriteItemsList;
+        notifyChange();
     }
 
     @Override

@@ -13,7 +13,7 @@ import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherResponse;
 
-@Database(entities = {SavedDailyForecast.class,}, version = 1 )
+@Database(entities = {FavouriteItem.class,}, version = 2 )
 public abstract class WeatherDatabase extends RoomDatabase {
 
 

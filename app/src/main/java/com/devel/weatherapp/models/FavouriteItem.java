@@ -8,7 +8,10 @@ import androidx.room.TypeConverters;
 import com.devel.weatherapp.utils.ListConverter;
 import com.google.gson.annotations.Expose;
 
+import java.security.Timestamp;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Entity(tableName = "FavouriteItem")
 public class FavouriteItem {
@@ -33,25 +36,18 @@ public class FavouriteItem {
     @Expose
     public List<SavedDailyForecast> savedDailyForecast;
 
-    @ColumnInfo(name = "feelsLike")
-    public String feelsLike;
-
-    @ColumnInfo(name = "date")
-    public String date;
-
     @ColumnInfo(name = "timestamp")
-    public int timestamp;
+    public Long timestamp;
 
 
-    public FavouriteItem(Long id, String city, String temperature,String feelsLike,String date, String description, String country, List<SavedDailyForecast> savedDailyForecast) {
+    public FavouriteItem(Long id, String city, String description, String country, List<SavedDailyForecast> savedDailyForecast) {
         this.city = city;
-        this.temperature = temperature;
         this.description = description;
         this.savedDailyForecast = savedDailyForecast;
         this.id = id;
         this.country = country;
-        this.feelsLike = feelsLike;
-        this.date = date ; }
+        this.timestamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -65,11 +61,11 @@ public class FavouriteItem {
 
     }
 
-    public int getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 }

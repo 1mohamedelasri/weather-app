@@ -15,11 +15,13 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.repositories.ForecastRepository;
+import com.devel.weatherapp.utils.Resource;
 import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.FavouriteItem;
@@ -40,9 +42,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static com.devel.weatherapp.viewmodels.WeatherViewModel.QUERY_EXHAUSTED;
+
 
 public class MainActivity extends LocationBaseActivity {
 
+    private final String TAG = "MainActivity";
     private WeatherViewModel mWeatherListViewModel;
     private ViewPager screenPager;
     private IntroViewPagerAdapter introViewPagerAdapter;
@@ -165,17 +170,18 @@ public class MainActivity extends LocationBaseActivity {
 
         //mWeatherRepository = WeatherRepository.getInstance(getApplication());
 
-        forecastRepository.fetchForecast("grenoble","").observe(this, result -> {
+        forecastRepository.fetchForecast("grenoble").observe(this, result -> {
             Log.d("MAINACTIIVTY","2");
             if(result != null) {
-                if(result.data != null) {
-                    Log.d("MAINACTIIVTY",  "3" + result.data.get(0).getDescription());
+                if(result.data != null && result.data.size() > 0 ) {
+                    Log.d("MAINACTIIVTY",  "3" + result.data.get(0).city);
 
                 }
             }
 
         });
     }
+
     private void SetupObservers() {
 
         // Instantiate the weather View Model.
@@ -192,6 +198,37 @@ public class MainActivity extends LocationBaseActivity {
             }
         });
 
+        mWeatherListViewModel.getDataSource().observe(this, new Observer<Resource<List<FavouriteItem>>>() {
+            @Override
+            public void onChanged(@Nullable Resource<List<FavouriteItem>> listResource) {
+                if(listResource != null){
+                    Log.d(TAG, "onChanged: status: " + listResource.status);
+
+                    if(listResource.data != null){
+                        switch (listResource.status){
+                            case LOADING:{
+                            }
+
+                            case ERROR:{
+                                Log.e(TAG, "onChanged: cannot refresh the cache." );
+                                Log.e(TAG, "onChanged: ERROR message: " + listResource.message );
+                                Log.e(TAG, "onChanged: status: ERROR, #recipes: " + listResource.data.size());
+                                introViewPagerAdapter.setFavouriteItems(listResource.data);
+
+                                break;
+                            }
+
+                            case SUCCESS:{
+                                Log.d(TAG, "onChanged: cache has been refreshed.");
+                                Log.d(TAG, "onChanged: status: SUCCESS, #Recipes: " + listResource.data.size());
+                                introViewPagerAdapter.setFavouriteItems(listResource.data);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public static void hideSystemUI(Activity activity) {
@@ -221,12 +258,14 @@ public class MainActivity extends LocationBaseActivity {
 
         //String[] res = Utility.geoLocToString(currentLocation);
         //mWeatherListViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
-       if(mWeatherListViewModel.getFavourtieItems().size() <1)
-        {
+       //if(mWeatherListViewModel.getFavourtieItems().size() <1)
+      //  {
             String[] res = Utility.geoLocToString(currentLocation);
-            mWeatherListViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
+            mWeatherListViewModel.fetchbyLocation(res[0],res[1]);
             introViewPagerAdapter.notifyChange();
-        }
+      //  }
+
+
     }
 
     @Override
@@ -308,33 +347,10 @@ public class MainActivity extends LocationBaseActivity {
                     savedDailyForecasts.add(savedDailyForecast);
                 }
 
-                Calendar c = Calendar.getInstance();
-                int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-                String temperatureText = "";
-                String feelsLike = "";
-                String date = String.format("%s, %s", Utility.format(savedDailyForecasts.get(0).getDate()), Utility.formatDate(savedDailyForecasts.get(0).getDate()));
 
-
-                String humidity_value=(savedDailyForecasts.get(0).getHumidity() + "%");
-
-
-                if (timeOfDay >= 0 && timeOfDay < 12) {
-                    temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getMorningTemp()));
-                    feelsLike = Utility.formatTemperature(getApplication(),savedDailyForecasts.get(0).getFeelslikeMorning());
-                } else if (timeOfDay >= 12 && timeOfDay < 16) {
-                    feelsLike = Utility.formatTemperature(getApplication(),savedDailyForecasts.get(0).getDayTemp());
-                    temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getDayTemp()));
-                } else if (timeOfDay >= 16 && timeOfDay < 21) {
-                    feelsLike = Utility.formatTemperature(getApplication(),savedDailyForecasts.get(0).getFeelslikeMorning());
-                    temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getEveningTemp()));
-                } else if (timeOfDay >= 21 && timeOfDay < 24) {
-                    feelsLike = Utility.formatTemperature(getApplication(),savedDailyForecasts.get(0).getFeelslikeNight());
-                    temperatureText = (Utility.formatTemperature(getApplication(), savedDailyForecasts.get(0).getNightTemp()));
-                }
 
                 mWeatherListViewModel.insertInFavourtieItems(new FavouriteItem(data.getCity().getId(),
                         data.getCity().getName(),
-                        temperatureText,feelsLike,date,
                         savedDailyForecasts.get(0).getDescription(), data.getCity().getName(),
                         savedDailyForecasts));
             }
