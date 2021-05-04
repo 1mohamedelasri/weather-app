@@ -16,6 +16,7 @@ import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.utils.Utility;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     public FavouritesAdapter(Context context, WeatherViewModel mViewModel) {
         this.mContext = context;
         this.mViewModel= mViewModel;
-        favouriteItems = mViewModel.getFavourtieItems();
+        favouriteItems = new ArrayList<>();
     }
 
     @NonNull
@@ -48,14 +49,12 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
         // Determine the values of the wanted data
-        FavouriteItem favouriteItem = mViewModel.getFavourtieItems().get(position);
-
 
         //Set values
-        holder.favCity.setText(favouriteItem.city);
-        holder.favTemperature.setText(favouriteItem.temperature);
-        holder.favImg.setImageResource(Utility.getArtResourceForWeatherCondition(favouriteItem.savedDailyForecast.get(0).weatherid));
-        holder.favCountry.setText(favouriteItem.country);
+        holder.favCity.setText(favouriteItems.get(position).city);
+        //holder.favTemperature.setText(favouriteItems.get(position).temperature);
+        holder.favImg.setImageResource(Utility.getArtResourceForWeatherCondition(favouriteItems.get(position).savedDailyForecast.get(0).weatherid));
+        holder.favCountry.setText(Utility.getCountryName(favouriteItems.get(0).country));
 
     }
 
@@ -108,15 +107,15 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
             favCity = itemView.findViewById(R.id.FavCity);
             favCountry = itemView.findViewById(R.id.FavCountry);
-            favTemperature = itemView.findViewById(R.id.FavTemperature);
             favImg = itemView.findViewById(R.id.FavImg);
-            favDelete = itemView.findViewById(R.id.FavDelete);
+            favDelete = itemView.findViewById(R.id.favDelete);
             favDelete.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            mViewModel.getFavourtieItems().remove(currentPos);
+            mViewModel.dropFravourtieItem(favouriteItems.get(currentPos));
+            favouriteItems.remove(currentPos);
             notifyDataSetChanged();
         }
     }

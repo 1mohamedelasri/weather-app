@@ -206,4 +206,8 @@ public class WeatherViewModel extends AndroidViewModel  {
         fetchWithCaching(repositorySource,_searchedData);
     }
 
+    public void dropFravourtieItem(FavouriteItem favouriteItem){
+        forecastRepository.dropFravourtieItem(favouriteItem);
+    }
+
 }

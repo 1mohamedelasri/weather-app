@@ -121,7 +121,8 @@ public class ForecastRepository {
 
                return new FavouriteItem(data.getCity().getId(),
                         data.getCity().getName(),
-                        savedDailyForecasts.get(0).getDescription(), data.getCity().getName(),
+                        savedDailyForecasts.get(0).getDescription(),
+                        data.getCity().getCountry(),
                         savedDailyForecasts);
             }
 
@@ -171,6 +172,10 @@ public class ForecastRepository {
 
     public void insertFavouriteDb(WeatherForecast favouriteItem) {
         this.weatherDao.insertWeather(mapWeatherToFavortie(favouriteItem));
+    }
+
+    public void dropFravourtieItem(FavouriteItem favouriteItem) {
+        this.weatherDao.deleteFavouriteItem(favouriteItem.id);
     }
 }
 

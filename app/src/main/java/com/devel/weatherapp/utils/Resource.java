@@ -3,6 +3,10 @@ package com.devel.weatherapp.utils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.devel.weatherapp.models.FavouriteItem;
+
+import java.util.List;
+
 public class Resource<T> {
 
     @NonNull
@@ -30,6 +34,14 @@ public class Resource<T> {
 
     public static <T> Resource<T> loading(@Nullable T data) {
         return new Resource<>(Status.LOADING, data, null);
+    }
+
+    public void delete(FavouriteItem favouriteItem) {
+        ((List)this.data).remove(favouriteItem);
+    }
+
+    public void insert(FavouriteItem favouriteItem) {
+        ((List)this.data).add(favouriteItem);
     }
 
     public enum Status { SUCCESS, ERROR, LOADING}

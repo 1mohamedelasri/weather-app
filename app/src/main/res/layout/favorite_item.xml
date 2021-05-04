@@ -4,24 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/corners_bg">
+    android:background="@drawable/corners_bg"
+    android:paddingLeft="5dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/FavCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
         android:layout_toEndOf="@+id/weather_img"
         android:layout_toRightOf="@+id/weather_img"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.299"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.42"
+        app:layout_constraintStart_toEndOf="@+id/FavImg"
+        app:layout_constraintTop_toTopOf="@+id/FavImg"
         tools:text="Paris" />
 
     <TextView
@@ -32,42 +33,41 @@
         app:layout_constraintStart_toStartOf="@+id/FavCity"
         app:layout_constraintTop_toBottomOf="@+id/FavCity" />
 
-    <TextView
-        android:id="@+id/FavTemperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginLeft="120dp"
-        android:text="2 C°"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/FavImg"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.512" />
-
     <ImageView
         android:id="@+id/FavImg"
         android:layout_width="64dp"
         android:layout_height="52dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/FavCity"
-        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.048"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.657"
         app:srcCompat="@drawable/art_clear" />
 
-    <ImageView
-        android:id="@+id/FavDelete"
-        android:layout_width="42dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="53dp"
-        android:layout_marginLeft="53dp"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="188dp"
+        android:layout_marginLeft="188dp"
+        android:text="2C"
+        android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/FavTemperature"
+        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:layout_constraintStart_toEndOf="@+id/FavImg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/favDelete"
+        android:layout_width="43dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:background="@drawable/outline_remove_circle_outline_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.523"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.491"
+        app:srcCompat="@drawable/outline_remove_circle_outline_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -52,7 +52,6 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         //Set values
         holder.desc.setText(description);
         holder.temp.setText(Utility.formatTemperature(mContext, forecast.getMaxTemp()) + "/" + Utility.formatTemperature(mContext, forecast.getMinTemp()));
-        String minTemp = Utility.formatTemperature(mContext, forecast.getMaxTemp()) + "/" + Utility.formatTemperature(mContext, forecast.getMinTemp());
         holder.imageView.setImageResource(Utility.getArtResourceForWeatherCondition(weather_id));
         holder.day.setText(Utility.format(forecast.getDate()));
     }
