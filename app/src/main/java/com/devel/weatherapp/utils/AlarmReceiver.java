@@ -17,7 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO Auto-generated method stub
+  /*      // TODO Auto-generated method stub
         long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -35,7 +35,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentText(SharedPreferences.getInstance(context).getNotificationBody())
                 .setWhen(when)
                 .setContentIntent(pendingIntent);
-        notificationManager.notify(200, mNotifyBuilder.build());
+        notificationManager.notify(200, mNotifyBuilder.build());*/
 
     }
 

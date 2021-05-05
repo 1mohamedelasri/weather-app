@@ -3,7 +3,7 @@ package com.devel.weatherapp.utils;
 import android.content.Context;
 
 public class SharedPreferences {
-
+/*
     private String WEATHR_PREFERENCES = "WEATHER";
     private android.content.SharedPreferences preferences;
     private android.content.SharedPreferences.Editor editor;
@@ -83,6 +83,6 @@ public class SharedPreferences {
 
     public String getNotificationBody() {
         return preferences.getString(NOT_BODY, "Weather is alaways beautiful");
-    }
+    }*/
 
 }

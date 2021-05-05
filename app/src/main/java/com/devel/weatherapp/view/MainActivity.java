@@ -66,8 +66,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.devel.weatherapp.utils.SharedPreferences.LAT;
-import static com.devel.weatherapp.utils.SharedPreferences.LON;
 import static com.devel.weatherapp.viewmodels.WeatherViewModel.QUERY_EXHAUSTED;
 
 
@@ -201,11 +199,11 @@ public class MainActivity extends LocationBaseActivity {
         //calendar.set(Calendar.HOUR_OF_DAY,23);
         //calendar.set(Calendar.MINUTE,36);
         //calendar.set(Calendar.SECOND,10);
-        Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
+      /*  Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager)this.getSystemService(this.ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 4*60*60, pendingIntent);
-
+*/
         //onTheTest();
     }
 

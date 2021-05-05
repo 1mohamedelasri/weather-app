@@ -143,7 +143,6 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     private void fetchData() {
 
 
-        this.weatherViewModel.getAirQuality(String.valueOf(this.geoLocation.getLatitude()),String.valueOf(this.geoLocation.getLongitude()));
 
         this.weatherViewModel.getAirQuality().observe((LifecycleOwner) mContext, new Observer<AirQuality>() {
             @Override
@@ -157,7 +156,10 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         });
 
         if(favouriteItems.size() > 0 && favouriteItems.get(currentPos).savedDailyForecast.size() > 0) {
+
             SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
+            this.weatherViewModel.getAirQuality(String.valueOf(mSavedDailyForecast.getLat()),String.valueOf(mSavedDailyForecast.getLon()));
+
             recyclerAdapter.setForecasts(favouriteItems.get(currentPos).savedDailyForecast);
             recyclerAdapter.notifyDataSetChanged();
 
@@ -217,6 +219,25 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
                     o3.setText(String.valueOf(airQuality.getAirList().get(0).component.o3)+"%");
                     co.setText(String.valueOf(airQuality.getAirList().get(0).component.co)+"%");
                     //qualityTextView.setText(airQuality.getAirList().get(0).main.getAqi());
+
+                    switch (airQuality.getAirList().get(0).main.getAqi()){
+                        case 1:
+                            qualityTextView.setText("Good");
+                            break;
+                        case 2:
+                            qualityTextView.setText("Fair");
+                            break;
+                        case 3:
+                            qualityTextView.setText("Moderate");
+                            break;
+                        case 4:
+                            qualityTextView.setText("Poor");
+                            break;
+                        case 5:
+                            qualityTextView.setText("Very Poor");
+                            break;
+
+                    }
                     qualityColor(qualityTextView,airQuality.getAirList().get(0).main.getAqi());
                 }
 
