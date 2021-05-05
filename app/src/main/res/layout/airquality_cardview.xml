@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/pm10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="8.6"
@@ -76,7 +76,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/so2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="8.6"
@@ -88,7 +88,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/co"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="8.6"
@@ -99,7 +99,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/o3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="8.6"
@@ -111,16 +111,15 @@
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/pm2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="8.6"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/textView10"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView10"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        app:layout_constraintEnd_toEndOf="@+id/no2"
+        app:layout_constraintStart_toStartOf="@+id/no2"
+        app:layout_constraintTop_toBottomOf="@+id/no2" />
 
     <TextView
         android:id="@+id/textView21"
@@ -148,7 +147,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/no2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -190,7 +189,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/qualityTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -33,6 +34,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.BuildConfig;
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.repositories.ForecastRepository;
 import com.devel.weatherapp.utils.AlarmReceiver;
 import com.devel.weatherapp.utils.Resource;
@@ -275,6 +277,17 @@ public class MainActivity extends LocationBaseActivity {
                 }
             }
         });
+
+        mWeatherListViewModel.getAirQuality().observe(this, new Observer<AirQuality>() {
+            @Override
+            public void onChanged(AirQuality airQuality) {
+                if(airQuality != null)
+                {
+                    introViewPagerAdapter.setAirQuality(airQuality);
+                    //introViewPagerAdapter.notifyChange();
+                }
+            }
+        });
     }
 
     public static void hideSystemUI(Activity activity) {
@@ -419,6 +432,7 @@ public class MainActivity extends LocationBaseActivity {
     public void refreshFromAnyWhere(){
         this.introViewPagerAdapter.notifyChange();
     }
+
 
 
 }

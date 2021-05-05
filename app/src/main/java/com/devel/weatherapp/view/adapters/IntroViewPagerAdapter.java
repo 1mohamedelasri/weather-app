@@ -3,6 +3,7 @@ package com.devel.weatherapp.view.adapters;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,14 +12,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.utils.Constants;
@@ -30,6 +34,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwner {
     private static final String TAG = "IntroViewPagerAdapter";
@@ -54,6 +62,14 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     private TextView WindSpeedValue;
     private SunView sv;
     private List<FavouriteItem> favouriteItems = new ArrayList<>();
+    private AirQuality airQuality;
+    private TextView pm2;
+    private TextView pm10;
+    private TextView so2;
+    private TextView no2;
+    private TextView o3;
+    private TextView co;
+    private TextView qualityTextView;
 
     public IntroViewPagerAdapter(Context mContext, Application application, WeatherViewModel weatherViewModel) {
         this.mContext = mContext;
@@ -94,8 +110,14 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         HumidityValue   = layoutScreen.findViewById(R.id.HumidityValue);
         cloudiness = layoutScreen.findViewById(R.id.CloudinessValue);
         WindSpeedValue  = layoutScreen.findViewById(R.id.WindSpeedValue);
-        sv = hostActivity.findViewById(R.id.sv);
-
+        sv      = hostActivity.findViewById(R.id.sv);
+        pm2     = layoutScreen.findViewById(R.id.pm2);;
+        pm10    = layoutScreen.findViewById(R.id.pm10);
+        so2     =layoutScreen.findViewById(R.id.so2);
+        no2     =layoutScreen.findViewById(R.id.no2);
+        o3      =layoutScreen.findViewById(R.id.o3);
+        co      =layoutScreen.findViewById(R.id.co);
+        qualityTextView= layoutScreen.findViewById(R.id.qualityTextView);
 
         recyclerView = (RecyclerView) container.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -119,6 +141,21 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     }
 
     private void fetchData() {
+
+
+        this.weatherViewModel.getAirQuality(String.valueOf(this.geoLocation.getLatitude()),String.valueOf(this.geoLocation.getLongitude()));
+
+        this.weatherViewModel.getAirQuality().observe((LifecycleOwner) mContext, new Observer<AirQuality>() {
+            @Override
+            public void onChanged(AirQuality airQuality) {
+                if(airQuality != null)
+                {
+                    setAirQuality(airQuality);
+                    //introViewPagerAdapter.notifyChange();
+                }
+            }
+        });
+
         if(favouriteItems.size() > 0 && favouriteItems.get(currentPos).savedDailyForecast.size() > 0) {
             SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
             recyclerAdapter.setForecasts(favouriteItems.get(currentPos).savedDailyForecast);
@@ -170,7 +207,21 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
             int minute = calendar.get(Calendar.MINUTE);
             // Set the current time
             sv.setCurrentTime(hour, minute);
+
+
+            if(this.airQuality != null && this.airQuality.getAirList().size() > 0 ) {
+                    pm2.setText(String.valueOf(airQuality.getAirList().get(0).component.pm2)+"%");
+                    pm10.setText(String.valueOf(airQuality.getAirList().get(0).component.pm10)+"%");
+                    so2.setText(String.valueOf(airQuality.getAirList().get(0).component.so2)+"%");
+                    no2.setText(String.valueOf(airQuality.getAirList().get(0).component.no2)+"%");
+                    o3.setText(String.valueOf(airQuality.getAirList().get(0).component.o3)+"%");
+                    co.setText(String.valueOf(airQuality.getAirList().get(0).component.co)+"%");
+                    //qualityTextView.setText(airQuality.getAirList().get(0).main.getAqi());
+                    qualityColor(qualityTextView,airQuality.getAirList().get(0).main.getAqi());
+                }
+
         }
+
     }
 
     public void notifyChange(){
@@ -194,6 +245,9 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         this.currentPos = pos;
     }
 
+    public void setAirQuality(AirQuality airQuality){
+        this.airQuality = airQuality;
+    }
     public void setFavouriteItems(List<FavouriteItem> favouriteItemsList){
         this.favouriteItems = favouriteItemsList;
         notifyChange();
@@ -227,6 +281,44 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     public void setCurrentLocation(Location location) {
         this.geoLocation = location;
     }
+
+
+    public String whichQuality(int quality){
+        switch (quality){
+            case 1:
+                return "Good";
+            case 2:
+                return "Fair";
+            case 3:
+                return "Moderate";
+            case 4:
+                return "Poor";
+            case 5:
+                return "Very Poor";
+        }
+        return "";
+    }
+
+    public void qualityColor(TextView textView, int quality){
+        switch (quality){
+            case 1:
+                textView.setTextColor(Color.parseColor("#7CFF0A"));
+                break;
+            case 2:
+                textView.setTextColor(Color.parseColor("#FBC02D"));
+                break;
+            case 3:
+                textView.setTextColor(Color.parseColor("#E64A19"));
+                break;
+            case 4:
+                textView.setTextColor(Color.parseColor("#D32F2F"));
+                break;
+            case 5:
+                textView.setTextColor(Color.parseColor("#7C1414"));
+                break;
+        }
+    }
+
 
 
 }

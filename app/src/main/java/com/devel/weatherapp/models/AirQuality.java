@@ -17,4 +17,19 @@ public class AirQuality {
     @Expose
     private List<Air> airList = null;
 
+    public Coord getCoord() {
+        return coord;
+    }
+
+    public void setCoord(Coord coord) {
+        this.coord = coord;
+    }
+
+    public List<Air> getAirList() {
+        return airList;
+    }
+
+    public void setAirList(List<Air> airList) {
+        this.airList = airList;
+    }
 }

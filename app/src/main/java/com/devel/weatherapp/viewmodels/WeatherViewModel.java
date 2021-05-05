@@ -12,12 +12,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.models.AirQuality;
-import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.repositories.ForecastRepository;
 import com.devel.weatherapp.repositories.WeatherRepository;
-import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Resource;
 
 import java.util.ArrayList;
@@ -43,6 +41,7 @@ public class WeatherViewModel extends AndroidViewModel  {
     private ForecastRepository forecastRepository = ForecastRepository.getInstance(getApplication());
     private MediatorLiveData<Resource<List<FavouriteItem>>> _dataSource = new MediatorLiveData<>();
     private MediatorLiveData<Resource<List<FavouriteItem>>> _searchedData = new MediatorLiveData<>();
+    private MutableLiveData<AirQuality> _airQuality = new MutableLiveData<>();
 
     public MediatorLiveData<Resource<List<FavouriteItem>>> getDataSource(){
         return _dataSource;
@@ -50,6 +49,10 @@ public class WeatherViewModel extends AndroidViewModel  {
 
     public MediatorLiveData<Resource<List<FavouriteItem>>> getSearchedDataSource(){
         return _searchedData;
+    }
+
+    public LiveData<AirQuality> getAirQuality(){
+        return _airQuality;
     }
     // query extras
     private boolean isQueryExhausted;
@@ -212,23 +215,27 @@ public class WeatherViewModel extends AndroidViewModel  {
     }
 
     private AirQuality obj;
-    public void getAirQuality(String lat , String lon) {
+    public Call<AirQuality> getAirQuality(String lat , String lon) {
 
         mWeatherRepository = WeatherRepository.getInstance(getApplication());
         final Call<AirQuality> call = forecastRepository.getAirQuality(lat,lon);
         call.enqueue(new Callback<AirQuality>() {
             @Override
             public void onResponse(Call<AirQuality> call, Response<AirQuality> response) {
-                obj = response.body();
+                if(response.body() != null) {
+                    obj = response.body();
+                    _airQuality.postValue(response.body());
+                }
 
             }
 
             @Override
             public void onFailure(Call<AirQuality> call, Throwable t) {
-                //_data.postValue(null);
+                _airQuality.postValue(null);
                 Log.d("getAirQuality",t.getMessage());
             }
         });
+        return call;
     }
 
 }
