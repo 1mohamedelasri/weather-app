@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.FavouriteItem;
-import com.devel.weatherapp.utils.Utility;
+import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     WeatherViewModel mViewModel;
     private Context mContext;
     private List<FavouriteItem> favouriteItems;
-    private int currentPos = 0;
 
     public FavouritesAdapter(Context context, WeatherViewModel mViewModel) {
         this.mContext = context;
@@ -38,23 +36,22 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     @Override
     public FavouritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.favorite_item, parent, false);
+                .inflate(R.layout.item_favorite, parent, false);
 
         return new FavouritesViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FavouritesViewHolder holder, int position) {
-        this.currentPos = position;
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
         // Determine the values of the wanted data
 
         //Set values
         holder.favCity.setText(favouriteItems.get(position).city);
-        //holder.favTemperature.setText(favouriteItems.get(position).temperature);
-        holder.favImg.setImageResource(Utility.getArtResourceForWeatherCondition(favouriteItems.get(currentPos).savedDailyForecast.get(0).weatherid));
-        holder.favCountry.setText(Utility.getCountryName(favouriteItems.get(currentPos).country));
+        holder.favTemperature.setText(favouriteItems.get(position).temperature);
+        holder.favImg.setImageResource(UtilityHelper.getArtResourceForWeatherCondition(favouriteItems.get(position).savedDailyForecast.get(0).weatherid));
+        holder.favCountry.setText(UtilityHelper.getCountryName(favouriteItems.get(position).country));
 
     }
 
@@ -109,11 +106,12 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
             favCountry = itemView.findViewById(R.id.FavCountry);
             favImg = itemView.findViewById(R.id.FavImg);
             favDelete = itemView.findViewById(R.id.favDelete);
+            favTemperature = itemView.findViewById(R.id.FavTemperature);
             favDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mViewModel.dropFravourtieItem(favouriteItems.get(currentPos));
-                    favouriteItems.remove(currentPos);
+                    mViewModel.dropFravourtieItem(favouriteItems.get(getLayoutPosition()));
+                    favouriteItems.remove(getLayoutPosition());
                     notifyDataSetChanged();
 
                 }

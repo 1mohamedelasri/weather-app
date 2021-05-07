@@ -8,12 +8,10 @@ import com.devel.weatherapp.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Optional;
 
-public class Utility {
+public class UtilityHelper {
 
     public static String formatTemperature(Context context, double temperature) {
         // Data stored in Celsius by default.  If user prefers to see in Fahrenheit, convert
@@ -78,7 +76,7 @@ public class Utility {
     public static String getFormattedMonthDay(Context context, long dateInMillis ) {
         Time time = new Time();
         time.setToNow();
-        SimpleDateFormat dbDateFormat = new SimpleDateFormat(Utility.DATE_FORMAT);
+        SimpleDateFormat dbDateFormat = new SimpleDateFormat(UtilityHelper.DATE_FORMAT);
         SimpleDateFormat monthDayFormat = new SimpleDateFormat("MMMM dd");
         String monthDayString = monthDayFormat.format(dateInMillis);
         return monthDayString;

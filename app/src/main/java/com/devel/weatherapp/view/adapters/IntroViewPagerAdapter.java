@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
@@ -26,7 +25,7 @@ import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.utils.Constants;
-import com.devel.weatherapp.utils.Utility;
+import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.SunView;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
@@ -34,10 +33,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwner {
     private static final String TAG = "IntroViewPagerAdapter";
@@ -106,10 +101,6 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         cityNameText = hostActivity.findViewById(R.id.cityTextView);
         cityTempText = layoutScreen.findViewById(R.id.temperatureTextView);
         cityDescText = layoutScreen.findViewById(R.id.TempDescTextView);
-        feelLikeValue   = layoutScreen.findViewById(R.id.feelLikeValue);
-        HumidityValue   = layoutScreen.findViewById(R.id.HumidityValue);
-        cloudiness = layoutScreen.findViewById(R.id.CloudinessValue);
-        WindSpeedValue  = layoutScreen.findViewById(R.id.WindSpeedValue);
         sv      = hostActivity.findViewById(R.id.sv);
         pm2     = layoutScreen.findViewById(R.id.pm2);;
         pm10    = layoutScreen.findViewById(R.id.pm10);
@@ -155,7 +146,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
             }
         });
 
-        if(favouriteItems.size() > 0 && favouriteItems.get(currentPos).savedDailyForecast.size() > 0) {
+        if(favouriteItems.size() > 0 && currentPos < favouriteItems.size() &&  favouriteItems.get(currentPos).savedDailyForecast.size() > 0) {
 
             SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
             this.weatherViewModel.getAirQuality(String.valueOf(mSavedDailyForecast.getLat()),String.valueOf(mSavedDailyForecast.getLon()));
@@ -167,21 +158,21 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
             int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
             String temperatureText = "";
             String feelsLike = "";
-            String date = String.format("%s, %s", Utility.format(mSavedDailyForecast.getDate()), Utility.formatDate(mSavedDailyForecast.getDate()));
+            String date = String.format("%s, %s", UtilityHelper.format(mSavedDailyForecast.getDate()), UtilityHelper.formatDate(mSavedDailyForecast.getDate()));
 
 
             if (timeOfDay >= 5 && timeOfDay <= 12) {
-                temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getMorningTemp()));
-                feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
+                temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getMorningTemp()));
+                feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
             } else if (timeOfDay >= 12 && timeOfDay <= 16) {
-                feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getDayTemp());
-                temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getDayTemp()));
+                feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getDayTemp());
+                temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getDayTemp()));
             } else if (timeOfDay >= 16 && timeOfDay <= 21) {
-                feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
-                temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getEveningTemp()));
+                feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
+                temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getEveningTemp()));
             } else if ((timeOfDay >= 21 && timeOfDay <= 24 )|| ( timeOfDay >= 0  && timeOfDay <= 5) ) {
-                feelsLike = Utility.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeNight());
-                temperatureText = (Utility.formatTemperature(mContext, mSavedDailyForecast.getNightTemp()));
+                feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeNight());
+                temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getNightTemp()));
             }
 
             cityNameText.setText(favouriteItems.get(currentPos).city);
@@ -193,7 +184,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
             HumidityValue.setText(mSavedDailyForecast.mhumidity + "%");
             cloudiness.setText(mSavedDailyForecast.clouds + "%");
-            WindSpeedValue.setText(Utility.getFormattedWind(mContext, favouriteItems.get(currentPos).savedDailyForecast.get(0).getWind()));
+            WindSpeedValue.setText(UtilityHelper.getFormattedWind(mContext, favouriteItems.get(currentPos).savedDailyForecast.get(0).getWind()));
 
 
             Date sunRisedate = new Date((long) (favouriteItems.get(currentPos).savedDailyForecast.get(0).getSunrise() * 1000));
@@ -288,7 +279,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     private void subscribeObservers(){
 
         if(geoLocation != null){
-            String[] res = Utility.geoLocToString(geoLocation);
+            String[] res = UtilityHelper.geoLocToString(geoLocation);
             weatherViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
         }
     }

@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer;
 import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
-import com.devel.weatherapp.repositories.ForecastRepository;
 import com.devel.weatherapp.repositories.WeatherRepository;
 import com.devel.weatherapp.utils.Resource;
 
@@ -38,7 +37,6 @@ public class WeatherViewModel extends AndroidViewModel  {
     private final MutableLiveData<WeatherForecast> _data = new MutableLiveData<>();
     private final MutableLiveData<WeatherForecast> _searchedCity= new MutableLiveData<>();
     private static WeatherViewModel instance;
-    private ForecastRepository forecastRepository = ForecastRepository.getInstance(getApplication());
     private MediatorLiveData<Resource<List<FavouriteItem>>> _dataSource = new MediatorLiveData<>();
     private MediatorLiveData<Resource<List<FavouriteItem>>> _searchedData = new MediatorLiveData<>();
     private MutableLiveData<AirQuality> _airQuality = new MutableLiveData<>();
@@ -135,17 +133,17 @@ public class WeatherViewModel extends AndroidViewModel  {
     public void addSearchCityToFavorties() {
 
         _data.postValue(_searchedCity.getValue());
-        forecastRepository.insertFavouriteDb(_searchedCity.getValue());
+        mWeatherRepository.insertFavouriteDb(_searchedCity.getValue());
     }
 
 
     public void fetchbyCity(String city){
-        final LiveData<Resource<List<FavouriteItem>>> repositorySource = forecastRepository.fetchForecast(_searchedCity.getValue().getCity().getName());
+        final LiveData<Resource<List<FavouriteItem>>> repositorySource = mWeatherRepository.fetchForecast(_searchedCity.getValue().getCity().getName());
         fetchWithCaching(repositorySource,_dataSource);
     }
 
     public void fetchbyLocation(String lat, String lon){
-        final LiveData<Resource<List<FavouriteItem>>> repositorySource = forecastRepository.fetchForecastByLocation(lat,lon);
+        final LiveData<Resource<List<FavouriteItem>>> repositorySource = mWeatherRepository.fetchForecastByLocation(lat,lon);
         fetchWithCaching(repositorySource, _dataSource);
     }
 
@@ -206,19 +204,19 @@ public class WeatherViewModel extends AndroidViewModel  {
     }*/
 
     public void searchWeatherOfCity(String city){
-        final LiveData<Resource<List<FavouriteItem>>> repositorySource = forecastRepository.fetchForecast(city);
+        final LiveData<Resource<List<FavouriteItem>>> repositorySource = mWeatherRepository.fetchForecast(city);
         fetchWithCaching(repositorySource,_searchedData);
     }
 
     public void dropFravourtieItem(FavouriteItem favouriteItem){
-        forecastRepository.dropFravourtieItem(favouriteItem);
+        mWeatherRepository.dropFravourtieItem(favouriteItem);
     }
 
     private AirQuality obj;
     public Call<AirQuality> getAirQuality(String lat , String lon) {
 
         mWeatherRepository = WeatherRepository.getInstance(getApplication());
-        final Call<AirQuality> call = forecastRepository.getAirQuality(lat,lon);
+        final Call<AirQuality> call = mWeatherRepository.getAirQuality(lat,lon);
         call.enqueue(new Callback<AirQuality>() {
             @Override
             public void onResponse(Call<AirQuality> call, Response<AirQuality> response) {

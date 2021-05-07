@@ -17,13 +17,6 @@ import retrofit2.http.Query;
 public interface WeatherApi {
 
 
-    @GET("data/2.5/weather?")
-    LiveData<ApiResponse<WeatherResponse>> getWeather(
-            @Query("id") int locationId,
-            @Query("APPID") String apiKey,
-            @Query("units") String metric,
-            @Query("cnt") int count
-    );
 
     @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
     Call<WeatherForecast> getCurrentLocationForecast(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);

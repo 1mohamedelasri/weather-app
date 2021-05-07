@@ -1,28 +1,17 @@
 package com.devel.weatherapp.view;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.Constants;
-import com.devel.weatherapp.utils.Resource;
-import com.devel.weatherapp.utils.Utility;
 import com.devel.weatherapp.view.adapters.SearchFragment;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 

@@ -1,7 +1,6 @@
 package com.devel.weatherapp.view.adapters;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,11 +14,8 @@ import androidx.fragment.app.Fragment;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.DailyForecast;
-import com.devel.weatherapp.models.FavouriteItem;
-import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.models.Status;
 import com.devel.weatherapp.models.WeatherForecast;
-import com.devel.weatherapp.utils.Utility;
+import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.SearchWeatherCity;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
@@ -63,7 +59,7 @@ public class SearchFragment extends Fragment {
                 );
 
                 this.searchResCity.setText((CharSequence) favouriteItem.getCity().getName());
-                this.searchResCountry.setText(Utility.getCountryName(favouriteItem.getCity().getCountry()));
+                this.searchResCountry.setText(UtilityHelper.getCountryName(favouriteItem.getCity().getCountry()));
                 this.searchTempText.setText(getTemperature(favouriteItem.getDailyForecasts().get(0)));
 
                 break;
@@ -90,13 +86,13 @@ public class SearchFragment extends Fragment {
         String temperatureText = "";
 
         if (timeOfDay >= 5 && timeOfDay < 12) {
-            temperatureText = (Utility.formatTemperature(getContext(), s.getTemp().getMorn()));
+            temperatureText = (UtilityHelper.formatTemperature(getContext(), s.getTemp().getMorn()));
         } else if (timeOfDay >= 12 && timeOfDay < 16) {
-            temperatureText = (Utility.formatTemperature(getContext(), s.getTemp().getDay()));
+            temperatureText = (UtilityHelper.formatTemperature(getContext(), s.getTemp().getDay()));
         } else if (timeOfDay >= 16 && timeOfDay < 21) {
-            temperatureText = (Utility.formatTemperature(getContext(), s.getTemp().getEve()));
+            temperatureText = (UtilityHelper.formatTemperature(getContext(), s.getTemp().getEve()));
         } else if ((timeOfDay >= 21 || timeOfDay >= 0)  && timeOfDay < 5) {
-            temperatureText = (Utility.formatTemperature(getContext(), s.getTemp().getNight()));
+            temperatureText = (UtilityHelper.formatTemperature(getContext(), s.getTemp().getNight()));
         }
         return temperatureText;
     }

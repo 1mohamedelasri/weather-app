@@ -1,23 +1,12 @@
 package com.devel.weatherapp.view;
 
-import android.Manifest;
 import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.Application;
-import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,25 +16,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
-import com.devel.weatherapp.BuildConfig;
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.AirQuality;
-import com.devel.weatherapp.repositories.ForecastRepository;
-import com.devel.weatherapp.utils.AlarmReceiver;
+import com.devel.weatherapp.repositories.WeatherRepository;
 import com.devel.weatherapp.utils.Resource;
-import com.devel.weatherapp.utils.ScreenShotHelper;
-import com.devel.weatherapp.utils.SharedPreferences;
 import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
 import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
-import com.devel.weatherapp.utils.Constants;
-import com.devel.weatherapp.utils.Utility;
+import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.yayandroid.locationmanager.base.LocationBaseActivity;
@@ -54,19 +36,11 @@ import com.yayandroid.locationmanager.configuration.LocationConfiguration;
 import com.yayandroid.locationmanager.constants.FailType;
 import com.yayandroid.locationmanager.constants.ProcessType;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import static com.devel.weatherapp.viewmodels.WeatherViewModel.QUERY_EXHAUSTED;
 
 
 public class MainActivity extends LocationBaseActivity {
@@ -80,7 +54,7 @@ public class MainActivity extends LocationBaseActivity {
     Location currentLocation = null;
     private ImageView searchButton;
     private ImageView baselineBtn;
-    private ForecastRepository forecastRepository ;
+    private WeatherRepository weatherRepository;
 
 
     @Override
@@ -193,7 +167,7 @@ public class MainActivity extends LocationBaseActivity {
                 popup.show();//showing popup menu
             }
         });//closing the setOnClickListener method
-        forecastRepository = ForecastRepository.getInstance(getApplication());
+        weatherRepository = weatherRepository.getInstance(getApplication());
 
         Calendar calendar = Calendar.getInstance();
         //calendar.set(Calendar.HOUR_OF_DAY,23);
@@ -212,7 +186,7 @@ public class MainActivity extends LocationBaseActivity {
 
         //mWeatherRepository = WeatherRepository.getInstance(getApplication());
 
-        forecastRepository.fetchForecast("grenoble").observe(this, result -> {
+        weatherRepository.fetchForecast("grenoble").observe(this, result -> {
             Log.d("MAINACTIIVTY","2");
             if(result != null) {
                 if(result.data != null && result.data.size() > 0 ) {
@@ -320,7 +294,7 @@ public class MainActivity extends LocationBaseActivity {
       //  {
       //  }
         if(location != null) {
-            String[] res = Utility.geoLocToString(currentLocation);
+            String[] res = UtilityHelper.geoLocToString(currentLocation);
             mWeatherListViewModel.getAirQuality(res[0],res[1]);
 
         }
@@ -329,7 +303,7 @@ public class MainActivity extends LocationBaseActivity {
 
     public void fetchWeatherLocationChanged(){
         if(currentLocation != null) {
-            String[] res = Utility.geoLocToString(currentLocation);
+            String[] res = UtilityHelper.geoLocToString(currentLocation);
             mWeatherListViewModel.fetchbyLocation(res[0],res[1]);
             introViewPagerAdapter.notifyChange();
 

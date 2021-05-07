@@ -51,7 +51,7 @@
 
     <include
         android:id="@+id/myid1"
-        layout="@layout/weather_cardview"
+        layout="@layout/item_weathercard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -74,7 +74,7 @@
 
     <include
         android:id="@+id/myid1"
-        layout="@layout/sunview_layout"
+        layout="@layout/item_sunview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -90,7 +90,7 @@
 
     <include
         android:id="@+id/myid1"
-        layout="@layout/airquality_cardview"
+        layout="@layout/item_airquality"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="308dp"

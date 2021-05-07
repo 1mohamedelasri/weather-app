@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.utils.Utility;
+import com.devel.weatherapp.utils.UtilityHelper;
 
 import java.util.Calendar;
 import java.util.List;
@@ -32,7 +32,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
     @Override
     public WeeklyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.weekly_items, parent, false);
+                .inflate(R.layout.item_weekly, parent, false);
 
         return new WeeklyViewHolder(view);
     }
@@ -51,9 +51,9 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
 
         //Set values
         holder.desc.setText(description);
-        holder.temp.setText(Utility.formatTemperature(mContext, forecast.getMaxTemp()) + "/" + Utility.formatTemperature(mContext, forecast.getMinTemp()));
-        holder.imageView.setImageResource(Utility.getArtResourceForWeatherCondition(weather_id));
-        holder.day.setText(Utility.format(forecast.getDate()));
+        holder.temp.setText(UtilityHelper.formatTemperature(mContext, forecast.getMaxTemp()) + "/" + UtilityHelper.formatTemperature(mContext, forecast.getMinTemp()));
+        holder.imageView.setImageResource(UtilityHelper.getArtResourceForWeatherCondition(weather_id));
+        holder.day.setText(UtilityHelper.format(forecast.getDate()));
     }
 
     /**
