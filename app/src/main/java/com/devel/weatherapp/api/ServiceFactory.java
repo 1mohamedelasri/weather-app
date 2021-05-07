@@ -6,7 +6,7 @@ import com.devel.weatherapp.utils.LiveDataCallAdapterFactory;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ServiceGenerator {
+public class ServiceFactory {
 
     private static Retrofit.Builder retrofitBuilder =
             new Retrofit.Builder()
@@ -18,10 +18,10 @@ public class ServiceGenerator {
     private static Retrofit retrofit = retrofitBuilder.build();
 
     // Use the retrofit instance to create another instance of the API.
-    private static WeatherApi weatherApi = retrofit.create(WeatherApi.class);
+    private static IWeatherApi weatherApi = retrofit.create(IWeatherApi.class);
 
     // Public method to access the API
-    public static WeatherApi getWeatherApi() {
+    public static IWeatherApi getWeatherApi() {
         return weatherApi;
     }
 }

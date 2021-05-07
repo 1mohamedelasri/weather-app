@@ -10,6 +10,8 @@
     android:layout_marginBottom="15dp"
     android:background="@drawable/corners_bg_cardview"
     android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
     android:paddingBottom="15dp">
 
     <TextView
@@ -106,7 +108,7 @@
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/textView21"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView21"
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
@@ -131,6 +133,7 @@
         android:text="O3"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toEndOf="@+id/textView20"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
@@ -161,10 +164,12 @@
         android:id="@+id/textView7"
         android:layout_width="186dp"
         android:layout_height="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:fontFamily="sans-serif-light"
         android:text="Air quality is good. A perfect day for a walk"
         android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="@+id/textView6"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView

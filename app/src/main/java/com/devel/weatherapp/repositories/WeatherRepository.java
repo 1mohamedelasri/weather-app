@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
-import com.devel.weatherapp.api.ServiceGenerator;
-import com.devel.weatherapp.api.WeatherApi;
+import com.devel.weatherapp.api.ServiceFactory;
+import com.devel.weatherapp.api.IWeatherApi;
 import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.FavouriteItem;
@@ -36,7 +36,7 @@ public class WeatherRepository {
 
     private static WeatherRepository instance;
     private WeatherDao weatherDao;
-    private WeatherApi weatherApi;
+    private IWeatherApi weatherApi;
     private Context context;
     public static WeatherRepository getInstance(Context context){
         if(instance == null){
@@ -45,14 +45,13 @@ public class WeatherRepository {
         return instance;
     }
 
-
     private WeatherRepository(Context context) {
         weatherDao = WeatherDatabase.getInstance(context).getWeatherDao();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        weatherApi = ServiceGenerator.getWeatherApi();
+        weatherApi = ServiceFactory.getWeatherApi();
     }
 
     public LiveData<Resource<List<FavouriteItem>>> fetchForecast(String city) {
@@ -80,7 +79,7 @@ public class WeatherRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<WeatherForecast>> createCall() {
-                return weatherApi.getCurrentWeatherDataOfCityV2(city, Constants.API_KEY);
+                return weatherApi.getCurrentHourlyDataOfCity(city, Constants.API_KEY);
             }
 
         }.getAsLiveData();
@@ -161,7 +160,7 @@ public class WeatherRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<WeatherForecast>> createCall() {
-                return weatherApi.getCurrentLocationForecastV2(lat,lon, Constants.API_KEY);
+                return weatherApi.getCurrentLocationHourlyData(lat,lon, Constants.API_KEY);
             }
 
         }.getAsLiveData();

@@ -200,19 +200,6 @@ public class MainActivity extends LocationBaseActivity {
 
     private void SetupObservers() {
 
-        // Instantiate the weather View Model.
-        mWeatherListViewModel.data().observe(this, new Observer<WeatherForecast>() {
-            @Override
-            public void onChanged(WeatherForecast data) {
-                Log.d("TEST", "subscribeObservers: ");
-
-                mapWeatherToFavortie(data);
-
-                introViewPagerAdapter.notifyChange();
-
-                        //introViewPagerAdapter.recyclerAdapter.notifyDataSetChanged();
-            }
-        });
 
         mWeatherListViewModel.getDataSource().observe(this, new Observer<Resource<List<FavouriteItem>>>() {
             @Override

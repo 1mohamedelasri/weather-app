@@ -41,6 +41,15 @@ public class WeatherViewModel extends AndroidViewModel  {
     private MediatorLiveData<Resource<List<FavouriteItem>>> _searchedData = new MediatorLiveData<>();
     private MutableLiveData<AirQuality> _airQuality = new MutableLiveData<>();
 
+    // query extras
+    private boolean isQueryExhausted;
+    private boolean isPerformingQuery;
+    private int pageNumber;
+    private String query;
+    private boolean cancelRequest;
+    private long requestStartTime;
+
+
     public MediatorLiveData<Resource<List<FavouriteItem>>> getDataSource(){
         return _dataSource;
     }
@@ -52,13 +61,7 @@ public class WeatherViewModel extends AndroidViewModel  {
     public LiveData<AirQuality> getAirQuality(){
         return _airQuality;
     }
-    // query extras
-    private boolean isQueryExhausted;
-    private boolean isPerformingQuery;
-    private int pageNumber;
-    private String query;
-    private boolean cancelRequest;
-    private long requestStartTime;
+
 
 
     public WeatherViewModel(@NonNull Application application) {
@@ -74,9 +77,6 @@ public class WeatherViewModel extends AndroidViewModel  {
         return instance;
     }
 
-    public LiveData<WeatherForecast> data() {
-        return _data;
-    }
     public LiveData<WeatherForecast> searchedResult() {
         return _searchedCity;
     }
@@ -91,24 +91,6 @@ public class WeatherViewModel extends AndroidViewModel  {
             this.getFavourtieItems().add(wf);
     }
 
-    public void getForecastByCurrentLocation(String lat , String lon , String apiKey) {
-
-        mWeatherRepository = WeatherRepository.getInstance(getApplication());
-
-        final Call<WeatherForecast> call = mWeatherRepository.getCurrentLocationForecast(lat,lon, apiKey);
-        call.enqueue(new Callback<WeatherForecast>() {
-            @Override
-            public void onResponse(Call<WeatherForecast> call, Response<WeatherForecast> response) {
-               _data.postValue(response.body());
-
-            }
-
-            @Override
-            public void onFailure(Call<WeatherForecast> call, Throwable t) {
-                _data.postValue(null);
-            }
-        });
-    }
 
     public void getForecastByCity(String city , String apiKey) {
 
@@ -130,11 +112,6 @@ public class WeatherViewModel extends AndroidViewModel  {
         });
     }
 
-    public void addSearchCityToFavorties() {
-
-        _data.postValue(_searchedCity.getValue());
-        mWeatherRepository.insertFavouriteDb(_searchedCity.getValue());
-    }
 
 
     public void fetchbyCity(String city){
@@ -199,9 +176,6 @@ public class WeatherViewModel extends AndroidViewModel  {
 
     }
 
-   /* public LiveData<Resource<List<SavedDailyForecast>>> fetchResults(String city, String numDays) {
-        return forecastRepository.fetchForecast(city, numDays);
-    }*/
 
     public void searchWeatherOfCity(String city){
         final LiveData<Resource<List<FavouriteItem>>> repositorySource = mWeatherRepository.fetchForecast(city);

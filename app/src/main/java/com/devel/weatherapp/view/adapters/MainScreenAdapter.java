@@ -17,6 +17,7 @@ import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
+import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.SunView;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
@@ -92,7 +93,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
                     layoutManager = new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false);
                     recyclerView.setLayoutManager(layoutManager);
-                    recyclerAdapter = new WeeklyAdapter(mContext,new ArrayList<>());
+                    recyclerAdapter = new WeeklyAdapter(mContext,favouriteItem.savedDailyForecast);
                     recyclerView.setAdapter(recyclerAdapter);
                     recyclerView.setHasFixedSize(true);
                     break;
@@ -103,9 +104,16 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     HumidityValue   = view.findViewById(R.id.HumidityValue);
                     cloudiness = view.findViewById(R.id.CloudinessValue);
                     WindSpeedValue  = view.findViewById(R.id.WindSpeedValue);
+
+                    SavedDailyForecast mSavedDailyForecast = favouriteItem.savedDailyForecast.get(0);
+
+                    String feelLike = UtilityHelper.calculateFeelLike(mContext,mSavedDailyForecast);
+                    HumidityValue.setText(mSavedDailyForecast.mhumidity + "%");
+                    cloudiness.setText(mSavedDailyForecast.clouds + "%");
+                    WindSpeedValue.setText(UtilityHelper.getFormattedWind(mContext, mSavedDailyForecast.getWind()));
+                    feelLikeValue.setText(feelLike);
                     break;
                 case 2:
-
                         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sunview, parent, false);
                         viewHolder = new ViewHolderSun(view);
                     break;

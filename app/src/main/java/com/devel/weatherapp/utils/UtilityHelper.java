@@ -5,9 +5,11 @@ import android.location.Location;
 import android.text.format.Time;
 
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.SavedDailyForecast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -160,5 +162,41 @@ public class UtilityHelper {
     public static String getCountryName(String name){
         Locale loc = new Locale("en",name);
         return loc.getDisplayCountry();
+    }
+
+    public static String calculateTemperature(Context mContext, SavedDailyForecast mSavedDailyForecast ){
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+        String temperatureText = "";
+
+        if (timeOfDay >= 5 && timeOfDay <= 12) {
+            temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getMorningTemp()));
+        } else if (timeOfDay >= 12 && timeOfDay <= 16) {
+            temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getDayTemp()));
+        } else if (timeOfDay >= 16 && timeOfDay <= 21) {
+            temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getEveningTemp()));
+        } else if ((timeOfDay >= 21 && timeOfDay <= 24 )|| ( timeOfDay >= 0  && timeOfDay <= 5) ) {
+            temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getNightTemp()));
+        }
+
+        return temperatureText;
+    }
+
+    public static String calculateFeelLike(Context mContext, SavedDailyForecast mSavedDailyForecast ){
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+        String feelsLike = "";
+
+        if (timeOfDay >= 5 && timeOfDay <= 12) {
+            feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
+        } else if (timeOfDay >= 12 && timeOfDay <= 16) {
+            feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getDayTemp());
+        } else if (timeOfDay >= 16 && timeOfDay <= 21) {
+            feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
+        } else if ((timeOfDay >= 21 && timeOfDay <= 24 )|| ( timeOfDay >= 0  && timeOfDay <= 5) ) {
+            feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeNight());
+        }
+
+        return feelsLike;
     }
 }

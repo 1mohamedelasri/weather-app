@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData;
 import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.ApiResponse;
 import com.devel.weatherapp.models.WeatherForecast;
-import com.devel.weatherapp.models.WeatherRes;
-import com.devel.weatherapp.models.WeatherResponse;
 
 import java.util.List;
 
@@ -14,7 +12,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface WeatherApi {
+public interface IWeatherApi {
 
 
 
@@ -36,8 +34,15 @@ public interface WeatherApi {
 
 
     @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
-    LiveData<ApiResponse<WeatherForecast>> getCurrentWeatherDataOfCityV2(@Query("q") String city, @Query("APPID") String app_id);
+    LiveData<ApiResponse<WeatherForecast>> getCurrentWeeklyDataOfCity(@Query("q") String city, @Query("APPID") String app_id);
 
     @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
-    LiveData<ApiResponse<WeatherForecast>> getCurrentLocationForecastV2(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);
+    LiveData<ApiResponse<WeatherForecast>> getCurrentLocationWeeklyData(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);
+
+    @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
+    LiveData<ApiResponse<WeatherForecast>> getCurrentHourlyDataOfCity(@Query("q") String city, @Query("APPID") String app_id);
+
+    @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
+    LiveData<ApiResponse<WeatherForecast>> getCurrentLocationHourlyData(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);
+
 }

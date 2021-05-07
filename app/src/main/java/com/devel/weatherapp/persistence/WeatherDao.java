@@ -8,7 +8,6 @@ import androidx.room.Query;
 
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.models.WeatherResponse;
 
 import java.util.List;
 

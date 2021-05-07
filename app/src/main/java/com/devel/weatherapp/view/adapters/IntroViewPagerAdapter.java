@@ -117,34 +117,18 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
             SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
             this.weatherViewModel.getAirQuality(String.valueOf(mSavedDailyForecast.getLat()), String.valueOf(mSavedDailyForecast.getLon()));
 
-            recyclerAdapter.setFavourtieItem(favouriteItems.get(currentPos));
-            recyclerAdapter.notifyDataSetChanged();
 
-            Calendar c = Calendar.getInstance();
-            int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-            String temperatureText = "";
-            String feelsLike = "";
             String date = String.format("%s, %s", UtilityHelper.format(mSavedDailyForecast.getDate()), UtilityHelper.formatDate(mSavedDailyForecast.getDate()));
 
 
-            if (timeOfDay >= 5 && timeOfDay <= 12) {
-                temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getMorningTemp()));
-                feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
-            } else if (timeOfDay >= 12 && timeOfDay <= 16) {
-                feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getDayTemp());
-                temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getDayTemp()));
-            } else if (timeOfDay >= 16 && timeOfDay <= 21) {
-                feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
-                temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getEveningTemp()));
-            } else if ((timeOfDay >= 21 && timeOfDay <= 24 )|| ( timeOfDay >= 0  && timeOfDay <= 5) ) {
-                feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeNight());
-                temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getNightTemp()));
-            }
-
+            String temperatureText = UtilityHelper.calculateTemperature(mContext,mSavedDailyForecast);
             cityNameText.setText(favouriteItems.get(currentPos).city);
             cityTempText.setText(temperatureText);
             cityDescText.setText(favouriteItems.get(currentPos).description);
             favouriteItems.get(currentPos).temperature = temperatureText;
+
+            recyclerAdapter.setFavourtieItem(favouriteItems.get(currentPos));
+            recyclerAdapter.notifyDataSetChanged();
 
         }
 
@@ -226,13 +210,6 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         return PagerAdapter.POSITION_NONE;
     }
 
-    private void subscribeObservers(){
-
-        if(geoLocation != null){
-            String[] res = UtilityHelper.geoLocToString(geoLocation);
-            weatherViewModel.getForecastByCurrentLocation(res[0],res[1],Constants.API_KEY);
-        }
-    }
 
     @NonNull
     @Override
