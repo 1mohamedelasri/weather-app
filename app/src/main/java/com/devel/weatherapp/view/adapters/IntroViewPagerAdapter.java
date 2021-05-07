@@ -42,7 +42,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     private Context mContext ;
 
     private RecyclerView recyclerView;
-    public WeeklyAdapter recyclerAdapter;
+    public MainScreenAdapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
     LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     private Location geoLocation;
@@ -85,8 +85,14 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         View layoutScreen = inflater.inflate(R.layout.layout_screen,container,false);
 
 
-        container.addView(layoutScreen);
 
+        Activity hostActivity = (Activity)mContext;
+        cityNameText =  hostActivity.findViewById(R.id.cityTextView);
+        cityTempText =  layoutScreen.findViewById(R.id.temperatureTextView);
+        cityDescText =  layoutScreen.findViewById(R.id.TempDescTextView);
+
+
+        container.addView(layoutScreen);
 
         /*layoutScreen.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,61 +103,21 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
             }
         });*/
 
-        Activity hostActivity = (Activity)mContext;
-        cityNameText = hostActivity.findViewById(R.id.cityTextView);
-        cityTempText = layoutScreen.findViewById(R.id.temperatureTextView);
-        cityDescText = layoutScreen.findViewById(R.id.TempDescTextView);
-        sv      = hostActivity.findViewById(R.id.sv);
-        pm2     = layoutScreen.findViewById(R.id.pm2);;
-        pm10    = layoutScreen.findViewById(R.id.pm10);
-        so2     =layoutScreen.findViewById(R.id.so2);
-        no2     =layoutScreen.findViewById(R.id.no2);
-        o3      =layoutScreen.findViewById(R.id.o3);
-        co      =layoutScreen.findViewById(R.id.co);
-        qualityTextView= layoutScreen.findViewById(R.id.qualityTextView);
 
-        recyclerView = (RecyclerView) container.findViewById(R.id.recyclerView);
-        layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView = (RecyclerView) container.findViewById(R.id.mainScreenRecycleView);
+        recyclerAdapter = new MainScreenAdapter(mContext,application,currentPos);
+        layoutManager = new LinearLayoutManager(container.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerAdapter = new WeeklyAdapter(mContext,new ArrayList<>());
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setHasFixedSize(true);
 
-
-        fetchData();
-
-
-
-        return layoutScreen;
-
-
-    }
-
-    public FavouriteItem getCurrentDisplayedWeather(){
-        return favouriteItems.get(currentPos);
-    }
-
-    private void fetchData() {
-
-
-
-        this.weatherViewModel.getAirQuality().observe((LifecycleOwner) mContext, new Observer<AirQuality>() {
-            @Override
-            public void onChanged(AirQuality airQuality) {
-                if(airQuality != null)
-                {
-                    setAirQuality(airQuality);
-                    //introViewPagerAdapter.notifyChange();
-                }
-            }
-        });
-
+        //fetchData();
         if(favouriteItems.size() > 0 && currentPos < favouriteItems.size() &&  favouriteItems.get(currentPos).savedDailyForecast.size() > 0) {
 
             SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
-            this.weatherViewModel.getAirQuality(String.valueOf(mSavedDailyForecast.getLat()),String.valueOf(mSavedDailyForecast.getLon()));
+            this.weatherViewModel.getAirQuality(String.valueOf(mSavedDailyForecast.getLat()), String.valueOf(mSavedDailyForecast.getLon()));
 
-            recyclerAdapter.setForecasts(favouriteItems.get(currentPos).savedDailyForecast);
+            recyclerAdapter.setFavourtieItem(favouriteItems.get(currentPos));
             recyclerAdapter.notifyDataSetChanged();
 
             Calendar c = Calendar.getInstance();
@@ -178,61 +144,45 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
             cityNameText.setText(favouriteItems.get(currentPos).city);
             cityTempText.setText(temperatureText);
             cityDescText.setText(favouriteItems.get(currentPos).description);
-            feelLikeValue.setText(feelsLike);
             favouriteItems.get(currentPos).temperature = temperatureText;
 
+        }
 
+
+        return layoutScreen;
+
+
+    }
+
+    public FavouriteItem getCurrentDisplayedWeather(){
+        return favouriteItems.get(currentPos);
+    }
+
+    private void fetchData() {
+
+
+        if(favouriteItems.size() > 0 && currentPos < favouriteItems.size() &&  favouriteItems.get(currentPos).savedDailyForecast.size() > 0) {
+
+            SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
+            this.weatherViewModel.getAirQuality(String.valueOf(mSavedDailyForecast.getLat()),String.valueOf(mSavedDailyForecast.getLon()));
+
+            recyclerAdapter.setFavourtieItem(favouriteItems.get(currentPos));
+            recyclerAdapter.notifyDataSetChanged();
+
+
+            //feelLikeValue.setText(feelsLike);
             HumidityValue.setText(mSavedDailyForecast.mhumidity + "%");
             cloudiness.setText(mSavedDailyForecast.clouds + "%");
             WindSpeedValue.setText(UtilityHelper.getFormattedWind(mContext, favouriteItems.get(currentPos).savedDailyForecast.get(0).getWind()));
 
 
-            Date sunRisedate = new Date((long) (favouriteItems.get(currentPos).savedDailyForecast.get(0).getSunrise() * 1000));
-            Date sunSetdate = new Date((long) (favouriteItems.get(currentPos).savedDailyForecast.get(0).getSunset() * 1000));
-
-            // Set sunrise time
-            sv.setSunrise(sunRisedate.getHours(), sunRisedate.getMinutes());
-            // Set the sunset time
-            sv.setSunset(sunSetdate.getHours(), sunSetdate.getMinutes());
-            // Get system time
-            Calendar calendar = Calendar.getInstance();
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
-            // Set the current time
-            sv.setCurrentTime(hour, minute);
 
 
-            if(this.airQuality != null && this.airQuality.getAirList().size() > 0 ) {
-                    pm2.setText(String.valueOf(airQuality.getAirList().get(0).component.pm2)+"%");
-                    pm10.setText(String.valueOf(airQuality.getAirList().get(0).component.pm10)+"%");
-                    so2.setText(String.valueOf(airQuality.getAirList().get(0).component.so2)+"%");
-                    no2.setText(String.valueOf(airQuality.getAirList().get(0).component.no2)+"%");
-                    o3.setText(String.valueOf(airQuality.getAirList().get(0).component.o3)+"%");
-                    co.setText(String.valueOf(airQuality.getAirList().get(0).component.co)+"%");
-                    //qualityTextView.setText(airQuality.getAirList().get(0).main.getAqi());
 
-                    switch (airQuality.getAirList().get(0).main.getAqi()){
-                        case 1:
-                            qualityTextView.setText("Good");
-                            break;
-                        case 2:
-                            qualityTextView.setText("Fair");
-                            break;
-                        case 3:
-                            qualityTextView.setText("Moderate");
-                            break;
-                        case 4:
-                            qualityTextView.setText("Poor");
-                            break;
-                        case 5:
-                            qualityTextView.setText("Very Poor");
-                            break;
-
-                    }
-                    qualityColor(qualityTextView,airQuality.getAirList().get(0).main.getAqi());
-                }
 
         }
+
+
 
     }
 
@@ -295,41 +245,9 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     }
 
 
-    public String whichQuality(int quality){
-        switch (quality){
-            case 1:
-                return "Good";
-            case 2:
-                return "Fair";
-            case 3:
-                return "Moderate";
-            case 4:
-                return "Poor";
-            case 5:
-                return "Very Poor";
-        }
-        return "";
-    }
 
-    public void qualityColor(TextView textView, int quality){
-        switch (quality){
-            case 1:
-                textView.setTextColor(Color.parseColor("#7CFF0A"));
-                break;
-            case 2:
-                textView.setTextColor(Color.parseColor("#FBC02D"));
-                break;
-            case 3:
-                textView.setTextColor(Color.parseColor("#E64A19"));
-                break;
-            case 4:
-                textView.setTextColor(Color.parseColor("#D32F2F"));
-                break;
-            case 5:
-                textView.setTextColor(Color.parseColor("#7C1414"));
-                break;
-        }
-    }
+
+
 
 
 
