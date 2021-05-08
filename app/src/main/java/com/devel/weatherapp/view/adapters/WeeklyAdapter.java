@@ -1,4 +1,4 @@
-package com.devel.weatherapp.view.adapters;
+/*package com.devel.weatherapp.view.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.SavedDailyForecast;
+import com.devel.weatherapp.models.WeatherList;
 import com.devel.weatherapp.utils.UtilityHelper;
 
 import java.util.Calendar;
@@ -20,10 +21,10 @@ import java.util.List;
 public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyViewHolder> {
 
     // Member variable to handle item clicks
-    private List<SavedDailyForecast> forecasts;
+    private List<WeatherList> forecasts;
     private Context mContext;
 
-    public WeeklyAdapter(Context context, List<SavedDailyForecast> savedDailyForecast) {
+    public WeeklyAdapter(Context context, List<WeatherList> savedDailyForecast) {
         mContext = context;
         forecasts= savedDailyForecast;
     }
@@ -56,9 +57,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         holder.day.setText(UtilityHelper.format(forecast.getDate()));
     }
 
-    /**
-     * Returns the number of items to display.
-     */
+
     @Override
     public int getItemCount() {
         if (forecasts == null) {
@@ -114,5 +113,5 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
             int elementId = forecasts.get(getAdapterPosition()).getId();
         }
     }
-}
+}*/
 

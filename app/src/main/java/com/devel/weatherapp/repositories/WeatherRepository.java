@@ -54,25 +54,25 @@ public class WeatherRepository {
         weatherApi = ServiceFactory.getWeatherApi();
     }
 
-    public LiveData<Resource<List<FavouriteItem>>> fetchForecast(String city) {
-        return new NetworkBoundResource<List<FavouriteItem>, WeatherForecast>(AppExecutors.getInstance()) {
+    public LiveData<Resource<List<WeatherForecast>>> fetchForecast(String city) {
+        return new NetworkBoundResource<List<WeatherForecast>, WeatherForecast>(AppExecutors.getInstance()) {
 
             @Override
             protected void saveCallResult(@NonNull WeatherForecast item) {
                 if (item != null && item.getDailyForecasts() != null) {
-
-                    weatherDao.insertWeather(mapWeatherToFavortie(item));
+                    item.setId(item.getCity().getId());
+                    weatherDao.insertWeather(item);
                 }
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable List<FavouriteItem> data) {
+            protected boolean shouldFetch(@Nullable List<WeatherForecast> data) {
                 return true;
             }
 
             @NonNull
             @Override
-            protected LiveData<List<FavouriteItem>> loadFromDb() {
+            protected LiveData<List<WeatherForecast>> loadFromDb() {
                 return weatherDao.loadForecast();
             }
 
@@ -85,6 +85,7 @@ public class WeatherRepository {
         }.getAsLiveData();
     }
 
+    /*
     public FavouriteItem mapWeatherToFavortie(WeatherForecast data) {
 
         if (data != null) {
@@ -118,10 +119,7 @@ public class WeatherRepository {
                     savedDailyForecast.setSunset(data.getDailyForecasts().get(i).getSunset());
                     savedDailyForecasts.add(savedDailyForecast);
                 }
-               /* SharedPreferences.getInstance(context).putStringValue(NOT_TITLE, savedDailyForecasts.get(0).getDescription());
-                SharedPreferences.getInstance(context).putStringValue(NOT_BODY,
-                        "the weather feels like " + savedDailyForecasts.get(0).getFeelslikeDay() + "C°"
-                );*/
+                );
 
                 return new FavouriteItem(data.getCity().getId(),
                         data.getCity().getName(),
@@ -133,27 +131,27 @@ public class WeatherRepository {
         }
         return null;
     }
-
-    public LiveData<Resource<List<FavouriteItem>>> fetchForecastByLocation(String lat, String lon) {
-        return new NetworkBoundResource<List<FavouriteItem>, WeatherForecast>(AppExecutors.getInstance()) {
+    */
+    public LiveData<Resource<List<WeatherForecast>>> fetchForecastByLocation(String lat, String lon) {
+        return new NetworkBoundResource<List<WeatherForecast>, WeatherForecast>(AppExecutors.getInstance()) {
 
             @Override
             protected void saveCallResult(@NonNull WeatherForecast item) {
                 weatherDao.deleteAll();
                 if (item != null && item.getDailyForecasts() != null) {
-
-                    weatherDao.insertWeather(mapWeatherToFavortie(item));
+                    item.setId(item.getCity().getId());
+                    weatherDao.insertWeather(item);
                 }
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable List<FavouriteItem> data) {
+            protected boolean shouldFetch(@Nullable List<WeatherForecast> data) {
                 return data == null || data.isEmpty();
             }
 
             @NonNull
             @Override
-            protected LiveData<List<FavouriteItem>> loadFromDb() {
+            protected LiveData<List<WeatherForecast>> loadFromDb() {
                 return weatherDao.loadForecast();
             }
 
@@ -174,23 +172,23 @@ public class WeatherRepository {
         );
     }
 
-    public void insertFavouriteDb(WeatherForecast favouriteItem) {
-        this.weatherDao.insertWeather(mapWeatherToFavortie(favouriteItem));
+    public void insertFavouriteDb(WeatherForecast weatherForecast) {
+        this.weatherDao.insertWeather(weatherForecast);
     }
 
-    public void dropFravourtieItem(FavouriteItem favouriteItem) {
-        new InsertAsynTask(WeatherDatabase.getInstance(context)).execute(favouriteItem);
+    public void dropFravourtieItem(WeatherForecast weatherForecast) {
+        new InsertAsynTask(WeatherDatabase.getInstance(context)).execute(weatherForecast);
     }
 
-    static class InsertAsynTask extends AsyncTask<FavouriteItem,Void,Void> {
+    static class InsertAsynTask extends AsyncTask<WeatherForecast,Void,Void> {
         private WeatherDao weatherDao;
         InsertAsynTask(WeatherDatabase weatherDatabase)
         {
             weatherDao= weatherDatabase.getWeatherDao();
         }
         @Override
-        protected Void doInBackground(FavouriteItem... favouriteItem) {
-            weatherDao.deleteFavouriteItem(favouriteItem[0].id);
+        protected Void doInBackground(WeatherForecast... weatherForecasts) {
+            weatherDao.deleteFavouriteItem(weatherForecasts[0].getId());
             return null;
         }
     }

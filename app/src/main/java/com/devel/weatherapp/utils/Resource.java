@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.devel.weatherapp.models.FavouriteItem;
+import com.devel.weatherapp.models.WeatherForecast;
 
 import java.util.List;
 
@@ -36,12 +37,12 @@ public class Resource<T> {
         return new Resource<>(Status.LOADING, data, null);
     }
 
-    public void delete(FavouriteItem favouriteItem) {
-        ((List)this.data).remove(favouriteItem);
+    public void delete(WeatherForecast weatherForecast) {
+        ((List)this.data).remove(weatherForecast);
     }
 
-    public void insert(FavouriteItem favouriteItem) {
-        ((List)this.data).add(favouriteItem);
+    public void insert(WeatherForecast weatherForecast) {
+        ((List)this.data).add(weatherForecast);
     }
 
     public List getSourceData() {

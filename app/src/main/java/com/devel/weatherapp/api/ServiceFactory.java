@@ -3,6 +3,7 @@ package com.devel.weatherapp.api;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.LiveDataCallAdapterFactory;
 
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -13,6 +14,7 @@ public class ServiceFactory {
                     .baseUrl(Constants.BASE_URL)
                     .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                     .addConverterFactory(GsonConverterFactory.create());
+
 
     // Returns a singleton instance of Retrofit
     private static Retrofit retrofit = retrofitBuilder.build();

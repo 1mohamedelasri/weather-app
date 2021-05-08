@@ -34,13 +34,13 @@ public class FavouriteItem {
     @ColumnInfo(name = "savedDailyForecast")
     @TypeConverters(ListConverter.class)
     @Expose
-    public List<SavedDailyForecast> savedDailyForecast;
+    public List<WeatherForecast> savedDailyForecast;
 
     @ColumnInfo(name = "timestamp")
     public Long timestamp;
 
 
-    public FavouriteItem(Long id, String city, String description, String country, List<SavedDailyForecast> savedDailyForecast) {
+    public FavouriteItem(Long id, String city, String description, String country, List<WeatherForecast> savedDailyForecast) {
         this.city = city;
         this.description = description;
         this.savedDailyForecast = savedDailyForecast;

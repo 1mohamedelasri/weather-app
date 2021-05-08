@@ -60,7 +60,7 @@ public class SearchFragment extends Fragment {
 
                 this.searchResCity.setText((CharSequence) favouriteItem.getCity().getName());
                 this.searchResCountry.setText(UtilityHelper.getCountryName(favouriteItem.getCity().getCountry()));
-                this.searchTempText.setText(getTemperature(favouriteItem.getDailyForecasts().get(0)));
+                this.searchTempText.setText(UtilityHelper.formatTemperature(context,favouriteItem.getDailyForecasts().get(0).getMain().getTemp()));
 
                 break;
             case NOT_FOUND:

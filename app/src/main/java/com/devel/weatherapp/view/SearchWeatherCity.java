@@ -6,10 +6,12 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.CurrentWeather;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.view.adapters.SearchFragment;
@@ -31,8 +33,12 @@ public class SearchWeatherCity extends AppCompatActivity {
         getSupportActionBar().hide();
         searchProgress      = findViewById(R.id.searchProgress);
         searchView = (SearchView)findViewById(R.id.search_view);
+        searchView.setFocusable(true);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.requestFocusFromTouch();
+
         mWeatherListViewModel =  WeatherViewModel.getInstance(getApplication());
-        searchView.requestFocus();
 
 
 
@@ -41,7 +47,9 @@ public class SearchWeatherCity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String s) {
 
                 searchProgress.setVisibility(View.VISIBLE);
-                mWeatherListViewModel.getForecastByCity(s,Constants.API_KEY);
+                mWeatherListViewModel.searchWeatherByCity(s,Constants.API_KEY);
+                searchView.clearFocus();
+
                 return false;
             }
 

@@ -87,24 +87,11 @@ public class MainActivity extends LocationBaseActivity {
                 introViewPagerAdapter.notifyChange();
 
                 TextView temperatureTextView = findViewById(R.id.temperatureTextView);
-                //temperatureTextView.setText(mWeatherListViewModel.getFavourtieItems().get(position).temperature);
-
 
                 ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.flipping);
                 anim.setTarget(temperatureTextView);
                 anim.setDuration(500);
                 anim.start();
-
-
-                //introViewPagerAdapter.recyclerAdapter.setForecasts(mList.get(position).savedDailyForecast);
-                //introViewPagerAdapter.recyclerAdapter.notifyDataSetChanged();
-
-
-                // cityTextView.setText(mList.get(posintroViewPagerAdapter.recyclerAdapterition).city);
-                //tempDescTextView.setText(mList.get(position).description);
-
-                //mWeatherListViewModel.getCityDataWeeklyData("GRenoble", "5", API_KEY);
-
             }
 
             @Override
@@ -127,7 +114,6 @@ public class MainActivity extends LocationBaseActivity {
             }
         });
         baselineBtn.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
 
@@ -142,10 +128,10 @@ public class MainActivity extends LocationBaseActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         String title = (String) item.getTitle();
                         if ("Share".equals(title)) {
-                            FavouriteItem myItem = introViewPagerAdapter.getCurrentDisplayedWeather();
+                            WeatherForecast myItem = introViewPagerAdapter.getCurrentDisplayedWeather();
                             Intent sendIntent = new Intent();
                             sendIntent.setAction(Intent.ACTION_SEND);
-                            sendIntent.putExtra(Intent.EXTRA_TEXT, "I share with you the weather of  "+ myItem.city+ " the temperature is " + myItem.temperature+". It's " + myItem.savedDailyForecast.get(0).mdescription );
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, "I share with you the weather of  "+ myItem.getCity().getName()+ " the temperature is " + myItem.getDailyForecasts().get(0).getMain().getTemp()+". It's " + myItem.getDailyForecasts().get(0).getWeathers().get(0).getDescription() );
                             sendIntent.setType("text/plain");
 
                             if (sendIntent.resolveActivity(getPackageManager()) != null) {
@@ -181,29 +167,12 @@ public class MainActivity extends LocationBaseActivity {
         //onTheTest();
     }
 
-    public void onTheTest(){
-        Log.d("MAINACTIIVTY","testRepository");
-
-        //mWeatherRepository = WeatherRepository.getInstance(getApplication());
-
-        weatherRepository.fetchForecast("grenoble").observe(this, result -> {
-            Log.d("MAINACTIIVTY","2");
-            if(result != null) {
-                if(result.data != null && result.data.size() > 0 ) {
-                    Log.d("MAINACTIIVTY",  "3" + result.data.get(0).city);
-
-                }
-            }
-
-        });
-    }
-
     private void SetupObservers() {
 
 
-        mWeatherListViewModel.getDataSource().observe(this, new Observer<Resource<List<FavouriteItem>>>() {
+        mWeatherListViewModel.getDataSource().observe(this, new Observer<Resource<List<WeatherForecast>>>() {
             @Override
-            public void onChanged(@Nullable Resource<List<FavouriteItem>> listResource) {
+            public void onChanged(@Nullable Resource<List<WeatherForecast>> listResource) {
                 introViewPagerAdapter.notifyChange();
                 if(listResource != null){
                     Log.d(TAG, "onChanged: status: " + listResource.status);
@@ -237,16 +206,6 @@ public class MainActivity extends LocationBaseActivity {
             }
         });
 
-        mWeatherListViewModel.getAirQuality().observe(this, new Observer<AirQuality>() {
-            @Override
-            public void onChanged(AirQuality airQuality) {
-                if(airQuality != null)
-                {
-                    introViewPagerAdapter.setAirQuality(airQuality);
-                    //introViewPagerAdapter.notifyChange();
-                }
-            }
-        });
     }
 
     public static void hideSystemUI(Activity activity) {
@@ -341,51 +300,6 @@ public class MainActivity extends LocationBaseActivity {
             return null;
         }
 
-    }
-
-    public void mapWeatherToFavortie(WeatherForecast data) {
-
-        if (data != null) {
-            if (data != null && data.getDailyForecasts() != null) {
-                List<SavedDailyForecast> savedDailyForecasts = new ArrayList<SavedDailyForecast>();
-
-                for (int i = 0; i < data.getDailyForecasts().size() - 1; i++) {
-                    SavedDailyForecast savedDailyForecast = new SavedDailyForecast();
-                    savedDailyForecast.setLat(data.getCity().getCoord().getLat());
-                    savedDailyForecast.setLon(data.getCity().getCoord().getLon());
-                    savedDailyForecast.setDate(data.getDailyForecasts().get(i).getDt());
-                    savedDailyForecast.setMaxTemp(data.getDailyForecasts().get(i).getTemp().getMax());
-                    savedDailyForecast.setMinTemp(data.getDailyForecasts().get(i).getTemp().getMin());
-                    savedDailyForecast.setDayTemp(data.getDailyForecasts().get(i).getTemp().getDay());
-                    savedDailyForecast.setEveningTemp(data.getDailyForecasts().get(i).getTemp().getEve());
-                    savedDailyForecast.setMorningTemp(data.getDailyForecasts().get(i).getTemp().getMorn());
-                    savedDailyForecast.setNightTemp(data.getDailyForecasts().get(i).getTemp().getNight());
-                    savedDailyForecast.setFeelslikeDay(data.getDailyForecasts().get(i).getFeelsLike().getDay());
-                    savedDailyForecast.setFeelslikeEve(data.getDailyForecasts().get(i).getFeelsLike().getEve());
-                    savedDailyForecast.setFeelslikeMorning(data.getDailyForecasts().get(i).getFeelsLike().getMorn());
-                    savedDailyForecast.setFeelslikeNight(data.getDailyForecasts().get(i).getFeelsLike().getNight());
-                    savedDailyForecast.setHumidity(data.getDailyForecasts().get(i).getHumidity());
-                    savedDailyForecast.setWind(data.getDailyForecasts().get(i).getSpeed());
-                    savedDailyForecast.setDescription(data.getDailyForecasts().get(i).getWeather().get(0).getDescription());
-                    savedDailyForecast.setWeatherid(data.getDailyForecasts().get(i).getWeather().get(0).getId());
-                    savedDailyForecast.setImageUrl(data.getDailyForecasts().get(i).getWeather().get(0).getIcon());
-                    savedDailyForecast.setPressure(data.getDailyForecasts().get(i).getHumidity());
-                    savedDailyForecast.setMain(data.getDailyForecasts().get(i).getWeather().get(0).getMain());
-                    savedDailyForecast.setClouds(data.getDailyForecasts().get(i).getClouds());
-                    savedDailyForecast.setSunrise(data.getDailyForecasts().get(i).getSunrise());
-                    savedDailyForecast.setSunset(data.getDailyForecasts().get(i).getSunset());
-                    savedDailyForecasts.add(savedDailyForecast);
-                }
-
-
-
-                mWeatherListViewModel.insertInFavourtieItems(new FavouriteItem(data.getCity().getId(),
-                        data.getCity().getName(),
-                        savedDailyForecasts.get(0).getDescription(), data.getCity().getName(),
-                        savedDailyForecasts));
-            }
-
-        }
     }
 
     public void refreshFromAnyWhere(){

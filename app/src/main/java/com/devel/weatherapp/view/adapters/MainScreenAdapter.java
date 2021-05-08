@@ -17,6 +17,8 @@ import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
+import com.devel.weatherapp.models.WeatherForecast;
+import com.devel.weatherapp.models.WeatherList;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.SunView;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
@@ -51,7 +53,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int currentScreenPosition;
 
     private RecyclerView recyclerView;
-    public WeeklyAdapter recyclerAdapter;
+    //public WeeklyAdapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private final WeatherViewModel weatherViewModel;
@@ -59,7 +61,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final Context mContext ;
 
     // Data
-    private FavouriteItem favouriteItem;
+    private WeatherForecast favouriteItem;
 
 
     public MainScreenAdapter(Context mContext, Application application, int currentScreenPosition) {
@@ -90,12 +92,12 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 case 0:
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_weekly_recycleview,parent,false);
                     viewHolder = new ViewHolderWeekly(view);
-                    recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+                    /*recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
                     layoutManager = new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false);
                     recyclerView.setLayoutManager(layoutManager);
-                    recyclerAdapter = new WeeklyAdapter(mContext,favouriteItem.savedDailyForecast);
+                    recyclerAdapter = new WeeklyAdapter(mContext,favouriteItem.getDailyForecasts());
                     recyclerView.setAdapter(recyclerAdapter);
-                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setHasFixedSize(true);*/
                     break;
                 case 1:
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_weathercard,parent,false);
@@ -105,13 +107,12 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     cloudiness = view.findViewById(R.id.CloudinessValue);
                     WindSpeedValue  = view.findViewById(R.id.WindSpeedValue);
 
-                    SavedDailyForecast mSavedDailyForecast = favouriteItem.savedDailyForecast.get(0);
+                    WeatherList mSavedDailyForecast = favouriteItem.getDailyForecasts().get(0);
 
-                    String feelLike = UtilityHelper.calculateFeelLike(mContext,mSavedDailyForecast);
-                    HumidityValue.setText(mSavedDailyForecast.mhumidity + "%");
-                    cloudiness.setText(mSavedDailyForecast.clouds + "%");
-                    WindSpeedValue.setText(UtilityHelper.getFormattedWind(mContext, mSavedDailyForecast.getWind()));
-                    feelLikeValue.setText(feelLike);
+                    HumidityValue.setText(mSavedDailyForecast.getMain().getHumidity() + "%");
+                    cloudiness.setText(mSavedDailyForecast.getClouds().getAll() + "%");
+                    WindSpeedValue.setText(UtilityHelper.getFormattedWind(mContext, mSavedDailyForecast.getWind().getSpeed()));
+                    feelLikeValue.setText(mSavedDailyForecast.getMain().getFeelsLike()+"°C");
                     break;
                 case 2:
                         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sunview, parent, false);
@@ -172,8 +173,8 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 {
                     sv      = itemView.findViewById(R.id.sv);
 
-                    Date sunRisedate = new Date((long) (favouriteItem.savedDailyForecast.get(0).getSunrise() * 1000));
-                    Date sunSetdate = new Date((long) (favouriteItem.savedDailyForecast.get(0).getSunset() * 1000));
+                    Date sunRisedate = new Date((long) (favouriteItem.getCity().getSunrise() * 1000));
+                    Date sunSetdate = new Date((long) (favouriteItem.getCity().getSunrise()* 1000));
 
                     // Set sunrise time
                     sv.setSunrise(sunRisedate.getHours(), sunRisedate.getMinutes());
@@ -242,7 +243,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
         }
 
-    public void setFavourtieItem(FavouriteItem favouriteItem) {
+    public void setFavourtieItem(WeatherForecast favouriteItem) {
         this.favouriteItem = favouriteItem;
         notifyDataSetChanged();
     }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.FavouriteItem;
+import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
@@ -24,7 +25,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     // Member variable to handle item clicks
     WeatherViewModel mViewModel;
     private Context mContext;
-    private List<FavouriteItem> favouriteItems;
+    private List<WeatherForecast> favouriteItems;
 
     public FavouritesAdapter(Context context, WeatherViewModel mViewModel) {
         this.mContext = context;
@@ -48,10 +49,10 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         // Determine the values of the wanted data
 
         //Set values
-        holder.favCity.setText(favouriteItems.get(position).city);
-        holder.favTemperature.setText(favouriteItems.get(position).temperature);
-        holder.favImg.setImageResource(UtilityHelper.getArtResourceForWeatherCondition(favouriteItems.get(position).savedDailyForecast.get(0).weatherid));
-        holder.favCountry.setText(UtilityHelper.getCountryName(favouriteItems.get(position).country));
+        holder.favCity.setText(favouriteItems.get(position).getCity().getName());
+        holder.favTemperature.setText(UtilityHelper.formatTemperature(mContext,favouriteItems.get(position).getDailyForecasts().get(0).getMain().getTemp()));
+        holder.favImg.setImageResource(UtilityHelper.getArtResourceForWeatherCondition(favouriteItems.get(position).getDailyForecasts().get(0).getWeathers().get(0).getId()));
+        holder.favCountry.setText(UtilityHelper.getCountryName(favouriteItems.get(position).getCity().getCountry()));
 
     }
 
@@ -66,11 +67,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         return favouriteItems.size();
     }
 
-    public List<FavouriteItem> getFavouriteItems() {
+    public List<WeatherForecast> getFavouriteItems() {
         return favouriteItems;
     }
 
-    public void setFavouriteItems(List<FavouriteItem> forecastEntities) {
+    public void setFavouriteItems(List<WeatherForecast> forecastEntities) {
         favouriteItems = forecastEntities;
         notifyDataSetChanged();
     }
@@ -80,7 +81,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(FavouriteItem item, int position) {
+    public void restoreItem(WeatherForecast item, int position) {
         favouriteItems.add(position, item);
         // notify item added by position
         notifyItemInserted(position);

@@ -24,6 +24,8 @@ import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.SavedDailyForecast;
+import com.devel.weatherapp.models.WeatherForecast;
+import com.devel.weatherapp.models.WeatherList;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.SunView;
@@ -49,22 +51,8 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
     private TextView cityNameText;
     private TextView cityTempText;
     private TextView cityDescText;
-    private View layoutScreen;
     private int currentPos = 0;
-    private TextView feelLikeValue ;
-    private TextView HumidityValue;
-    private TextView cloudiness;
-    private TextView WindSpeedValue;
-    private SunView sv;
-    private List<FavouriteItem> favouriteItems = new ArrayList<>();
-    private AirQuality airQuality;
-    private TextView pm2;
-    private TextView pm10;
-    private TextView so2;
-    private TextView no2;
-    private TextView o3;
-    private TextView co;
-    private TextView qualityTextView;
+    private List<WeatherForecast> favouriteItems = new ArrayList<>();
 
     public IntroViewPagerAdapter(Context mContext, Application application, WeatherViewModel weatherViewModel) {
         this.mContext = mContext;
@@ -112,20 +100,20 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         recyclerView.setHasFixedSize(true);
 
         //fetchData();
-        if(favouriteItems.size() > 0 && currentPos < favouriteItems.size() &&  favouriteItems.get(currentPos).savedDailyForecast.size() > 0) {
+        if(favouriteItems.size() > 0 && currentPos < favouriteItems.size() &&  favouriteItems.get(currentPos).getDailyForecasts().size() > 0) {
 
-            SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
-            this.weatherViewModel.getAirQuality(String.valueOf(mSavedDailyForecast.getLat()), String.valueOf(mSavedDailyForecast.getLon()));
-
-
-            String date = String.format("%s, %s", UtilityHelper.format(mSavedDailyForecast.getDate()), UtilityHelper.formatDate(mSavedDailyForecast.getDate()));
+            WeatherList mSavedDailyForecast = favouriteItems.get(currentPos).getDailyForecasts().get(0);
+            this.weatherViewModel.getAirQuality(String.valueOf(favouriteItems.get(currentPos).getCity().getCoord().getLat()),String.valueOf(favouriteItems.get(currentPos).getCity().getCoord().getLat()));
 
 
-            String temperatureText = UtilityHelper.calculateTemperature(mContext,mSavedDailyForecast);
-            cityNameText.setText(favouriteItems.get(currentPos).city);
-            cityTempText.setText(temperatureText);
-            cityDescText.setText(favouriteItems.get(currentPos).description);
-            favouriteItems.get(currentPos).temperature = temperatureText;
+           // String date = String.format("%s, %s", UtilityHelper.format(mSavedDailyForecast.), UtilityHelper.formatDate(mSavedDailyForecast.getDate()));
+
+
+            cityNameText.setText(favouriteItems.get(currentPos).getCity().getName());
+            cityTempText.setText(UtilityHelper.formatTemperature(mContext,favouriteItems.get(currentPos).getDailyForecasts().get(0).getMain().getTemp()));
+            cityDescText.setText(favouriteItems.get(currentPos).getDailyForecasts().get(0).getWeathers().get(0).getDescription());
+            //favouriteItems.get(currentPos). = temperatureText;
+
 
             recyclerAdapter.setFavourtieItem(favouriteItems.get(currentPos));
             recyclerAdapter.notifyDataSetChanged();
@@ -138,35 +126,22 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
 
     }
 
-    public FavouriteItem getCurrentDisplayedWeather(){
+    public WeatherForecast getCurrentDisplayedWeather(){
         return favouriteItems.get(currentPos);
     }
 
     private void fetchData() {
 
 
-        if(favouriteItems.size() > 0 && currentPos < favouriteItems.size() &&  favouriteItems.get(currentPos).savedDailyForecast.size() > 0) {
+        if(favouriteItems.size() > 0 && currentPos < favouriteItems.size() &&  favouriteItems.get(currentPos).getDailyForecasts().size() > 0) {
 
-            SavedDailyForecast mSavedDailyForecast = favouriteItems.get(currentPos).savedDailyForecast.get(0);
-            this.weatherViewModel.getAirQuality(String.valueOf(mSavedDailyForecast.getLat()),String.valueOf(mSavedDailyForecast.getLon()));
+            WeatherList mSavedDailyForecast = favouriteItems.get(currentPos).getDailyForecasts().get(0);
+            this.weatherViewModel.getAirQuality(String.valueOf(favouriteItems.get(currentPos).getCity().getCoord().getLat()),String.valueOf(favouriteItems.get(currentPos).getCity().getCoord().getLat()));
 
-            recyclerAdapter.setFavourtieItem(favouriteItems.get(currentPos));
+           // recyclerAdapter.setFavourtieItem(favouriteItems.get(currentPos));
             recyclerAdapter.notifyDataSetChanged();
 
-
-            //feelLikeValue.setText(feelsLike);
-            HumidityValue.setText(mSavedDailyForecast.mhumidity + "%");
-            cloudiness.setText(mSavedDailyForecast.clouds + "%");
-            WindSpeedValue.setText(UtilityHelper.getFormattedWind(mContext, favouriteItems.get(currentPos).savedDailyForecast.get(0).getWind()));
-
-
-
-
-
-
         }
-
-
 
     }
 
@@ -191,10 +166,7 @@ public class IntroViewPagerAdapter extends PagerAdapter implements LifecycleOwne
         this.currentPos = pos;
     }
 
-    public void setAirQuality(AirQuality airQuality){
-        this.airQuality = airQuality;
-    }
-    public void setFavouriteItems(List<FavouriteItem> favouriteItemsList){
+    public void setFavouriteItems(List<WeatherForecast> favouriteItemsList){
         this.favouriteItems = favouriteItemsList;
         notifyChange();
     }

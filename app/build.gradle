@@ -58,6 +58,7 @@ dependencies {
 
     // location
     implementation 'com.yayandroid:LocationManager:2.4.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
 
 
