@@ -1,5 +1,7 @@
 package com.devel.weatherapp.models;
 
+import android.util.Log;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -7,12 +9,18 @@ import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
 import com.devel.weatherapp.utils.ListConverter;
+import com.devel.weatherapp.utils.UtilityHelper;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@Entity(tableName = "WeatherForecast")
+@Entity
 public class WeatherForecast {
 
     @ColumnInfo(name = "id")
@@ -43,6 +51,8 @@ public class WeatherForecast {
     private List<WeatherList> dailyForecasts = null;
 
     private int timestamp;
+
+
 
 
     public City getCity() {
@@ -112,4 +122,20 @@ public class WeatherForecast {
         return true;
 
     }
+
+    public List<WeatherList> getConvertedDaily(){
+
+        List<WeatherList> dailyWeather = new ArrayList<>();
+        final Map<Integer, List<WeatherList>> listMap =
+                this.getDailyForecasts().stream().collect( Collectors.groupingBy(item -> UtilityHelper.timestampToDate(item.getDt()).getDay()));
+
+        Set<Integer> keys = listMap.keySet();
+
+        for (Integer key : keys) {
+            List<WeatherList> w = (List<WeatherList>) listMap.get(key);
+            dailyWeather.add(w.get(0));
+        }
+        return dailyWeather;
+    }
+
 }

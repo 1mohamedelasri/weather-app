@@ -10,7 +10,7 @@
     app:contentInsetEnd="0dp"
     app:contentInsetRight="0dp"
     android:theme="@style/mainActivityTheme"
-    android:background="@drawable/btn_gradient_style"
+    android:background="@drawable/blue_gradient_style"
     tools:context=".view.MainActivity">
 
 

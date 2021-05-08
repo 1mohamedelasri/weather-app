@@ -12,18 +12,20 @@ import com.devel.weatherapp.api.ServiceFactory;
 import com.devel.weatherapp.api.IWeatherApi;
 import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.ApiResponse;
-import com.devel.weatherapp.models.FavouriteItem;
-import com.devel.weatherapp.models.SavedDailyForecast;
+import com.devel.weatherapp.models.Weather;
 import com.devel.weatherapp.models.WeatherForecast;
+import com.devel.weatherapp.models.WeatherList;
 import com.devel.weatherapp.persistence.WeatherDao;
 import com.devel.weatherapp.persistence.WeatherDatabase;
 import com.devel.weatherapp.utils.AppExecutors;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.NetworkBoundResource;
 import com.devel.weatherapp.utils.Resource;
+import com.devel.weatherapp.utils.UtilityHelper;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -141,6 +143,8 @@ public class WeatherRepository {
                 if (item != null && item.getDailyForecasts() != null) {
                     item.setId(item.getCity().getId());
                     weatherDao.insertWeather(item);
+
+
                 }
             }
 

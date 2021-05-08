@@ -53,7 +53,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int currentScreenPosition;
 
     private RecyclerView recyclerView;
-    //public WeeklyAdapter recyclerAdapter;
+    public WeeklyAdapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private final WeatherViewModel weatherViewModel;
@@ -79,7 +79,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 5;
     }
 
     @Override
@@ -92,12 +92,12 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 case 0:
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_weekly_recycleview,parent,false);
                     viewHolder = new ViewHolderWeekly(view);
-                    /*recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+                    recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
                     layoutManager = new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false);
                     recyclerView.setLayoutManager(layoutManager);
-                    recyclerAdapter = new WeeklyAdapter(mContext,favouriteItem.getDailyForecasts());
+                    recyclerAdapter = new WeeklyAdapter(mContext,favouriteItem.getConvertedDaily());
                     recyclerView.setAdapter(recyclerAdapter);
-                    recyclerView.setHasFixedSize(true);*/
+                    recyclerView.setHasFixedSize(true);
                     break;
                 case 1:
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_weathercard,parent,false);
@@ -123,6 +123,12 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         qualityTextView= view.findViewById(R.id.qualityTextView);
                         viewHolder = new ViewHolderAirQuality(view);
                     break;
+                case 4:
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_airquality,parent,false);
+                    qualityTextView= view.findViewById(R.id.qualityTextView);
+                    viewHolder = new ViewHolderAirQuality(view);
+                    break;
+
             }
 
             return viewHolder;

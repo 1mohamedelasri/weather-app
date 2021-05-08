@@ -30,8 +30,8 @@ public interface WeatherDao {
     @Query("DELETE FROM WeatherForecast")
     void deleteAll();
 
-    @Query("DELETE FROM WeatherForecast where id = :id")
-    void deleteFavouriteItem(Long id);
+    @Query("DELETE FROM WeatherForecast where id = :ids")
+    void deleteFavouriteItem(Long ids);
 
 
 }

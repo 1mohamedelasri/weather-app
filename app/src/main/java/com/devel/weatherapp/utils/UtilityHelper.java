@@ -7,6 +7,7 @@ import android.text.format.Time;
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.SavedDailyForecast;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -62,6 +63,11 @@ public class UtilityHelper {
         DateFormat dateFormat = new SimpleDateFormat("EEEE ");
         String dateString = dateFormat.format(new Date(dateInMilliseconds * 1000));
         return dateString;
+    }
+
+    public static Date timestampToDate(Long timestamp){
+        java.util.Date date =new java.util.Date((long)timestamp*1000);
+        return date;
     }
 
     // Format used for storing dates in the database.  ALso used for converting those strings

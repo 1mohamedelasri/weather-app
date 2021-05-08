@@ -1,4 +1,4 @@
-/*package com.devel.weatherapp.view.adapters;
+package com.devel.weatherapp.view.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.SavedDailyForecast;
+import com.devel.weatherapp.models.Weather;
 import com.devel.weatherapp.models.WeatherList;
 import com.devel.weatherapp.utils.UtilityHelper;
 
@@ -43,18 +44,18 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
         // Determine the values of the wanted data
-        SavedDailyForecast forecast = forecasts.get(position+1);
-        Double max_temp = forecast.getMaxTemp();
-        Double min_temp = forecast.getMinTemp();
-        Long date = forecast.getDate();
-        String description = forecast.getDescription();
-        Long weather_id = forecast.getWeatherid();
+        WeatherList forecast = forecasts.get(position);
+        Double max_temp = forecast.getMain().getTempMax();
+        Double min_temp = forecast.getMain().getTempMin();
+        Long date = forecast.getDt();
+        String description = forecast.getWeathers().get(0).getDescription();
+        Long weather_id = forecast.getWeathers().get(0).getId();
 
         //Set values
         holder.desc.setText(description);
-        holder.temp.setText(UtilityHelper.formatTemperature(mContext, forecast.getMaxTemp()) + "/" + UtilityHelper.formatTemperature(mContext, forecast.getMinTemp()));
+        holder.temp.setText(UtilityHelper.formatTemperature(mContext, max_temp) + "/" + UtilityHelper.formatTemperature(mContext, min_temp));
         holder.imageView.setImageResource(UtilityHelper.getArtResourceForWeatherCondition(weather_id));
-        holder.day.setText(UtilityHelper.format(forecast.getDate()));
+        holder.day.setText(UtilityHelper.format(date));
     }
 
 
@@ -66,11 +67,11 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         return forecasts.size()-1;
     }
 
-    public List<SavedDailyForecast> getForecasts() {
+    public List<WeatherList> getForecasts() {
         return forecasts;
     }
 
-    public void setForecasts(List<SavedDailyForecast> forecastEntities) {
+    public void setForecasts(List<WeatherList> forecastEntities) {
         forecasts = forecastEntities;
         notifyDataSetChanged();
     }
@@ -80,7 +81,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(SavedDailyForecast item, int position) {
+    public void restoreItem(WeatherList item, int position) {
         forecasts.add(position, item);
         // notify item added by position
         notifyItemInserted(position);
@@ -110,8 +111,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
 
         @Override
         public void onClick(View view) {
-            int elementId = forecasts.get(getAdapterPosition()).getId();
         }
     }
-}*/
+}
 
