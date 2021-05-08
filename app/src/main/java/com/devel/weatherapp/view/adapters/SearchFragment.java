@@ -1,7 +1,6 @@
 package com.devel.weatherapp.view.adapters;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,16 +13,10 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.DailyForecast;
-import com.devel.weatherapp.models.FavouriteItem;
-import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.models.Status;
 import com.devel.weatherapp.models.WeatherForecast;
-import com.devel.weatherapp.utils.Utility;
+import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.SearchWeatherCity;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
-
-import java.util.Calendar;
 
 public class SearchFragment extends Fragment {
 
@@ -57,18 +50,20 @@ public class SearchFragment extends Fragment {
                                                         mWeatherListViewModel.fetchbyCity("");
                                                         getParentFragmentManager().popBackStack();
                                                         getActivity().finish();
-
                                                     }
                                                 }
                 );
 
                 this.searchResCity.setText((CharSequence) favouriteItem.getCity().getName());
-                this.searchResCountry.setText(Utility.getCountryName(favouriteItem.getCity().getCountry()));
-                this.searchTempText.setText(getTemperature(favouriteItem.getDailyForecasts().get(0)));
+                this.searchResCountry.setText(UtilityHelper.getCountryName(favouriteItem.getCity().getCountry()));
+                this.searchTempText.setText(UtilityHelper.formatTemperature(context,favouriteItem.getDailyForecasts().get(0).getMain().getTemp(),true));
 
                 break;
             case NOT_FOUND:
                  view = inflater.inflate(R.layout.fragement_notfound, container, false);
+                break;
+            case NONE:
+                view = inflater.inflate(R.layout.fragment_none, container, false);
                 break;
         }
 
@@ -82,23 +77,6 @@ public class SearchFragment extends Fragment {
     public void setStatus(SearchWeatherCity.STATUS status) {
 
         this.status = status;
-    }
-
-    public String getTemperature(DailyForecast s){
-        Calendar c = Calendar.getInstance();
-        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-        String temperatureText = "";
-
-        if (timeOfDay >= 5 && timeOfDay < 12) {
-            temperatureText = (Utility.formatTemperature(getContext(), s.getTemp().getMorn()));
-        } else if (timeOfDay >= 12 && timeOfDay < 16) {
-            temperatureText = (Utility.formatTemperature(getContext(), s.getTemp().getDay()));
-        } else if (timeOfDay >= 16 && timeOfDay < 21) {
-            temperatureText = (Utility.formatTemperature(getContext(), s.getTemp().getEve()));
-        } else if ((timeOfDay >= 21 || timeOfDay >= 0)  && timeOfDay < 5) {
-            temperatureText = (Utility.formatTemperature(getContext(), s.getTemp().getNight()));
-        }
-        return temperatureText;
     }
 
     public void setContext(Context cx){

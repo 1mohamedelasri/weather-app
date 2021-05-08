@@ -1,23 +1,16 @@
 package com.devel.weatherapp.view;
 
-import android.Manifest;
 import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.Application;
 import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,25 +20,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
-import com.devel.weatherapp.BuildConfig;
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.AirQuality;
-import com.devel.weatherapp.repositories.ForecastRepository;
-import com.devel.weatherapp.utils.AlarmReceiver;
-import com.devel.weatherapp.utils.Resource;
-import com.devel.weatherapp.utils.ScreenShotHelper;
-import com.devel.weatherapp.utils.SharedPreferences;
-import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
-import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
-import com.devel.weatherapp.utils.Constants;
-import com.devel.weatherapp.utils.Utility;
+import com.devel.weatherapp.repositories.WeatherRepository;
+import com.devel.weatherapp.utils.Resource;
+import com.devel.weatherapp.utils.UtilityHelper;
+import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.yayandroid.locationmanager.base.LocationBaseActivity;
@@ -54,19 +39,10 @@ import com.yayandroid.locationmanager.configuration.LocationConfiguration;
 import com.yayandroid.locationmanager.constants.FailType;
 import com.yayandroid.locationmanager.constants.ProcessType;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.security.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import static com.devel.weatherapp.viewmodels.WeatherViewModel.QUERY_EXHAUSTED;
 
 
 public class MainActivity extends LocationBaseActivity {
@@ -80,7 +56,7 @@ public class MainActivity extends LocationBaseActivity {
     Location currentLocation = null;
     private ImageView searchButton;
     private ImageView baselineBtn;
-    private ForecastRepository forecastRepository ;
+    private WeatherRepository weatherRepository;
 
 
     @Override
@@ -91,9 +67,9 @@ public class MainActivity extends LocationBaseActivity {
 
         // setup viewpager
         screenPager = findViewById(R.id.screen_viewpager);
-        screenPager.setOffscreenPageLimit(7);
+        screenPager.setOffscreenPageLimit(0);
         mWeatherListViewModel = WeatherViewModel.getInstance(getApplication());
-        introViewPagerAdapter = new IntroViewPagerAdapter(this, getApplication(), mWeatherListViewModel);
+        introViewPagerAdapter = new IntroViewPagerAdapter(this, getApplication(), mWeatherListViewModel,screenPager);
         screenPager.setAdapter(introViewPagerAdapter);
         searchButton = findViewById(R.id.magnifyImgView);
         baselineBtn = findViewById(R.id.baselineBtn);
@@ -113,24 +89,11 @@ public class MainActivity extends LocationBaseActivity {
                 introViewPagerAdapter.notifyChange();
 
                 TextView temperatureTextView = findViewById(R.id.temperatureTextView);
-                //temperatureTextView.setText(mWeatherListViewModel.getFavourtieItems().get(position).temperature);
-
 
                 ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(MainActivity.this, R.animator.flipping);
                 anim.setTarget(temperatureTextView);
                 anim.setDuration(500);
                 anim.start();
-
-
-                //introViewPagerAdapter.recyclerAdapter.setForecasts(mList.get(position).savedDailyForecast);
-                //introViewPagerAdapter.recyclerAdapter.notifyDataSetChanged();
-
-
-                // cityTextView.setText(mList.get(posintroViewPagerAdapter.recyclerAdapterition).city);
-                //tempDescTextView.setText(mList.get(position).description);
-
-                //mWeatherListViewModel.getCityDataWeeklyData("GRenoble", "5", API_KEY);
-
             }
 
             @Override
@@ -153,7 +116,6 @@ public class MainActivity extends LocationBaseActivity {
             }
         });
         baselineBtn.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
 
@@ -168,10 +130,10 @@ public class MainActivity extends LocationBaseActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         String title = (String) item.getTitle();
                         if ("Share".equals(title)) {
-                            FavouriteItem myItem = introViewPagerAdapter.getCurrentDisplayedWeather();
+                            WeatherForecast myItem = introViewPagerAdapter.getCurrentDisplayedWeather();
                             Intent sendIntent = new Intent();
                             sendIntent.setAction(Intent.ACTION_SEND);
-                            sendIntent.putExtra(Intent.EXTRA_TEXT, "I share with you the weather of  "+ myItem.city+ " the temperature is " + myItem.temperature+". It's " + myItem.savedDailyForecast.get(0).mdescription );
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, "I share with you the weather of  "+ myItem.getCity().getName()+ " the temperature is " + myItem.getDailyForecasts().get(0).getMain().getTemp()+". It's " + myItem.getDailyForecasts().get(0).getWeathers().get(0).getDescription() );
                             sendIntent.setType("text/plain");
 
                             if (sendIntent.resolveActivity(getPackageManager()) != null) {
@@ -193,7 +155,7 @@ public class MainActivity extends LocationBaseActivity {
                 popup.show();//showing popup menu
             }
         });//closing the setOnClickListener method
-        forecastRepository = ForecastRepository.getInstance(getApplication());
+        weatherRepository = weatherRepository.getInstance(getApplication());
 
         Calendar calendar = Calendar.getInstance();
         //calendar.set(Calendar.HOUR_OF_DAY,23);
@@ -205,49 +167,44 @@ public class MainActivity extends LocationBaseActivity {
         am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 4*60*60, pendingIntent);
 */
         //onTheTest();
-    }
 
-    public void onTheTest(){
-        Log.d("MAINACTIIVTY","testRepository");
 
-        //mWeatherRepository = WeatherRepository.getInstance(getApplication());
+// Create an explicit intent for an Activity in your app
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        forecastRepository.fetchForecast("grenoble").observe(this, result -> {
-            Log.d("MAINACTIIVTY","2");
-            if(result != null) {
-                if(result.data != null && result.data.size() > 0 ) {
-                    Log.d("MAINACTIIVTY",  "3" + result.data.get(0).city);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "22211221")
+                .setSmallIcon(R.drawable.app_icon)
+                .setContentTitle("My notification")
+                .setContentText("Hello World!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-                }
-            }
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(211211, builder.build());
 
-        });
     }
 
     private void SetupObservers() {
 
-        // Instantiate the weather View Model.
-        mWeatherListViewModel.data().observe(this, new Observer<WeatherForecast>() {
+
+        mWeatherListViewModel.getDataSource().observe(this, new Observer<Resource<List<WeatherForecast>>>() {
             @Override
-            public void onChanged(WeatherForecast data) {
-                Log.d("TEST", "subscribeObservers: ");
-
-                mapWeatherToFavortie(data);
-
+            public void onChanged(@Nullable Resource<List<WeatherForecast>> listResource) {
                 introViewPagerAdapter.notifyChange();
 
-                        //introViewPagerAdapter.recyclerAdapter.notifyDataSetChanged();
-            }
-        });
-
-        mWeatherListViewModel.getDataSource().observe(this, new Observer<Resource<List<FavouriteItem>>>() {
-            @Override
-            public void onChanged(@Nullable Resource<List<FavouriteItem>> listResource) {
-                introViewPagerAdapter.notifyChange();
                 if(listResource != null){
                     Log.d(TAG, "onChanged: status: " + listResource.status);
 
                     if(listResource.data != null){
+                        if(listResource.data.size() > 0) {
+                            TextView nointernet = findViewById(R.id.nointernet);
+                            nointernet.setVisibility(View.GONE);
+                        }
 
                         switch (listResource.status){
                             case LOADING:{
@@ -268,21 +225,11 @@ public class MainActivity extends LocationBaseActivity {
                                 Log.d(TAG, "onChanged: status: SUCCESS, #Recipes: " + listResource.data.size());
                                 introViewPagerAdapter.setFavouriteItems(listResource.data);
                                 introViewPagerAdapter.notifyChange();
+
                                 break;
                             }
                         }
                     }
-                }
-            }
-        });
-
-        mWeatherListViewModel.getAirQuality().observe(this, new Observer<AirQuality>() {
-            @Override
-            public void onChanged(AirQuality airQuality) {
-                if(airQuality != null)
-                {
-                    introViewPagerAdapter.setAirQuality(airQuality);
-                    //introViewPagerAdapter.notifyChange();
                 }
             }
         });
@@ -319,17 +266,19 @@ public class MainActivity extends LocationBaseActivity {
        //if(mWeatherListViewModel.getFavourtieItems().size() <1)
       //  {
       //  }
-        if(location != null) {
-            String[] res = Utility.geoLocToString(currentLocation);
-            mWeatherListViewModel.getAirQuality(res[0],res[1]);
+            if(!isNetworkAvailable()) {
+                TextView nointernet = findViewById(R.id.nointernet);
+                nointernet.setVisibility(View.VISIBLE);
+            }else{
+                TextView nointernet = findViewById(R.id.nointernet);
+                nointernet.setVisibility(View.GONE);
 
-        }
-
+            }
     }
 
     public void fetchWeatherLocationChanged(){
         if(currentLocation != null) {
-            String[] res = Utility.geoLocToString(currentLocation);
+            String[] res = UtilityHelper.geoLocToString(currentLocation);
             mWeatherListViewModel.fetchbyLocation(res[0],res[1]);
             introViewPagerAdapter.notifyChange();
 
@@ -382,49 +331,11 @@ public class MainActivity extends LocationBaseActivity {
 
     }
 
-    public void mapWeatherToFavortie(WeatherForecast data) {
-
-        if (data != null) {
-            if (data != null && data.getDailyForecasts() != null) {
-                List<SavedDailyForecast> savedDailyForecasts = new ArrayList<SavedDailyForecast>();
-
-                for (int i = 0; i < data.getDailyForecasts().size() - 1; i++) {
-                    SavedDailyForecast savedDailyForecast = new SavedDailyForecast();
-                    savedDailyForecast.setLat(data.getCity().getCoord().getLat());
-                    savedDailyForecast.setLon(data.getCity().getCoord().getLon());
-                    savedDailyForecast.setDate(data.getDailyForecasts().get(i).getDt());
-                    savedDailyForecast.setMaxTemp(data.getDailyForecasts().get(i).getTemp().getMax());
-                    savedDailyForecast.setMinTemp(data.getDailyForecasts().get(i).getTemp().getMin());
-                    savedDailyForecast.setDayTemp(data.getDailyForecasts().get(i).getTemp().getDay());
-                    savedDailyForecast.setEveningTemp(data.getDailyForecasts().get(i).getTemp().getEve());
-                    savedDailyForecast.setMorningTemp(data.getDailyForecasts().get(i).getTemp().getMorn());
-                    savedDailyForecast.setNightTemp(data.getDailyForecasts().get(i).getTemp().getNight());
-                    savedDailyForecast.setFeelslikeDay(data.getDailyForecasts().get(i).getFeelsLike().getDay());
-                    savedDailyForecast.setFeelslikeEve(data.getDailyForecasts().get(i).getFeelsLike().getEve());
-                    savedDailyForecast.setFeelslikeMorning(data.getDailyForecasts().get(i).getFeelsLike().getMorn());
-                    savedDailyForecast.setFeelslikeNight(data.getDailyForecasts().get(i).getFeelsLike().getNight());
-                    savedDailyForecast.setHumidity(data.getDailyForecasts().get(i).getHumidity());
-                    savedDailyForecast.setWind(data.getDailyForecasts().get(i).getSpeed());
-                    savedDailyForecast.setDescription(data.getDailyForecasts().get(i).getWeather().get(0).getDescription());
-                    savedDailyForecast.setWeatherid(data.getDailyForecasts().get(i).getWeather().get(0).getId());
-                    savedDailyForecast.setImageUrl(data.getDailyForecasts().get(i).getWeather().get(0).getIcon());
-                    savedDailyForecast.setPressure(data.getDailyForecasts().get(i).getHumidity());
-                    savedDailyForecast.setMain(data.getDailyForecasts().get(i).getWeather().get(0).getMain());
-                    savedDailyForecast.setClouds(data.getDailyForecasts().get(i).getClouds());
-                    savedDailyForecast.setSunrise(data.getDailyForecasts().get(i).getSunrise());
-                    savedDailyForecast.setSunset(data.getDailyForecasts().get(i).getSunset());
-                    savedDailyForecasts.add(savedDailyForecast);
-                }
-
-
-
-                mWeatherListViewModel.insertInFavourtieItems(new FavouriteItem(data.getCity().getId(),
-                        data.getCity().getName(),
-                        savedDailyForecasts.get(0).getDescription(), data.getCity().getName(),
-                        savedDailyForecasts));
-            }
-
-        }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public void refreshFromAnyWhere(){

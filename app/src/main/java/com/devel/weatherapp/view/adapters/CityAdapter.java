@@ -29,7 +29,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
     @Override
     public CityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.weekly_items, parent, false);
+                .inflate(R.layout.item_daily, parent, false);
 
         return new CityViewHolder(view);
     }

@@ -10,7 +10,7 @@
     app:contentInsetEnd="0dp"
     app:contentInsetRight="0dp"
     android:theme="@style/mainActivityTheme"
-    android:background="@drawable/btn_gradient_style"
+    android:background="@drawable/blue_gradient_style"
     tools:context=".view.MainActivity">
 
 
@@ -49,26 +49,41 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_more_vert_36" />
 
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="72dp" />
+        app:layout_constraintGuide_begin="64dp" />
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/screen_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="#00000000"
-            android:fadeScrollbars="true"
-            android:isScrollContainer="true"
-            android:nestedScrollingEnabled="true"
-            android:overScrollMode="always"
-            android:scrollbars="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline3" />
+    <TextView
+        android:id="@+id/nointernet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No network available, cache is empty"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/screen_viewpager"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/screen_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#00000000"
+        android:fadeScrollbars="true"
+        android:isScrollContainer="true"
+        android:nestedScrollingEnabled="true"
+        android:overScrollMode="always"
+        android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline3" >
+
+    </androidx.viewpager.widget.ViewPager>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

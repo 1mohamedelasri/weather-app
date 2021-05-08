@@ -1,19 +1,14 @@
 package com.devel.weatherapp.persistence;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.devel.weatherapp.models.FavouriteItem;
-import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.models.WeatherResponse;
+import com.devel.weatherapp.models.WeatherForecast;
 
-@Database(entities = {FavouriteItem.class}, version = 2 )
+@Database(entities = {WeatherForecast.class}, version = 2 )
 public abstract class WeatherDatabase extends RoomDatabase {
 
 

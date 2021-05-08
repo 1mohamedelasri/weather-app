@@ -34,7 +34,7 @@ public class WeatherList {
     @Expose
     @ColumnInfo(name = "weather")
     @TypeConverters(ListConverter.class)
-    private List<Weather> results;
+    private List<Weather> weathers;
 
     @SerializedName("clouds")
     @Expose
@@ -66,10 +66,10 @@ public class WeatherList {
     public WeatherList() {
     }
 
-    public WeatherList(Long dt, Main main, List<Weather> results, Clouds clouds, Wind wind, Sys sys, String dtTxt) {
+    public WeatherList(Long dt, Main main, List<Weather> weathers, Clouds clouds, Wind wind, Sys sys, String dtTxt) {
         this.dt = dt;
         this.main = main;
-        this.results = results;
+        this.weathers = weathers;
         this.clouds = clouds;
         this.wind = wind;
         this.sys = sys;
@@ -100,12 +100,12 @@ public class WeatherList {
         this.main = main;
     }
 
-    public List<Weather> getResults() {
-        return results;
+    public List<Weather> getWeathers() {
+        return weathers;
     }
 
-    public void setResults(List<Weather> results) {
-        this.results = results;
+    public void setResults(List<Weather> weathers) {
+        this.weathers = weathers;
     }
 
     public Clouds getClouds() {
@@ -145,7 +145,7 @@ public class WeatherList {
         return "WeatherList{" +
                 "dt=" + dt +
                 ", main=" + main +
-                ", results=" + results +
+                ", results=" + weathers +
                 ", clouds=" + clouds +
                 ", wind=" + wind +
                 ", sys=" + sys +

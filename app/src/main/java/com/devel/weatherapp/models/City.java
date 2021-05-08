@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.devel.weatherapp.utils.IdsConverter;
-import com.devel.weatherapp.utils.ListConverter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -160,5 +159,18 @@ public class City {
                 ", sunrise=" + sunrise +
                 ", sunset=" + sunset +
                 '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null) return false;
+        if(!(o instanceof City) ) return false;
+
+        City other = (City) o;
+        if(this.id == other.id && name.equals(other.name))      return true;
+
+        return false;
+
     }
 }

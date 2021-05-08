@@ -1,33 +1,54 @@
 package com.devel.weatherapp.models;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
+import com.devel.weatherapp.utils.ListConverter;
+import com.devel.weatherapp.utils.UtilityHelper;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Entity
 public class WeatherForecast {
 
+    @ColumnInfo(name = "id")
+    @PrimaryKey(autoGenerate = false)
+    private Long id;
+
+    @ColumnInfo(name = "city")
     @SerializedName("city")
     @Expose
+    @TypeConverters({ListConverter.class})
     private City city;
+
     @SerializedName("cod")
     @Expose
     private String cod;
+
     @SerializedName("message")
     @Expose
     private Double message;
+
     @SerializedName("cnt")
     @Expose
     private Integer cnt;
 
+    @TypeConverters(ListConverter.class)
     @SerializedName("list")
     @Expose
-    private List<DailyForecast> dailyForecasts = null;
+    private List<WeatherList> dailyForecasts = null;
 
-    @ColumnInfo(name = "timestamp")
     private int timestamp;
+
+
 
 
     public City getCity() {
@@ -62,11 +83,11 @@ public class WeatherForecast {
         this.cnt = cnt;
     }
 
-    public List<DailyForecast> getDailyForecasts() {
+    public List<WeatherList> getDailyForecasts() {
         return dailyForecasts;
     }
 
-    public void setDailyForecasts(List<DailyForecast> dailyForecasts) {
+    public void setDailyForecasts(List<WeatherList> dailyForecasts) {
         this.dailyForecasts = dailyForecasts;
     }
 
@@ -77,4 +98,40 @@ public class WeatherForecast {
     public void setTimestamp(int timestamp) {
         this.timestamp = timestamp;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null) return false;
+        if(!(o instanceof WeatherForecast) ) return false;
+
+        WeatherForecast other = (WeatherForecast) o;
+        if(this.id != other.id && !city.equals(other.city))      return false;
+
+        return true;
+
+    }
+
+    public List<WeatherList> getConvertedDaily(){
+
+        List<WeatherList> dailyWeather = new ArrayList<>();
+        final Map<Integer, List<WeatherList>> listMap =
+                this.getDailyForecasts().stream().collect( Collectors.groupingBy(item -> UtilityHelper.timestampToDate(item.getDt()).getDay()));
+
+        Set<Integer> keys = listMap.keySet();
+
+        for (Integer key : keys) {
+            List<WeatherList> w = (List<WeatherList>) listMap.get(key);
+            dailyWeather.add(w.get(0));
+        }
+        return dailyWeather;
+    }
+
 }

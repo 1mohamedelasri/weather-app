@@ -1,17 +1,8 @@
 package com.devel.weatherapp.utils;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import androidx.core.app.NotificationCompat;
-
-import com.devel.weatherapp.R;
-import com.devel.weatherapp.repositories.WeatherRepository;
-import com.devel.weatherapp.view.MainActivity;
-import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 public class AlarmReceiver extends BroadcastReceiver {
 

@@ -11,7 +11,7 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.models.ApiResponse;
-import com.devel.weatherapp.models.FavouriteItem;
+import com.devel.weatherapp.models.WeatherForecast;
 
 // CacheObject: Type for the Resource data. (database cache)
 // RequestObject: Type for the API response. (network request)
@@ -164,12 +164,12 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
         }
     }
 
-    private void addValue(FavouriteItem favouriteItem){
-        results.getValue().insert(favouriteItem);
+    private void addValue(WeatherForecast weatherForecast){
+        results.getValue().insert(weatherForecast);
     }
 
-    private void removeValue(FavouriteItem favouriteItem){
-        results.getValue().delete(favouriteItem);
+    private void removeValue(WeatherForecast weatherForecast){
+        results.getValue().delete(weatherForecast);
     }
 
     // Called to save the result of the API response into the database.
