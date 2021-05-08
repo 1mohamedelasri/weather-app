@@ -3,9 +3,6 @@ package com.devel.weatherapp.utils;
 import androidx.room.TypeConverter;
 
 import com.devel.weatherapp.models.City;
-import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.models.Weather;
-import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.models.WeatherList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -1,11 +1,8 @@
 package com.devel.weatherapp.view;
 
-import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,13 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.Resource;
 import com.devel.weatherapp.view.adapters.FavouritesAdapter;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
-import com.yayandroid.locationmanager.constants.FailType;
-import com.yayandroid.locationmanager.constants.ProcessType;
 
 import java.util.List;
 

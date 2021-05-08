@@ -1,7 +1,5 @@
 package com.devel.weatherapp.models;
 
-import androidx.room.ColumnInfo;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

@@ -3,7 +3,6 @@ package com.devel.weatherapp.utils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
 
 import java.util.List;

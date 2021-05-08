@@ -11,7 +11,6 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.models.ApiResponse;
-import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
 
 // CacheObject: Type for the Resource data. (database cache)

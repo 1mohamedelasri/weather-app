@@ -3,7 +3,6 @@ package com.devel.weatherapp.api;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.LiveDataCallAdapterFactory;
 
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

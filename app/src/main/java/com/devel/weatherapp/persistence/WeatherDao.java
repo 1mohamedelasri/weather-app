@@ -6,8 +6,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.devel.weatherapp.models.FavouriteItem;
-import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherForecast;
 
 import java.util.List;

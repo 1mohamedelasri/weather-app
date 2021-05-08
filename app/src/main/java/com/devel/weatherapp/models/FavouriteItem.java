@@ -8,8 +8,6 @@ import androidx.room.TypeConverters;
 import com.devel.weatherapp.utils.ListConverter;
 import com.google.gson.annotations.Expose;
 
-import java.security.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 

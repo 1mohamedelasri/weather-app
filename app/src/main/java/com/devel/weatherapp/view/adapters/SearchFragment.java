@@ -13,13 +13,10 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.DailyForecast;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.SearchWeatherCity;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
-
-import java.util.Calendar;
 
 public class SearchFragment extends Fragment {
 

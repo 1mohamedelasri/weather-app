@@ -1,7 +1,5 @@
 package com.devel.weatherapp.utils;
 
-import android.content.Context;
-
 public class SharedPreferences {
 /*
     private String WEATHR_PREFERENCES = "WEATHER";

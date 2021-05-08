@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;

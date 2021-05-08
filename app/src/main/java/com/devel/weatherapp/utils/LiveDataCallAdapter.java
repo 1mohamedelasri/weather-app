@@ -3,6 +3,7 @@ package com.devel.weatherapp.utils;
 import androidx.lifecycle.LiveData;
 
 import com.devel.weatherapp.models.ApiResponse;
+
 import java.lang.reflect.Type;
 
 import retrofit2.Call;

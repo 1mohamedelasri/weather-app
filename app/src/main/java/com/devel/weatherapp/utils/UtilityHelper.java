@@ -5,12 +5,9 @@ import android.location.Location;
 import android.text.format.Time;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.SavedDailyForecast;
 
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 

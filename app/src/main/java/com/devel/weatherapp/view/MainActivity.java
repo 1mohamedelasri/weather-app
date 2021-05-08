@@ -26,14 +26,11 @@ import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.AirQuality;
+import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.repositories.WeatherRepository;
 import com.devel.weatherapp.utils.Resource;
-import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
-import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.models.FavouriteItem;
-import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.UtilityHelper;
+import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.yayandroid.locationmanager.base.LocationBaseActivity;
@@ -44,7 +41,6 @@ import com.yayandroid.locationmanager.constants.ProcessType;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 

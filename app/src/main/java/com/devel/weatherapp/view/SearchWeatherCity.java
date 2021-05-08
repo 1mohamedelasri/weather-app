@@ -6,12 +6,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.CurrentWeather;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.view.adapters.SearchFragment;

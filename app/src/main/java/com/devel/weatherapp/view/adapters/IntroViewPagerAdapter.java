@@ -3,38 +3,24 @@ package com.devel.weatherapp.view.adapters;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.graphics.Color;
 import android.location.Location;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LifecycleRegistry;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.AirQuality;
-import com.devel.weatherapp.models.FavouriteItem;
-import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.models.WeatherList;
-import com.devel.weatherapp.utils.Constants;
-import com.devel.weatherapp.utils.UtilityHelper;
-import com.devel.weatherapp.view.SunView;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class IntroViewPagerAdapter extends PagerAdapter {

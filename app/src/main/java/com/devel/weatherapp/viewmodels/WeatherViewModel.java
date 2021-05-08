@@ -17,7 +17,6 @@ import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.repositories.WeatherRepository;
 import com.devel.weatherapp.utils.Resource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
