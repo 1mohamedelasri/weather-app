@@ -66,7 +66,6 @@ public class SearchWeatherCity extends AppCompatActivity {
             public void onChanged(WeatherForecast data) {
                 Log.d("TEST", "subscribeObservers: ");
                 if (data != null) {
-
                     loadFragment(data,STATUS.FOUND);
                 }else{
                     loadFragment(data,STATUS.NOT_FOUND);
@@ -85,6 +84,7 @@ public class SearchWeatherCity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         searchProgress.setVisibility(View.INVISIBLE);
+        loadFragment(null,STATUS.NONE);
     }
 
 

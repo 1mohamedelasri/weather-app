@@ -15,26 +15,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.AirQuality;
-import com.devel.weatherapp.models.FavouriteItem;
-import com.devel.weatherapp.models.SavedDailyForecast;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.models.WeatherList;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.SunView;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-
 
 
 public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private TextView cityNameText;
-    private TextView cityTempText;
-    private TextView cityDescText;
+
+    private final int INTRO = 0;
+    private final int DAILY = 1;
+    private final int DETAILS = 2;
+    private final int SUNVIEW = 3;
+    private final int HOURLY = 4;
+    private final int AIRQUALITY = 5;
+
+
     private View layoutScreen;
     private int currentPos = 0;
     private TextView feelLikeValue ;
@@ -43,18 +44,15 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private TextView WindSpeedValue;
     private SunView sv;
     private AirQuality airQuality;
-    private TextView pm2;
-    private TextView pm10;
-    private TextView so2;
-    private TextView no2;
-    private TextView o3;
-    private TextView co;
-    private TextView qualityTextView;
     private final int currentScreenPosition;
 
-    private RecyclerView recyclerView;
-    public WeeklyAdapter recyclerAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView dailyRecyclerView;
+    public DailyAdapter dailyRecyclerAdapter;
+    private RecyclerView.LayoutManager dailyLayoutManager;
+
+    private RecyclerView hourlyRecyclerView;
+    public HourlyAdapter hourlyRecyclerAdapter;
+    private RecyclerView.LayoutManager hourlyLayoutManager;
 
     private final WeatherViewModel weatherViewModel;
     private final Application application;
@@ -79,7 +77,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 6;
     }
 
     @Override
@@ -89,17 +87,22 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             RecyclerView.ViewHolder viewHolder = null;
 
             switch (viewType){
-                case 0:
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_weekly_recycleview,parent,false);
-                    viewHolder = new ViewHolderWeekly(view);
-                    recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-                    layoutManager = new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false);
-                    recyclerView.setLayoutManager(layoutManager);
-                    recyclerAdapter = new WeeklyAdapter(mContext,favouriteItem.getConvertedDaily());
-                    recyclerView.setAdapter(recyclerAdapter);
-                    recyclerView.setHasFixedSize(true);
+                case INTRO:
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_intro, parent, false);
+                    viewHolder = new ViewHolderIntro(view);
                     break;
-                case 1:
+
+                case DAILY:
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_daily_recycleview,parent,false);
+                    viewHolder = new ViewHolderWeekly(view);
+                    dailyRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+                    dailyLayoutManager = new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false);
+                    dailyRecyclerView.setLayoutManager(dailyLayoutManager);
+                    dailyRecyclerAdapter = new DailyAdapter(mContext,favouriteItem.getConvertedDaily());
+                    dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
+                    dailyRecyclerView.setHasFixedSize(true);
+                    break;
+                case DETAILS:
                     view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_weathercard,parent,false);
                     viewHolder = new ViewHolderWeather(view);
                     feelLikeValue   = view.findViewById(R.id.feelLikeValue);
@@ -114,20 +117,27 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     WindSpeedValue.setText(UtilityHelper.getFormattedWind(mContext, mSavedDailyForecast.getWind().getSpeed()));
                     feelLikeValue.setText(mSavedDailyForecast.getMain().getFeelsLike()+"°C");
                     break;
-                case 2:
+                case SUNVIEW:
                         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sunview, parent, false);
                         viewHolder = new ViewHolderSun(view);
                     break;
-                case 3:
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_airquality,parent,false);
-                        qualityTextView= view.findViewById(R.id.qualityTextView);
+                case AIRQUALITY:
+                        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_airquality,parent,false);
                         viewHolder = new ViewHolderAirQuality(view);
+                        this.weatherViewModel.getAirQuality(String.valueOf(favouriteItem.getCity().getCoord().getLat()),String.valueOf(favouriteItem.getCity().getCoord().getLon()));
+
                     break;
-                case 4:
-                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_airquality,parent,false);
-                    qualityTextView= view.findViewById(R.id.qualityTextView);
-                    viewHolder = new ViewHolderAirQuality(view);
+                case HOURLY:
+                    view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_daily_recycleview,parent,false);
+                    viewHolder = new ViewHolderHourly(view);
+                    hourlyRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+                    hourlyLayoutManager = new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false);
+                    hourlyRecyclerView.setLayoutManager(hourlyLayoutManager);
+                    hourlyRecyclerAdapter = new HourlyAdapter(mContext,favouriteItem.getDailyForecasts());
+                    hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
+                    hourlyRecyclerView.setHasFixedSize(true);
                     break;
+
 
             }
 
@@ -138,23 +148,65 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
             switch (position){
-                case 0:
-                    ViewHolderWeekly viewHolderWeekly = (ViewHolderWeekly) holder;
-                    break;
-                case 1:
-                    ViewHolderWeather viewHolderWeather = (ViewHolderWeather) holder;
+                case INTRO:
+                    ViewHolderIntro viewHolderIntro= (ViewHolderIntro) holder;
 
+                    viewHolderIntro.cityTempText.setText(UtilityHelper.formatTemperature(mContext,favouriteItem.getDailyForecasts().get(0).getMain().getTemp(),false));
+                    viewHolderIntro.cityDescText.setText(favouriteItem.getDailyForecasts().get(0).getWeathers().get(0).getDescription());
                     break;
-                case 2:
-                    ViewHolderSun viewHolderSun = (ViewHolderSun) holder;
-                    break;
-                case 3:
+                case AIRQUALITY:
                     ViewHolderAirQuality viewHolderAirQuality = (ViewHolderAirQuality) holder;
+                    weatherViewModel.getAirQuality().observe((LifecycleOwner) mContext, new Observer<AirQuality>() {
+                        @Override
+                        public void onChanged(AirQuality airQuality) {
+                            if(airQuality != null)
+                            {
+                                    viewHolderAirQuality.pm2.setText(String.valueOf(airQuality.getAirList().get(0).component.pm2));
+                                    viewHolderAirQuality.pm10.setText(String.valueOf(airQuality.getAirList().get(0).component.pm10));
+                                    viewHolderAirQuality.so2.setText(String.valueOf(airQuality.getAirList().get(0).component.so2));
+                                    viewHolderAirQuality.no2.setText(String.valueOf(airQuality.getAirList().get(0).component.no2));
+                                    viewHolderAirQuality.o3.setText(String.valueOf(airQuality.getAirList().get(0).component.o3));
+                                    viewHolderAirQuality.co.setText(String.valueOf(airQuality.getAirList().get(0).component.co));
+                                    //qualityTextView.setText(airQuality.getAirList().get(0).main.getAqi());
+
+                                    qualityColor(viewHolderAirQuality.qualityTextView,airQuality.getAirList().get(0).main.getAqi());
+                                    viewHolderAirQuality.qualityTextView.setText(whichQuality(airQuality.getAirList().get(0).main.getAqi()));
+
+                            }
+                        }
+                    });
+/*
+                    if(airQuality != null)
+                    {
+                        viewHolderAirQuality.pm2.setText(String.valueOf(airQuality.getAirList().get(0).component.pm2) + "%");
+                        viewHolderAirQuality.pm10.setText(String.valueOf(airQuality.getAirList().get(0).component.pm10) + "%");
+                        viewHolderAirQuality.so2.setText(String.valueOf(airQuality.getAirList().get(0).component.so2) + "%");
+                        viewHolderAirQuality.no2.setText(String.valueOf(airQuality.getAirList().get(0).component.no2) + "%");
+                        viewHolderAirQuality.o3.setText(String.valueOf(airQuality.getAirList().get(0).component.o3) + "%");
+                        viewHolderAirQuality.co.setText(String.valueOf(airQuality.getAirList().get(0).component.co) + "%");
+                        //qualityTextView.setText(airQuality.getAirList().get(0).main.getAqi());
+
+                        qualityColor(viewHolderAirQuality.qualityTextView,airQuality.getAirList().get(0).main.getAqi());
+                        viewHolderAirQuality.qualityTextView.setText(whichQuality(airQuality.getAirList().get(0).main.getAqi()));
+
+                    }
+*/
                     break;
             }
 
         }
 
+        public class ViewHolderIntro extends RecyclerView.ViewHolder{
+            private TextView cityNameText;
+            private TextView cityTempText;
+            private TextView cityDescText;
+
+            public ViewHolderIntro(View itemView) {
+                super(itemView);
+                cityTempText =  itemView.findViewById(R.id.temperatureTextView);
+                cityDescText =  itemView.findViewById(R.id.TempDescTextView);
+            }
+        }
 
         public class ViewHolderWeekly extends RecyclerView.ViewHolder{
 
@@ -162,6 +214,13 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 super(itemView);
             }
         }
+
+        public class ViewHolderHourly extends RecyclerView.ViewHolder{
+
+        public ViewHolderHourly(View itemView) {
+            super(itemView);
+        }
+     }
 
         public class ViewHolderWeather extends RecyclerView.ViewHolder{
 
@@ -198,6 +257,13 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public class ViewHolderAirQuality extends RecyclerView.ViewHolder{
+            private TextView pm2;
+            private TextView pm10;
+            private TextView so2;
+            private TextView no2;
+            private TextView o3;
+            private TextView co;
+            private TextView qualityTextView;
 
             public ViewHolderAirQuality(View itemView) {
                 super(itemView);
@@ -207,54 +273,16 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 no2     = itemView.findViewById(R.id.no2);
                 o3      = itemView.findViewById(R.id.o3);
                 co      = itemView.findViewById(R.id.co);
-
-                weatherViewModel.getAirQuality().observe((LifecycleOwner) mContext, new Observer<AirQuality>() {
-                    @Override
-                    public void onChanged(AirQuality airQuality) {
-                        if(airQuality != null)
-                        {
-                            if(airQuality != null && airQuality.getAirList().size() > 0 ) {
-                                pm2.setText(String.valueOf(airQuality.getAirList().get(0).component.pm2)+"%");
-                                pm10.setText(String.valueOf(airQuality.getAirList().get(0).component.pm10)+"%");
-                                so2.setText(String.valueOf(airQuality.getAirList().get(0).component.so2)+"%");
-                                no2.setText(String.valueOf(airQuality.getAirList().get(0).component.no2)+"%");
-                                o3.setText(String.valueOf(airQuality.getAirList().get(0).component.o3)+"%");
-                                co.setText(String.valueOf(airQuality.getAirList().get(0).component.co)+"%");
-                                //qualityTextView.setText(airQuality.getAirList().get(0).main.getAqi());
-
-                                switch (airQuality.getAirList().get(0).main.getAqi()){
-                                    case 1:
-                                        qualityTextView.setText("Good");
-                                        break;
-                                    case 2:
-                                        qualityTextView.setText("Fair");
-                                        break;
-                                    case 3:
-                                        qualityTextView.setText("Moderate");
-                                        break;
-                                    case 4:
-                                        qualityTextView.setText("Poor");
-                                        break;
-                                    case 5:
-                                        qualityTextView.setText("Very Poor");
-                                        break;
-
-                                }
-                                qualityColor(qualityTextView,airQuality.getAirList().get(0).main.getAqi());
-                            }
-                        }
-                    }
-                });
-
+                qualityTextView = itemView.findViewById(R.id.qualityTextView);
             }
         }
 
-    public void setFavourtieItem(WeatherForecast favouriteItem) {
+        public void setFavourtieItem(WeatherForecast favouriteItem) {
         this.favouriteItem = favouriteItem;
         notifyDataSetChanged();
     }
 
-    public String whichQuality(int quality){
+        public String whichQuality(int quality){
         switch (quality){
             case 1:
                 return "Good";
@@ -270,7 +298,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return "";
     }
 
-    public void qualityColor(TextView textView, int quality){
+        public void qualityColor(TextView textView, int quality){
         switch (quality){
             case 1:
                 textView.setTextColor(Color.parseColor("#7CFF0A"));
@@ -287,6 +315,17 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case 5:
                 textView.setTextColor(Color.parseColor("#7C1414"));
                 break;
+        }
+    }
+
+    public AirQuality getAirQuality() {
+        return airQuality;
+    }
+
+    public void setAirQuality(AirQuality airQuality) {
+        if(airQuality != null) {
+            this.airQuality = airQuality;
+            notifyDataSetChanged();
         }
     }
 }

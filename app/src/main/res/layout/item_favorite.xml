@@ -15,9 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
+        
         android:layout_toEndOf="@+id/weather_img"
-        android:layout_toRightOf="@+id/weather_img"
+        
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="280dp"
-        android:layout_marginLeft="280dp"
+        
         android:text="2C"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -64,7 +64,7 @@
         android:layout_width="34dp"
         android:layout_height="36dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        
         android:background="@drawable/outline_remove_circle_outline_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -11,51 +11,59 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
-import com.devel.weatherapp.models.SavedDailyForecast;
-import com.devel.weatherapp.models.Weather;
 import com.devel.weatherapp.models.WeatherList;
 import com.devel.weatherapp.utils.UtilityHelper;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyViewHolder> {
+public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.HourlyViewHolder> {
 
     // Member variable to handle item clicks
     private List<WeatherList> forecasts;
     private Context mContext;
 
-    public WeeklyAdapter(Context context, List<WeatherList> savedDailyForecast) {
+    public HourlyAdapter(Context context, List<WeatherList> savedDailyForecast) {
         mContext = context;
         forecasts= savedDailyForecast;
     }
 
     @NonNull
     @Override
-    public WeeklyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HourlyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.item_weekly, parent, false);
+                .inflate(R.layout.item_hourly, parent, false);
 
-        return new WeeklyViewHolder(view);
+        return new HourlyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WeeklyViewHolder holder, int position) {
-        Calendar c = Calendar.getInstance();
-        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-        // Determine the values of the wanted data
+    public void onBindViewHolder(@NonNull HourlyViewHolder holder, int position) {
+        Calendar today = Calendar.getInstance();
+        Calendar check = Calendar.getInstance();
+
+
         WeatherList forecast = forecasts.get(position);
-        Double max_temp = forecast.getMain().getTempMax();
-        Double min_temp = forecast.getMain().getTempMin();
-        Long date = forecast.getDt();
+
+        Date date = UtilityHelper.timestampToDate(forecast.getDt());
+
+        Double temp = forecast.getMain().getTemp();
         String description = forecast.getWeathers().get(0).getDescription();
         Long weather_id = forecast.getWeathers().get(0).getId();
 
         //Set values
+        holder.hour.setText(UtilityHelper.formatHourly(forecast.getDt()));
         holder.desc.setText(description);
-        holder.temp.setText(UtilityHelper.formatTemperature(mContext, max_temp) + "/" + UtilityHelper.formatTemperature(mContext, min_temp));
+        holder.temp.setText(UtilityHelper.formatTemperature(mContext, temp,true));
         holder.imageView.setImageResource(UtilityHelper.getArtResourceForWeatherCondition(weather_id));
-        holder.day.setText(UtilityHelper.format(date));
+
+        check.setTime(UtilityHelper.timestampToDate(forecast.getDt()));
+        if(today.get(Calendar.DAY_OF_YEAR) == check.get(Calendar.DAY_OF_YEAR) &&
+                today.get(Calendar.YEAR) == check.get(Calendar.YEAR))
+            holder.day.setText("Today");
+        else
+            holder.day.setText(UtilityHelper.format(forecast.getDt()));
     }
 
 
@@ -92,20 +100,22 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
     }
 
     // Inner class for creating ViewHolders
-    public class WeeklyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class HourlyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        TextView hour;
         TextView day;
         TextView temp;
         TextView desc;
         ImageView imageView;
 
-        WeeklyViewHolder(View itemView) {
+        HourlyViewHolder(View itemView) {
             super(itemView);
 
-            day = itemView.findViewById(R.id.FavCity);
-            temp = itemView.findViewById(R.id.temp);
-            desc = itemView.findViewById(R.id.desc);
-            imageView = itemView.findViewById(R.id.weather_img);
+            hour = itemView.findViewById(R.id.hourly_hour);
+            day = itemView.findViewById(R.id.hourly_day);
+            temp = itemView.findViewById(R.id.hourly_temp);
+            desc = itemView.findViewById(R.id.hourly_desc);
+            imageView = itemView.findViewById(R.id.hourly_img);
             itemView.setOnClickListener(this);
         }
 

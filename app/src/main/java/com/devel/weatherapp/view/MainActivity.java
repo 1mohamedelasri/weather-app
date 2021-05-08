@@ -3,8 +3,12 @@ package com.devel.weatherapp.view;
 import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
@@ -65,9 +71,9 @@ public class MainActivity extends LocationBaseActivity {
 
         // setup viewpager
         screenPager = findViewById(R.id.screen_viewpager);
-        screenPager.setOffscreenPageLimit(7);
+        screenPager.setOffscreenPageLimit(0);
         mWeatherListViewModel = WeatherViewModel.getInstance(getApplication());
-        introViewPagerAdapter = new IntroViewPagerAdapter(this, getApplication(), mWeatherListViewModel);
+        introViewPagerAdapter = new IntroViewPagerAdapter(this, getApplication(), mWeatherListViewModel,screenPager);
         screenPager.setAdapter(introViewPagerAdapter);
         searchButton = findViewById(R.id.magnifyImgView);
         baselineBtn = findViewById(R.id.baselineBtn);
@@ -165,6 +171,26 @@ public class MainActivity extends LocationBaseActivity {
         am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 4*60*60, pendingIntent);
 */
         //onTheTest();
+
+
+// Create an explicit intent for an Activity in your app
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "22211221")
+                .setSmallIcon(R.drawable.app_icon)
+                .setContentTitle("My notification")
+                .setContentText("Hello World!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(211211, builder.build());
+
     }
 
     private void SetupObservers() {
@@ -174,10 +200,15 @@ public class MainActivity extends LocationBaseActivity {
             @Override
             public void onChanged(@Nullable Resource<List<WeatherForecast>> listResource) {
                 introViewPagerAdapter.notifyChange();
+
                 if(listResource != null){
                     Log.d(TAG, "onChanged: status: " + listResource.status);
 
                     if(listResource.data != null){
+                        if(listResource.data.size() > 0) {
+                            TextView nointernet = findViewById(R.id.nointernet);
+                            nointernet.setVisibility(View.GONE);
+                        }
 
                         switch (listResource.status){
                             case LOADING:{
@@ -198,6 +229,7 @@ public class MainActivity extends LocationBaseActivity {
                                 Log.d(TAG, "onChanged: status: SUCCESS, #Recipes: " + listResource.data.size());
                                 introViewPagerAdapter.setFavouriteItems(listResource.data);
                                 introViewPagerAdapter.notifyChange();
+
                                 break;
                             }
                         }
@@ -205,7 +237,6 @@ public class MainActivity extends LocationBaseActivity {
                 }
             }
         });
-
     }
 
     public static void hideSystemUI(Activity activity) {
@@ -239,12 +270,14 @@ public class MainActivity extends LocationBaseActivity {
        //if(mWeatherListViewModel.getFavourtieItems().size() <1)
       //  {
       //  }
-        if(location != null) {
-            String[] res = UtilityHelper.geoLocToString(currentLocation);
-            mWeatherListViewModel.getAirQuality(res[0],res[1]);
+            if(!isNetworkAvailable()) {
+                TextView nointernet = findViewById(R.id.nointernet);
+                nointernet.setVisibility(View.VISIBLE);
+            }else{
+                TextView nointernet = findViewById(R.id.nointernet);
+                nointernet.setVisibility(View.GONE);
 
-        }
-
+            }
     }
 
     public void fetchWeatherLocationChanged(){
@@ -300,6 +333,13 @@ public class MainActivity extends LocationBaseActivity {
             return null;
         }
 
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public void refreshFromAnyWhere(){

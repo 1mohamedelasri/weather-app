@@ -39,11 +39,9 @@ public class WeatherViewModel extends AndroidViewModel  {
      * Observables data declarations.
      */
     private WeatherRepository mWeatherRepository;
-    private final List<WeatherForecast> _favouriteItems = new ArrayList<>();
     private final MutableLiveData<WeatherForecast> _searchedCity= new MutableLiveData<>();
     private MediatorLiveData<Resource<List<WeatherForecast>>> _dataSource = new MediatorLiveData<>();
     private MutableLiveData<AirQuality> _airQuality = new MutableLiveData<>();
-
     // query extras
     private boolean isQueryExhausted;
     private boolean isPerformingQuery;
@@ -76,15 +74,12 @@ public class WeatherViewModel extends AndroidViewModel  {
     public LiveData<WeatherForecast> searchedResult() {
         return _searchedCity;
     }
-    public List<WeatherForecast> getFavourtieItems() {
-        return _favouriteItems;
-    }
 
     public void insertInFavourtieItems(WeatherForecast wf){
-        for(WeatherForecast ele : this.getFavourtieItems())
+       /* for(WeatherForecast ele : this.getFavourtieItems())
             if(ele.equals(wf)) return;
 
-            this.getFavourtieItems().add(wf);
+            this.getFavourtieItems().add(wf);*/
     }
 
 

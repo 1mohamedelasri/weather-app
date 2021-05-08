@@ -16,13 +16,15 @@ import java.util.Locale;
 
 public class UtilityHelper {
 
-    public static String formatTemperature(Context context, double temperature) {
+    public static String formatTemperature(Context context, double temperature, boolean withCelsiusSymbol) {
         // Data stored in Celsius by default.  If user prefers to see in Fahrenheit, convert
         // the values here.
         String suffix = "\u00B0";
         //temperature = (temperature * 1.8) + 32;
-        // For presentation, assume the user doesn't care about tenths of a degree.
-        return String.format(context.getString(R.string.format_temperature), temperature);
+
+        if(withCelsiusSymbol) return String.format(context.getString(R.string.format_temperature), temperature);
+
+        return String.format(context.getString(R.string.format_temperature_nosymbol), temperature);
     }
 
     public static String toTitleCase(String str) {
@@ -59,6 +61,12 @@ public class UtilityHelper {
         return dateString;
     }
 
+    public static String formatHourly(long dateInMilliseconds) {
+        DateFormat dateFormat = new SimpleDateFormat("kk:mm");
+        String dateString = dateFormat.format(new Date(dateInMilliseconds * 1000));
+        return dateString;
+    }
+
     public static String format(long dateInMilliseconds) {
         DateFormat dateFormat = new SimpleDateFormat("EEEE ");
         String dateString = dateFormat.format(new Date(dateInMilliseconds * 1000));
@@ -82,6 +90,14 @@ public class UtilityHelper {
      * @return The day in the form of a string formatted "December 6"
      */
     public static String getFormattedMonthDay(Context context, long dateInMillis ) {
+        Time time = new Time();
+        time.setToNow();
+        SimpleDateFormat dbDateFormat = new SimpleDateFormat(UtilityHelper.DATE_FORMAT);
+        SimpleDateFormat monthDayFormat = new SimpleDateFormat("MMMM dd");
+        String monthDayString = monthDayFormat.format(dateInMillis);
+        return monthDayString;
+    }
+    public static String getFormattedDayHour(Context context, long dateInMillis ) {
         Time time = new Time();
         time.setToNow();
         SimpleDateFormat dbDateFormat = new SimpleDateFormat(UtilityHelper.DATE_FORMAT);
@@ -168,41 +184,5 @@ public class UtilityHelper {
     public static String getCountryName(String name){
         Locale loc = new Locale("en",name);
         return loc.getDisplayCountry();
-    }
-
-    public static String calculateTemperature(Context mContext, SavedDailyForecast mSavedDailyForecast ){
-        Calendar c = Calendar.getInstance();
-        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-        String temperatureText = "";
-
-        if (timeOfDay >= 5 && timeOfDay <= 12) {
-            temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getMorningTemp()));
-        } else if (timeOfDay >= 12 && timeOfDay <= 16) {
-            temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getDayTemp()));
-        } else if (timeOfDay >= 16 && timeOfDay <= 21) {
-            temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getEveningTemp()));
-        } else if ((timeOfDay >= 21 && timeOfDay <= 24 )|| ( timeOfDay >= 0  && timeOfDay <= 5) ) {
-            temperatureText = (UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getNightTemp()));
-        }
-
-        return temperatureText;
-    }
-
-    public static String calculateFeelLike(Context mContext, SavedDailyForecast mSavedDailyForecast ){
-        Calendar c = Calendar.getInstance();
-        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-        String feelsLike = "";
-
-        if (timeOfDay >= 5 && timeOfDay <= 12) {
-            feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
-        } else if (timeOfDay >= 12 && timeOfDay <= 16) {
-            feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getDayTemp());
-        } else if (timeOfDay >= 16 && timeOfDay <= 21) {
-            feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeMorning());
-        } else if ((timeOfDay >= 21 && timeOfDay <= 24 )|| ( timeOfDay >= 0  && timeOfDay <= 5) ) {
-            feelsLike = UtilityHelper.formatTemperature(mContext, mSavedDailyForecast.getFeelslikeNight());
-        }
-
-        return feelsLike;
     }
 }

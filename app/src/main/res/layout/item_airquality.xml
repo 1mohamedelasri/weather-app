@@ -54,8 +54,7 @@
         android:layout_width="18dp"
         android:layout_height="14dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="236dp"
-        android:layout_marginRight="236dp"
+        android:layout_marginEnd="224dp"
         android:text="So2"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="180dp"
-        android:layout_marginRight="180dp"
+        
         android:text="No2"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +128,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="92dp"
-        android:layout_marginRight="92dp"
+        
         android:text="O3"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -165,7 +164,7 @@
         android:layout_width="186dp"
         android:layout_height="12dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        
         android:fontFamily="sans-serif-light"
         android:text="Air quality is good. A perfect day for a walk"
         android:textSize="10sp"

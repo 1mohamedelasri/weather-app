@@ -7,56 +7,20 @@ android:layout_height="match_parent"
 android:background="#00000000"
 android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/temperatureTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/nunito_sans_light"
-        android:includeFontPadding="false"
-        android:text="10"
-        android:textColor="@color/white"
-        android:textSize="80dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cityTextView" />
-
-    <TextView
-        android:id="@+id/TempDescTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="sans-serif-black"
-        android:text="Cloudy"
-        android:textColor="@color/design_default_color_on_primary"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/temperatureTextView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainScreenRecycleView"
-        android:layout_width="match_parent"
-        android:layout_height="612dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="0dp"
+        android:layout_height="803dp"
         android:fillViewport="true"
         android:layoutAnimation="@anim/layout_animation"
+        android:requiresFadingEdge="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TempDescTextView"></androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toTopOf="parent"></androidx.recyclerview.widget.RecyclerView>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="°C"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/temperatureTextView"
-        app:layout_constraintTop_toTopOf="@+id/temperatureTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -50,7 +50,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
         //Set values
         holder.favCity.setText(favouriteItems.get(position).getCity().getName());
-        holder.favTemperature.setText(UtilityHelper.formatTemperature(mContext,favouriteItems.get(position).getDailyForecasts().get(0).getMain().getTemp()));
+        holder.favTemperature.setText(UtilityHelper.formatTemperature(mContext,favouriteItems.get(position).getDailyForecasts().get(0).getMain().getTemp(),true));
         holder.favImg.setImageResource(UtilityHelper.getArtResourceForWeatherCondition(favouriteItems.get(position).getDailyForecasts().get(0).getWeathers().get(0).getId()));
         holder.favCountry.setText(UtilityHelper.getCountryName(favouriteItems.get(position).getCity().getCountry()));
 

@@ -1,6 +1,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">IWeather</string>
-    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g></string>
+    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u2103</string>
+    <string name="format_temperature_nosymbol"><xliff:g id="temp">%1.0f</xliff:g></string>
     <string name="format_wind_kmh"> <xliff:g id="speed">%1$1.0f</xliff:g> km/h</string>
     <string name="title_activity_splash">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
