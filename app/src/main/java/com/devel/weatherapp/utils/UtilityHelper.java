@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class UtilityHelper {
 
@@ -146,7 +147,7 @@ public class UtilityHelper {
         // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
 
         if (weatherId >= 200 && weatherId <= 232) {
-            return R.drawable.corners_bg_cardview;
+            return R.drawable.corners_bg_cardview_dark;
         } else if (weatherId >= 300 && weatherId <= 321) {
             return R.drawable.corners_bg_cardview;
         } else if (weatherId >= 500 && weatherId <= 504) {
@@ -171,6 +172,36 @@ public class UtilityHelper {
         return -1;
     }
 
+
+    public static int getCardViewColorResourceForNightCondition(Long weatherId) {
+        // Based on weather code data found at:
+        // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
+
+        if (weatherId >= 200 && weatherId <= 232) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId == 511) {
+            return R.drawable.w_snow;
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return R.drawable.corners_bg_cardview_dark;
+        } else if (weatherId == 761 || weatherId == 781) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId == 800) {
+            return R.drawable.corners_bg_cardview_dark;
+        } else if (weatherId == 801) {
+            return R.drawable.corners_bg_cardview_dark;
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return R.drawable.corners_bg_cardview_dark;
+        }
+        return -1;
+    }
 
     /**
      * Helper method to provide the art resource id according to the weather condition id returned
@@ -207,6 +238,35 @@ public class UtilityHelper {
         return -1;
     }
 
+    public static int getArtResourceForNightCondition(Long weatherId) {
+        // Based on weather code data found at:
+        // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
+        if (weatherId >= 200 && weatherId <= 232) {
+            return R.drawable.w_night_storm;
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return R.drawable.w_night_rain;
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return R.drawable.w_night_rain;
+        } else if (weatherId == 511) {
+            return R.drawable.w_night_storm;
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return R.drawable.w_night_rain;
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return R.drawable.w_night_snow;
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return R.drawable.art_fog;
+        } else if (weatherId == 761 || weatherId == 781) {
+            return R.drawable.w_night_storm;
+        } else if (weatherId == 800) {
+            return R.drawable.w_night;
+        } else if (weatherId == 801) {
+            return R.drawable.w_night_cloud;
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return R.drawable.w_night_cloud;
+        }
+        return -1;
+    }
+
     public static String[] geoLocToString(Location loc){
         return new String[]{String.valueOf(loc.getLatitude()),String.valueOf(loc.getLongitude())};
     }
@@ -214,5 +274,24 @@ public class UtilityHelper {
     public static String getCountryName(String name){
         Locale loc = new Locale("en",name);
         return loc.getDisplayCountry();
+    }
+
+    public static Date convertTimeZone(Date date, TimeZone fromTimeZone, TimeZone toTimeZone)
+    {
+        long fromTimeZoneOffset = getTimeZoneUTCAndDSTOffset(date, fromTimeZone);
+        long toTimeZoneOffset = getTimeZoneUTCAndDSTOffset(date, toTimeZone);
+
+        return new Date(date.getTime() + (toTimeZoneOffset - fromTimeZoneOffset));
+    }
+
+    private static long getTimeZoneUTCAndDSTOffset(Date date, TimeZone timeZone)
+    {
+        long timeZoneDSTOffset = 0;
+        if(timeZone.inDaylightTime(date))
+        {
+            timeZoneDSTOffset = timeZone.getDSTSavings();
+        }
+
+        return timeZone.getRawOffset() + timeZoneDSTOffset;
     }
 }

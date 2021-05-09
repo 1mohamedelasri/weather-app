@@ -24,7 +24,9 @@ import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class IntroViewPagerAdapter extends PagerAdapter {
@@ -88,7 +90,18 @@ public class IntroViewPagerAdapter extends PagerAdapter {
             WeatherList mSavedDailyForecast = favouriteItems.get(currentPos).getDailyForecasts().get(0);
 
             ConstraintLayout constr = hostActivity.findViewById(R.id.main_activity);
-            constr.setBackgroundResource(UtilityHelper.getBackgroundResourceForWeatherCondition(favouriteItems.get(currentPos).getDailyForecasts().get(0).getWeathers().get(0).getId()));
+
+            long sunset = (favouriteItems.get(currentPos).getCity().getSunset()* 1000);
+            long sunrise = (favouriteItems.get(currentPos).getCity().getSunrise()* 1000);
+            long currentTime = System.currentTimeMillis();
+
+            if(!(currentTime <= sunset  && currentTime >= sunrise)) {
+                constr.setBackgroundResource(UtilityHelper.getArtResourceForNightCondition(favouriteItems.get(currentPos).getDailyForecasts().get(0).getWeathers().get(0).getId()));
+
+            }else{
+                constr.setBackgroundResource(UtilityHelper.getBackgroundResourceForWeatherCondition(favouriteItems.get(currentPos).getDailyForecasts().get(0).getWeathers().get(0).getId()));
+
+            }
 
 
             // String date = String.format("%s, %s", UtilityHelper.format(mSavedDailyForecast.), UtilityHelper.formatDate(mSavedDailyForecast.getDate()));
