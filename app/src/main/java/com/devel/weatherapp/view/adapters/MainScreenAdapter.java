@@ -22,7 +22,10 @@ import com.devel.weatherapp.view.SunView;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+
+import okhttp3.internal.Util;
 
 
 public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -197,7 +200,6 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public class ViewHolderIntro extends RecyclerView.ViewHolder{
-            private TextView cityNameText;
             private TextView cityTempText;
             private TextView cityDescText;
 
@@ -212,6 +214,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             public ViewHolderWeekly(View itemView) {
                 super(itemView);
+                itemView.setBackgroundResource(UtilityHelper.getCardViewColorResourceForWeatherCondition(favouriteItem.getDailyForecasts().get(0).getWeathers().get(0).getId()));
             }
         }
 
@@ -219,6 +222,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public ViewHolderHourly(View itemView) {
             super(itemView);
+            itemView.setBackgroundResource(UtilityHelper.getCardViewColorResourceForWeatherCondition(favouriteItem.getDailyForecasts().get(0).getWeathers().get(0).getId()));
         }
      }
 
@@ -226,6 +230,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             public ViewHolderWeather(View itemView) {
                 super(itemView);
+                itemView.setBackgroundResource(UtilityHelper.getCardViewColorResourceForWeatherCondition(favouriteItem.getDailyForecasts().get(0).getWeathers().get(0).getId()));
 
             }
         }
@@ -239,7 +244,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     sv      = itemView.findViewById(R.id.sv);
 
                     Date sunRisedate = new Date((long) (favouriteItem.getCity().getSunrise() * 1000));
-                    Date sunSetdate = new Date((long) (favouriteItem.getCity().getSunrise()* 1000));
+                    Date sunSetdate = new Date((long) (favouriteItem.getCity().getSunset()* 1000));
 
                     // Set sunrise time
                     sv.setSunrise(sunRisedate.getHours(), sunRisedate.getMinutes());
@@ -251,6 +256,8 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     int minute = calendar.get(Calendar.MINUTE);
                     // Set the current time
                     sv.setCurrentTime(hour, minute);
+                    itemView.setBackgroundResource(UtilityHelper.getCardViewColorResourceForWeatherCondition(favouriteItem.getDailyForecasts().get(0).getWeathers().get(0).getId()));
+
 
                 }
             }
@@ -274,12 +281,13 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 o3      = itemView.findViewById(R.id.o3);
                 co      = itemView.findViewById(R.id.co);
                 qualityTextView = itemView.findViewById(R.id.qualityTextView);
+                itemView.setBackgroundResource(UtilityHelper.getCardViewColorResourceForWeatherCondition(favouriteItem.getDailyForecasts().get(0).getWeathers().get(0).getId()));
             }
         }
 
         public void setFavourtieItem(WeatherForecast favouriteItem) {
-        this.favouriteItem = favouriteItem;
-        notifyDataSetChanged();
+            this.favouriteItem = favouriteItem;
+            notifyDataSetChanged();
     }
 
         public String whichQuality(int quality){

@@ -19,15 +19,19 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.Tuple;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.repositories.WeatherRepository;
+import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Resource;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
@@ -43,6 +47,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends LocationBaseActivity {
@@ -67,7 +72,7 @@ public class MainActivity extends LocationBaseActivity {
 
         // setup viewpager
         screenPager = findViewById(R.id.screen_viewpager);
-        screenPager.setOffscreenPageLimit(0);
+        screenPager.setOffscreenPageLimit(1);
         mWeatherListViewModel = WeatherViewModel.getInstance(getApplication());
         introViewPagerAdapter = new IntroViewPagerAdapter(this, getApplication(), mWeatherListViewModel,screenPager);
         screenPager.setAdapter(introViewPagerAdapter);
@@ -143,7 +148,7 @@ public class MainActivity extends LocationBaseActivity {
                         } else if ("Favorites".equals(title)) {
                             Intent myIntent = new Intent(getApplication(), FavouriteActivity.class);
                             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            getApplication().startActivity(myIntent);
+                            startActivityForResult(myIntent,Constants.MY_CODE_REQUEST);
 
                         }
 
@@ -233,6 +238,17 @@ public class MainActivity extends LocationBaseActivity {
                 }
             }
         });
+        mWeatherListViewModel.getlastAddedItemIndex().observe(this, new Observer<Tuple>() {
+            @Override
+            public void onChanged(Tuple value) {
+                if(value.source == Tuple.Source.FAVORTIES){
+                    screenPager.setCurrentItem(value.index,true);
+                }else if(value.source == Tuple.Source.SEARCH){
+                    screenPager.setCurrentItem(introViewPagerAdapter.getCount()+1,true);
+                }
+                introViewPagerAdapter.notifyChange();
+            }
+        });
     }
 
     public static void hideSystemUI(Activity activity) {
@@ -269,6 +285,7 @@ public class MainActivity extends LocationBaseActivity {
             if(!isNetworkAvailable()) {
                 TextView nointernet = findViewById(R.id.nointernet);
                 nointernet.setVisibility(View.VISIBLE);
+                introViewPagerAdapter.notifyChange();
             }else{
                 TextView nointernet = findViewById(R.id.nointernet);
                 nointernet.setVisibility(View.GONE);

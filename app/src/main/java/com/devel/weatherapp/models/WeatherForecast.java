@@ -1,5 +1,8 @@
 package com.devel.weatherapp.models;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -14,10 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Entity
-public class WeatherForecast {
+public class WeatherForecast implements Comparable<WeatherForecast>{
 
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = false)
@@ -46,7 +50,7 @@ public class WeatherForecast {
     @Expose
     private List<WeatherList> dailyForecasts = null;
 
-    private int timestamp;
+    private Long timestamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());;
 
 
 
@@ -91,11 +95,11 @@ public class WeatherForecast {
         this.dailyForecasts = dailyForecasts;
     }
 
-    public int getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -119,6 +123,7 @@ public class WeatherForecast {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public List<WeatherList> getConvertedDaily(){
 
         List<WeatherList> dailyWeather = new ArrayList<>();
@@ -134,4 +139,8 @@ public class WeatherForecast {
         return dailyWeather;
     }
 
+    @Override
+    public int compareTo(WeatherForecast o) {
+        return getTimestamp().compareTo(o.getTimestamp());
+    }
 }

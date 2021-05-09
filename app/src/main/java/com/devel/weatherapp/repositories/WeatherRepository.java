@@ -205,26 +205,16 @@ public class WeatherRepository {
         Log.d(TAG, "shouldFetch: recipe: " + data.toString());
         int currentTime = (int)(System.currentTimeMillis() / 1000);
         Log.d(TAG, "shouldFetch: current time: " + currentTime);
-        int lastRefresh = data.getTimestamp();
+        Long lastRefresh = data.getTimestamp();
         Log.d(TAG, "shouldFetch: last refresh: " + lastRefresh);
         Log.d(TAG, "shouldFetch: it's been " + ((currentTime - lastRefresh) / 60 / 60 / 24) +
                 " days since this recipe was refreshed. 30 days must elapse before refreshing. ");
         if((currentTime - data.getTimestamp()) >= Constants.WEATHER_REFRESH_TIME){
-            Log.d(TAG, "shouldFetch: SHOULD REFRESH RECIPE?! " + true);
+            Log.d(TAG, "shouldFetch: SHOULD REFRESH Weather with from api ?! " + true);
             return true;
         }
-        Log.d(TAG, "shouldFetch: SHOULD REFRESH RECIPE?! " + false);
+        Log.d(TAG, "shouldFetch: SHOULD REFRESH Weather?! " + false);
         return false;
-    }
-
-    public Call<WeatherForecast>  getCurrentLocationForecast(String lat, String lon, String apiKey)
-    {
-
-        return weatherApi.getCurrentLocationForecast(
-                lat,
-                lon,
-                apiKey
-        );
     }
 
 

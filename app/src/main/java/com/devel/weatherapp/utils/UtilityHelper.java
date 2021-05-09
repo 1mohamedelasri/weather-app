@@ -110,34 +110,68 @@ public class UtilityHelper {
         return String.format(context.getString(windFormat), windSpeed);
     }
 
-    public static int getIconResourceForWeatherCondition(Long weatherId) {
+    public static int getBackgroundResourceForWeatherCondition(Long weatherId) {
         // Based on weather code data found at:
         // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
+
+
         if (weatherId >= 200 && weatherId <= 232) {
-            return R.drawable.ic_storm;
+            return R.drawable.w_storm;
         } else if (weatherId >= 300 && weatherId <= 321) {
-            return R.drawable.ic_light_rain;
+            return R.drawable.w_rain;
         } else if (weatherId >= 500 && weatherId <= 504) {
-            return R.drawable.ic_rain;
+            return R.drawable.w_rain;
         } else if (weatherId == 511) {
-            return R.drawable.ic_snow;
+            return R.drawable.w_snow;
         } else if (weatherId >= 520 && weatherId <= 531) {
-            return R.drawable.ic_rain;
+            return R.drawable.w_rain;
         } else if (weatherId >= 600 && weatherId <= 622) {
-            return R.drawable.ic_snow;
+            return R.drawable.w_snow;
         } else if (weatherId >= 701 && weatherId <= 761) {
-            return R.drawable.ic_fog;
+            return R.drawable.w_fog;
         } else if (weatherId == 761 || weatherId == 781) {
-            return R.drawable.ic_storm;
+            return R.drawable.w_storm;
         } else if (weatherId == 800) {
-            return R.drawable.ic_clear;
+            return R.drawable.w_sunny;
         } else if (weatherId == 801) {
-            return R.drawable.ic_light_clouds;
+            return R.drawable.w_cool;
         } else if (weatherId >= 802 && weatherId <= 804) {
-            return R.drawable.ic_cloudy;
+            return R.drawable.w_bad;
         }
         return -1;
     }
+
+    public static int getCardViewColorResourceForWeatherCondition(Long weatherId) {
+        // Based on weather code data found at:
+        // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
+
+
+        if (weatherId >= 200 && weatherId <= 232) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId == 511) {
+            return R.drawable.w_snow;
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return R.drawable.corners_bg_cardview_dark;
+        } else if (weatherId == 761 || weatherId == 781) {
+            return R.drawable.corners_bg_cardview;
+        } else if (weatherId == 800) {
+            return R.drawable.corners_bg_cardview_dark;
+        } else if (weatherId == 801) {
+            return R.drawable.corners_bg_cardview_dark;
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return R.drawable.corners_bg_cardview_dark;
+        }
+        return -1;
+    }
+
 
     /**
      * Helper method to provide the art resource id according to the weather condition id returned

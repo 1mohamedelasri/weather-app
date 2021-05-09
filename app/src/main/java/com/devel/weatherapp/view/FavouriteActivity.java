@@ -35,7 +35,7 @@ public class FavouriteActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.FavRecyclerView);
         layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerAdapter = new FavouritesAdapter(getApplicationContext(),mViewModel);
+        recyclerAdapter = new FavouritesAdapter(FavouriteActivity.this,mViewModel);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setHasFixedSize(true);
 

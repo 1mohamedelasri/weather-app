@@ -10,13 +10,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.Tuple;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.view.adapters.SearchFragment;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SearchWeatherCity extends AppCompatActivity {
     private WeatherViewModel mWeatherListViewModel;

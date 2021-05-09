@@ -1,6 +1,9 @@
 package com.devel.weatherapp.view.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +14,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.Tuple;
 import com.devel.weatherapp.models.WeatherForecast;
+import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder> {
 
@@ -71,6 +81,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     }
 
     public void setFavouriteItems(List<WeatherForecast> forecastEntities) {
+        Collections.sort(forecastEntities);
         favouriteItems = forecastEntities;
         notifyDataSetChanged();
     }
@@ -91,7 +102,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     }
 
     // Inner class for creating ViewHolders
-    public class FavouritesViewHolder extends RecyclerView.ViewHolder {
+    public class FavouritesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView favCity;
         TextView favCountry;
@@ -116,6 +127,16 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
                 }
             });
+
+            itemView.setOnClickListener(this);
+
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            mViewModel.setlastAddedItemIndex(new Tuple(Tuple.Source.FAVORTIES,getLayoutPosition()));
+            ((Activity)mContext).finish();
         }
     }
 }

@@ -13,11 +13,14 @@ import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.models.AirQuality;
 import com.devel.weatherapp.models.FavouriteItem;
+import com.devel.weatherapp.models.Tuple;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.repositories.WeatherRepository;
+import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Resource;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +44,7 @@ public class WeatherViewModel extends AndroidViewModel  {
     private final MutableLiveData<WeatherForecast> _searchedCity= new MutableLiveData<>();
     private MediatorLiveData<Resource<List<WeatherForecast>>> _dataSource = new MediatorLiveData<>();
     private MutableLiveData<AirQuality> _airQuality = new MutableLiveData<>();
+    private MutableLiveData<Tuple> _lastAddedItemIndex = new MutableLiveData<>();
     // query extras
     private boolean isQueryExhausted;
     private boolean isPerformingQuery;
@@ -61,7 +65,6 @@ public class WeatherViewModel extends AndroidViewModel  {
         super(application);
         mWeatherRepository = WeatherRepository.getInstance(application);
     }
-    List<FavouriteItem> test;
 
     public static WeatherViewModel getInstance(Application application) {
         if (instance == null) {
@@ -72,6 +75,14 @@ public class WeatherViewModel extends AndroidViewModel  {
 
     public LiveData<WeatherForecast> searchedResult() {
         return _searchedCity;
+    }
+
+    public LiveData<Tuple> getlastAddedItemIndex() {
+        return _lastAddedItemIndex;
+    }
+
+    public void setlastAddedItemIndex(Tuple value) {
+         _lastAddedItemIndex.postValue(value);
     }
 
     public void insertInFavourtieItems(WeatherForecast wf){
@@ -102,7 +113,7 @@ public class WeatherViewModel extends AndroidViewModel  {
         });
     }
 
-    public void fetchbyCity(String city){
+    public void fetchbyCity(){
         final LiveData<Resource<List<WeatherForecast>>> repositorySource = mWeatherRepository.fetchForecast(_searchedCity.getValue().getCity().getName());
         fetchWithCaching(_dataSource, repositorySource);
     }

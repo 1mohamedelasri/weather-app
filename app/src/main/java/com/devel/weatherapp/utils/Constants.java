@@ -13,5 +13,11 @@ public class Constants {
     public static String lat = "35";
     public static String lon = "139";
 
+    public static Integer MY_CODE_REQUEST = 2020;
 
 }
+
+
+
+
+
