@@ -82,53 +82,6 @@ public class WeatherRepository {
         }.getAsLiveData();
     }
 
-    /*
-    public FavouriteItem mapWeatherToFavortie(WeatherForecast data) {
-
-        if (data != null) {
-            if (data != null && data.getDailyForecasts() != null) {
-                List<SavedDailyForecast> savedDailyForecasts = new ArrayList<SavedDailyForecast>();
-
-                for (int i = 0; i < data.getDailyForecasts().size() - 1; i++) {
-                    SavedDailyForecast savedDailyForecast = new SavedDailyForecast();
-                    savedDailyForecast.setLat(data.getCity().getCoord().getLat());
-                    savedDailyForecast.setLon(data.getCity().getCoord().getLon());
-                    savedDailyForecast.setDate(data.getDailyForecasts().get(i).getDt());
-                    savedDailyForecast.setMaxTemp(data.getDailyForecasts().get(i).getTemp().getMax());
-                    savedDailyForecast.setMinTemp(data.getDailyForecasts().get(i).getTemp().getMin());
-                    savedDailyForecast.setDayTemp(data.getDailyForecasts().get(i).getTemp().getDay());
-                    savedDailyForecast.setEveningTemp(data.getDailyForecasts().get(i).getTemp().getEve());
-                    savedDailyForecast.setMorningTemp(data.getDailyForecasts().get(i).getTemp().getMorn());
-                    savedDailyForecast.setNightTemp(data.getDailyForecasts().get(i).getTemp().getNight());
-                    savedDailyForecast.setFeelslikeDay(data.getDailyForecasts().get(i).getFeelsLike().getDay());
-                    savedDailyForecast.setFeelslikeEve(data.getDailyForecasts().get(i).getFeelsLike().getEve());
-                    savedDailyForecast.setFeelslikeMorning(data.getDailyForecasts().get(i).getFeelsLike().getMorn());
-                    savedDailyForecast.setFeelslikeNight(data.getDailyForecasts().get(i).getFeelsLike().getNight());
-                    savedDailyForecast.setHumidity(data.getDailyForecasts().get(i).getHumidity());
-                    savedDailyForecast.setWind(data.getDailyForecasts().get(i).getSpeed());
-                    savedDailyForecast.setDescription(data.getDailyForecasts().get(i).getWeather().get(0).getDescription());
-                    savedDailyForecast.setWeatherid(data.getDailyForecasts().get(i).getWeather().get(0).getId());
-                    savedDailyForecast.setImageUrl(data.getDailyForecasts().get(i).getWeather().get(0).getIcon());
-                    savedDailyForecast.setPressure(data.getDailyForecasts().get(i).getHumidity());
-                    savedDailyForecast.setMain(data.getDailyForecasts().get(i).getWeather().get(0).getMain());
-                    savedDailyForecast.setClouds(data.getDailyForecasts().get(i).getClouds());
-                    savedDailyForecast.setSunrise(data.getDailyForecasts().get(i).getSunrise());
-                    savedDailyForecast.setSunset(data.getDailyForecasts().get(i).getSunset());
-                    savedDailyForecasts.add(savedDailyForecast);
-                }
-                );
-
-                return new FavouriteItem(data.getCity().getId(),
-                        data.getCity().getName(),
-                        savedDailyForecasts.get(0).getDescription(),
-                        data.getCity().getCountry(),
-                        savedDailyForecasts);
-            }
-
-        }
-        return null;
-    }
-    */
     public LiveData<Resource<List<WeatherForecast>>> fetchForecastByLocation(String lat, String lon) {
         return new NetworkBoundResource<List<WeatherForecast>, WeatherForecast>(AppExecutors.getInstance()) {
 
@@ -138,14 +91,13 @@ public class WeatherRepository {
                 if (item != null && item.getDailyForecasts() != null) {
                     item.setId(item.getCity().getId());
                     weatherDao.insertWeather(item);
-
-
                 }
             }
 
             @Override
             protected boolean shouldFetch(@Nullable List<WeatherForecast> data) {
-                return data == null || data.isEmpty();
+                //if(shouldFetch(data)) return false;
+                return data == null || data.isEmpty() || calculateShouldFetch(data.get(0));
             }
 
             @NonNull
@@ -201,14 +153,15 @@ public class WeatherRepository {
         );
     }
 
-    protected boolean shouldFetch(WeatherForecast data) {
+    protected boolean calculateShouldFetch(WeatherForecast data) {
+        if(data ==null) return true;
         Log.d(TAG, "shouldFetch: recipe: " + data.toString());
         int currentTime = (int)(System.currentTimeMillis() / 1000);
         Log.d(TAG, "shouldFetch: current time: " + currentTime);
         Long lastRefresh = data.getTimestamp();
         Log.d(TAG, "shouldFetch: last refresh: " + lastRefresh);
         Log.d(TAG, "shouldFetch: it's been " + ((currentTime - lastRefresh) / 60 / 60 / 24) +
-                " days since this recipe was refreshed. 30 days must elapse before refreshing. ");
+                " days since this Weather was refreshed. 30 days must elapse before refreshing. ");
         if((currentTime - data.getTimestamp()) >= Constants.WEATHER_REFRESH_TIME){
             Log.d(TAG, "shouldFetch: SHOULD REFRESH Weather with from api ?! " + true);
             return true;
