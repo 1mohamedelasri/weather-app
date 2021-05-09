@@ -17,25 +17,6 @@ import com.devel.weatherapp.R;
 public class SplashActivity extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 3000;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_splash);
-        hideSystemUI(this);
-        /* New Handler to start the Menu-Activity
-         * and close this Splash-Screen after some seconds.*/
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(getApplication(),MainActivity.class);
-                startActivity(mainIntent);
-                finish();
-            }
-        }, SPLASH_DISPLAY_LENGTH);
-    }
-
     public static void hideSystemUI(Activity activity) {
         View decorView = activity.getWindow().getDecorView();
         decorView.setSystemUiVisibility(
@@ -47,6 +28,24 @@ public class SplashActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_splash);
+        hideSystemUI(this);
+        /* New Handler to start the Menu-Activity
+         * and close this Splash-Screen after some seconds.*/
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                Intent mainIntent = new Intent(getApplication(), MainActivity.class);
+                startActivity(mainIntent);
+                finish();
+            }
+        }, SPLASH_DISPLAY_LENGTH);
+    }
 
 
 }

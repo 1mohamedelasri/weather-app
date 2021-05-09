@@ -14,13 +14,18 @@ import java.util.TimeZone;
 
 public class UtilityHelper {
 
+    // Format used for storing dates in the database.  ALso used for converting those strings
+    // back into date objects for comparison/processing.
+    public static final String DATE_FORMAT = "yyyyMMdd";
+
     public static String formatTemperature(Context context, double temperature, boolean withCelsiusSymbol) {
         // Data stored in Celsius by default.  If user prefers to see in Fahrenheit, convert
         // the values here.
         String suffix = "\u00B0";
         //temperature = (temperature * 1.8) + 32;
 
-        if(withCelsiusSymbol) return String.format(context.getString(R.string.format_temperature), temperature);
+        if (withCelsiusSymbol)
+            return String.format(context.getString(R.string.format_temperature), temperature);
 
         return String.format(context.getString(R.string.format_temperature_nosymbol), temperature);
     }
@@ -71,23 +76,20 @@ public class UtilityHelper {
         return dateString;
     }
 
-    public static Date timestampToDate(Long timestamp){
-        java.util.Date date =new java.util.Date((long)timestamp*1000);
+    public static Date timestampToDate(Long timestamp) {
+        java.util.Date date = new java.util.Date((long) timestamp * 1000);
         return date;
     }
 
-    // Format used for storing dates in the database.  ALso used for converting those strings
-    // back into date objects for comparison/processing.
-    public static final String DATE_FORMAT = "yyyyMMdd";
-
     /**
      * Converts db date format to the format "Month day", e.g "June 24".
-     * @param context Context to use for resource localization
+     *
+     * @param context      Context to use for resource localization
      * @param dateInMillis The db formatted date string, expected to be of the form specified
-     *                in Utility.DATE_FORMAT
+     *                     in Utility.DATE_FORMAT
      * @return The day in the form of a string formatted "December 6"
      */
-    public static String getFormattedMonthDay(Context context, long dateInMillis ) {
+    public static String getFormattedMonthDay(Context context, long dateInMillis) {
         Time time = new Time();
         time.setToNow();
         SimpleDateFormat dbDateFormat = new SimpleDateFormat(UtilityHelper.DATE_FORMAT);
@@ -95,7 +97,8 @@ public class UtilityHelper {
         String monthDayString = monthDayFormat.format(dateInMillis);
         return monthDayString;
     }
-    public static String getFormattedDayHour(Context context, long dateInMillis ) {
+
+    public static String getFormattedDayHour(Context context, long dateInMillis) {
         Time time = new Time();
         time.setToNow();
         SimpleDateFormat dbDateFormat = new SimpleDateFormat(UtilityHelper.DATE_FORMAT);
@@ -236,6 +239,7 @@ public class UtilityHelper {
     /**
      * Helper method to provide the art resource id according to the weather condition id returned
      * by the OpenWeatherMap call.
+     *
      * @param weatherId from OpenWeatherMap API response
      * @return resource id for the corresponding icon. -1 if no relation is found.
      */
@@ -297,28 +301,25 @@ public class UtilityHelper {
         return -1;
     }
 
-    public static String[] geoLocToString(Location loc){
-        return new String[]{String.valueOf(loc.getLatitude()),String.valueOf(loc.getLongitude())};
+    public static String[] geoLocToString(Location loc) {
+        return new String[]{String.valueOf(loc.getLatitude()), String.valueOf(loc.getLongitude())};
     }
 
-    public static String getCountryName(String name){
-        Locale loc = new Locale("en",name);
+    public static String getCountryName(String name) {
+        Locale loc = new Locale("en", name);
         return loc.getDisplayCountry();
     }
 
-    public static Date convertTimeZone(Date date, TimeZone fromTimeZone, TimeZone toTimeZone)
-    {
+    public static Date convertTimeZone(Date date, TimeZone fromTimeZone, TimeZone toTimeZone) {
         long fromTimeZoneOffset = getTimeZoneUTCAndDSTOffset(date, fromTimeZone);
         long toTimeZoneOffset = getTimeZoneUTCAndDSTOffset(date, toTimeZone);
 
         return new Date(date.getTime() + (toTimeZoneOffset - fromTimeZoneOffset));
     }
 
-    private static long getTimeZoneUTCAndDSTOffset(Date date, TimeZone timeZone)
-    {
+    private static long getTimeZoneUTCAndDSTOffset(Date date, TimeZone timeZone) {
         long timeZoneDSTOffset = 0;
-        if(timeZone.inDaylightTime(date))
-        {
+        if (timeZone.inDaylightTime(date)) {
             timeZoneDSTOffset = timeZone.getDSTSavings();
         }
 

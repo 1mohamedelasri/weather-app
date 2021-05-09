@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.devel.weatherapp.models.WeatherForecast;
 
-@Database(entities = {WeatherForecast.class}, version = 2 )
+@Database(entities = {WeatherForecast.class}, version = 2)
 public abstract class WeatherDatabase extends RoomDatabase {
 
 
@@ -16,8 +16,8 @@ public abstract class WeatherDatabase extends RoomDatabase {
 
     private static volatile WeatherDatabase instance;
 
-    public static WeatherDatabase getInstance(final Context context){
-        if(instance == null){
+    public static WeatherDatabase getInstance(final Context context) {
+        if (instance == null) {
             instance = Room.databaseBuilder(
                     context.getApplicationContext(),
                     WeatherDatabase.class,

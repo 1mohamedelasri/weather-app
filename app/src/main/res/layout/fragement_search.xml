@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:layout_toEndOf="@+id/weather_img"
-        
+
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="36sp"
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        
+
         android:text="ville de france"
         android:textColor="@color/white"
         android:visibility="visible"
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        
+
         android:text="2 C°"
         android:textColor="@color/white"
         android:textSize="24sp"

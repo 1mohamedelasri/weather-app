@@ -25,7 +25,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.WeeklyViewHo
 
     public DailyAdapter(Context context, List<WeatherList> savedDailyForecast) {
         mContext = context;
-        forecasts= savedDailyForecast;
+        forecasts = savedDailyForecast;
     }
 
     @NonNull
@@ -51,7 +51,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.WeeklyViewHo
 
         //Set values
         holder.desc.setText(description);
-        holder.temp.setText(UtilityHelper.formatTemperature(mContext, max_temp,false) + "/" + UtilityHelper.formatTemperature(mContext, min_temp,true));
+        holder.temp.setText(UtilityHelper.formatTemperature(mContext, max_temp, false) + "/" + UtilityHelper.formatTemperature(mContext, min_temp, true));
         holder.imageView.setImageResource(UtilityHelper.getArtResourceForWeatherCondition(weather_id));
         holder.day.setText(UtilityHelper.format(date));
     }
@@ -62,7 +62,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.WeeklyViewHo
         if (forecasts == null) {
             return 0;
         }
-        return forecasts.size()-1;
+        return forecasts.size() - 1;
     }
 
     public List<WeatherList> getForecasts() {

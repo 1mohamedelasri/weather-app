@@ -23,16 +23,16 @@ import com.devel.weatherapp.R;
 public class SunView extends View {
 
     Paint mPathPaint;
-    private int mWidth;
-    private int mHeight;
     int mainColor;
     int trackColor;
-    private Path mPathPath;
-    private Paint mMotionPaint;
-    private Path mMotionPath;
     int controlX, controlY;
     float startX, startY;
     float endX, endY;
+    private int mWidth;
+    private int mHeight;
+    private Path mPathPath;
+    private Paint mMotionPaint;
+    private Path mMotionPath;
     private double rX;
     private double rY;
     private int[] mSunrise = new int[2];
@@ -137,19 +137,19 @@ public class SunView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.save();
-        if(!isDraw){
+        if (!isDraw) {
             mWidth = getWidth();
             mHeight = getHeight();
-            controlX = mWidth/2;
-            controlY = 0-mHeight/2;
+            controlX = mWidth / 2;
+            controlY = 0 - mHeight / 2;
             startX = svPadding;
-            startY = mHeight-svPadding;
-            endX = mWidth-svPadding;
-            endY = mHeight-svPadding;
+            startY = mHeight - svPadding;
+            endX = mWidth - svPadding;
+            endY = mHeight - svPadding;
             rX = svPadding;
-            rY = mHeight-svPadding;
+            rY = mHeight - svPadding;
             // gradient path
-            mPathShader = new LinearGradient(mWidth/2, svPadding, mWidth/2, endY,
+            mPathShader = new LinearGradient(mWidth / 2, svPadding, mWidth / 2, endY,
                     mainColor, Color.WHITE, Shader.TileMode.CLAMP);
             mPathPaint.setShader(mPathShader);
             mPathPath.moveTo(startX, startY);
@@ -175,47 +175,48 @@ public class SunView extends View {
         canvas.drawPath(mMotionPath, mMotionPaint);
 
         // Draw sunrise and sunset text
-        if (mSunrise.length != 0||mSunset.length != 0){
+        if (mSunrise.length != 0 || mSunset.length != 0) {
             mTextPaint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("Sunrise"+(mSunrise[0]<10? "0"+mSunrise[0]: mSunrise[0])
-                    +":"+(mSunrise[1]<10? "0"+mSunrise[1]: mSunrise[1]), startX+textOffset, startY, mTextPaint);
+            canvas.drawText("Sunrise" + (mSunrise[0] < 10 ? "0" + mSunrise[0] : mSunrise[0])
+                    + ":" + (mSunrise[1] < 10 ? "0" + mSunrise[1] : mSunrise[1]), startX + textOffset, startY, mTextPaint);
             mTextPaint.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText("Sunset"+(mSunset[0]<10? "0"+mSunset[0]: mSunset[0])
-                    +":"+(mSunset[1]<10? "0"+mSunset[1]: mSunset[1]), endX-textOffset, endY, mTextPaint);
+            canvas.drawText("Sunset" + (mSunset[0] < 10 ? "0" + mSunset[0] : mSunset[0])
+                    + ":" + (mSunset[1] < 10 ? "0" + mSunset[1] : mSunset[1]), endX - textOffset, endY, mTextPaint);
         }
 
         // draw endpoint
         mMotionPaint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(startX, startY, svTrackWidth*2, mMotionPaint);
-        canvas.drawCircle(endX, endY, svTrackWidth*2, mMotionPaint);
+        canvas.drawCircle(startX, startY, svTrackWidth * 2, mMotionPaint);
+        canvas.drawCircle(endX, endY, svTrackWidth * 2, mMotionPaint);
         // draw the sun
-        canvas.drawCircle((float) rX, (float)rY, svSunSize*6/5, mSunStrokePaint);
-        canvas.drawCircle((float) rX, (float)rY, svSunSize, mSunPaint);
+        canvas.drawCircle((float) rX, (float) rY, svSunSize * 6 / 5, mSunStrokePaint);
+        canvas.drawCircle((float) rX, (float) rY, svSunSize, mSunPaint);
 
         canvas.restore();
     }
 
     /**
      * Set the current progress and update the position of the sun center
+     *
      * @param t range: [0~1]
      */
-    private void setProgress(float t){
+    private void setProgress(float t) {
         mProgress = t;
         rX = startX * Math.pow(1 - t, 2) + 2 * controlX * t * (1 - t) + endX * Math.pow(t, 2);
         rY = startY * Math.pow(1 - t, 2) + 2 * controlY * t * (1 - t) + endY * Math.pow(t, 2);
         // Only update the area to be painted
-        invalidate((int)rX, 0, (int)(mWidth-svPadding), (int)(mHeight-svPadding));
+        invalidate((int) rX, 0, (int) (mWidth - svPadding), (int) (mHeight - svPadding));
     }
 
     /**
      * Set the current time (please set the sunrise and sunset time first)
      */
-    public void setCurrentTime(int hour, int minute){
-        if (mSunrise.length != 0||mSunset.length != 0){
-            float p0 = mSunrise[0]*60+mSunrise[1];//Starting minutes
-            float p1 = hour*60+minute-p0;//Total minutes in current time
-            float p2 = mSunset[0]*60+mSunset[1]-p0;//Total number of minutes from sunset to sunrise
-            float progress = p1/p2;
+    public void setCurrentTime(int hour, int minute) {
+        if (mSunrise.length != 0 || mSunset.length != 0) {
+            float p0 = mSunrise[0] * 60 + mSunrise[1];//Starting minutes
+            float p1 = hour * 60 + minute - p0;//Total minutes in current time
+            float p2 = mSunset[0] * 60 + mSunset[1] - p0;//Total number of minutes from sunset to sunrise
+            float progress = p1 / p2;
             mProgress = progress;
             motionAnimation();
         }
@@ -224,7 +225,7 @@ public class SunView extends View {
     /**
      * Set sunrise time
      */
-    public void setSunrise(int hour, int minute){
+    public void setSunrise(int hour, int minute) {
         mSunrise[0] = hour;
         mSunrise[1] = minute;
     }
@@ -232,7 +233,7 @@ public class SunView extends View {
     /**
      * Set sunset time
      */
-    public void setSunset(int hour, int minute){
+    public void setSunset(int hour, int minute) {
         mSunset[0] = hour;
         mSunset[1] = minute;
     }
@@ -240,23 +241,23 @@ public class SunView extends View {
     /**
      * Sun track animation
      */
-    public void motionAnimation(){
-        if (valueAnimator == null){
+    public void motionAnimation() {
+        if (valueAnimator == null) {
             mCurrentProgress = 0f;
             // Make sure the sun will not go out of bounds
-            if (mProgress<0){
-                mProgress=0;
+            if (mProgress < 0) {
+                mProgress = 0;
             }
-            if (mProgress>1){
-                mProgress=1;
+            if (mProgress > 1) {
+                mProgress = 1;
             }
             final ValueAnimator animator = ValueAnimator.ofFloat(mCurrentProgress, mProgress);
-            animator.setDuration((long) (2500*(mProgress-mCurrentProgress)));
+            animator.setDuration((long) (2500 * (mProgress - mCurrentProgress)));
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
                     Object val = animator.getAnimatedValue();
-                    if (val instanceof Float){
+                    if (val instanceof Float) {
                         setProgress((Float) val);
                     }
                 }

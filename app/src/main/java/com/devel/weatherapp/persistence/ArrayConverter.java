@@ -11,7 +11,8 @@ public class ArrayConverter {
 
     @TypeConverter
     public static String[] fromString(String value) {
-        Type listType = new TypeToken<String[]>() {}.getType();
+        Type listType = new TypeToken<String[]>() {
+        }.getType();
         return new Gson().fromJson(value, listType);
     }
 

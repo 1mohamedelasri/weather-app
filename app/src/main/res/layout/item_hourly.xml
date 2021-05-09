@@ -23,7 +23,7 @@
         android:layout_height="19dp"
         android:layout_marginTop="4dp"
         android:layout_toEndOf="@+id/hourly_img"
-        
+
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="14dp"
@@ -39,7 +39,7 @@
         android:layout_height="21dp"
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/hourly_day"
-        
+
         android:gravity="center"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,10 +53,10 @@
         android:layout_width="84dp"
         android:layout_height="55dp"
         android:layout_alignParentEnd="true"
-        
+
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/hourly_temp"
-        
+
         android:gravity="center"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"

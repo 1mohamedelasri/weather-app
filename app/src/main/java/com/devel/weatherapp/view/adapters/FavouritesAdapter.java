@@ -2,8 +2,6 @@ package com.devel.weatherapp.view.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.Tuple;
 import com.devel.weatherapp.models.WeatherForecast;
-import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static android.app.Activity.RESULT_OK;
 
 public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder> {
 
@@ -38,7 +31,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
     public FavouritesAdapter(Context context, WeatherViewModel mViewModel) {
         this.mContext = context;
-        this.mViewModel= mViewModel;
+        this.mViewModel = mViewModel;
         favouriteItems = new ArrayList<>();
     }
 
@@ -59,7 +52,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
         //Set values
         holder.favCity.setText(favouriteItems.get(position).getCity().getName());
-        holder.favTemperature.setText(UtilityHelper.formatTemperature(mContext,favouriteItems.get(position).getDailyForecasts().get(0).getMain().getTemp(),true));
+        holder.favTemperature.setText(UtilityHelper.formatTemperature(mContext, favouriteItems.get(position).getDailyForecasts().get(0).getMain().getTemp(), true));
         holder.favImg.setImageResource(UtilityHelper.getArtResourceForWeatherCondition(favouriteItems.get(position).getDailyForecasts().get(0).getWeathers().get(0).getId()));
         holder.favCountry.setText(UtilityHelper.getCountryName(favouriteItems.get(position).getCity().getCountry()));
 
@@ -135,8 +128,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
         @Override
         public void onClick(View v) {
-            mViewModel.setlastAddedItemIndex(new Tuple(Tuple.Source.FAVORTIES,getLayoutPosition()));
-            ((Activity)mContext).finish();
+            mViewModel.setlastAddedItemIndex(new Tuple(Tuple.Source.FAVORTIES, getLayoutPosition()));
+            ((Activity) mContext).finish();
         }
     }
 }

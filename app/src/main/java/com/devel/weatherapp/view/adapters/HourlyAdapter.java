@@ -26,7 +26,7 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.HourlyView
 
     public HourlyAdapter(Context context, List<WeatherList> savedDailyForecast) {
         mContext = context;
-        forecasts= savedDailyForecast;
+        forecasts = savedDailyForecast;
     }
 
     @NonNull
@@ -55,11 +55,11 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.HourlyView
         //Set values
         holder.hour.setText(UtilityHelper.formatHourly(forecast.getDt()));
         holder.desc.setText(description);
-        holder.temp.setText(UtilityHelper.formatTemperature(mContext, temp,true));
+        holder.temp.setText(UtilityHelper.formatTemperature(mContext, temp, true));
         holder.imageView.setImageResource(UtilityHelper.getArtResourceForWeatherCondition(weather_id));
 
         check.setTime(UtilityHelper.timestampToDate(forecast.getDt()));
-        if(today.get(Calendar.DAY_OF_YEAR) == check.get(Calendar.DAY_OF_YEAR) &&
+        if (today.get(Calendar.DAY_OF_YEAR) == check.get(Calendar.DAY_OF_YEAR) &&
                 today.get(Calendar.YEAR) == check.get(Calendar.YEAR))
             holder.day.setText("Today");
         else
@@ -72,7 +72,7 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.HourlyView
         if (forecasts == null) {
             return 0;
         }
-        return forecasts.size()-1;
+        return forecasts.size() - 1;
     }
 
     public List<WeatherList> getForecasts() {

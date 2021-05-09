@@ -35,12 +35,6 @@ public class WeatherRepository {
     private WeatherDao weatherDao;
     private IWeatherApi weatherApi;
     private Context context;
-    public static WeatherRepository getInstance(Context context){
-        if(instance == null){
-            instance = new WeatherRepository(context);
-        }
-        return instance;
-    }
 
     private WeatherRepository(Context context) {
         weatherDao = WeatherDatabase.getInstance(context).getWeatherDao();
@@ -49,6 +43,13 @@ public class WeatherRepository {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         weatherApi = ServiceFactory.getWeatherApi();
+    }
+
+    public static WeatherRepository getInstance(Context context) {
+        if (instance == null) {
+            instance = new WeatherRepository(context);
+        }
+        return instance;
     }
 
     public LiveData<Resource<List<WeatherForecast>>> fetchForecast(String city) {
@@ -109,14 +110,13 @@ public class WeatherRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<WeatherForecast>> createCall() {
-                return weatherApi.getCurrentLocationHourlyData(lat,lon, Constants.API_KEY);
+                return weatherApi.getCurrentLocationHourlyData(lat, lon, Constants.API_KEY);
             }
 
         }.getAsLiveData();
     }
 
-    public final Call<WeatherForecast>  getWeatherByCity(String city, String apiKey)
-    {
+    public final Call<WeatherForecast> getWeatherByCity(String city, String apiKey) {
         return weatherApi.getCurrentWeatherDataOfCity(
                 city,
                 apiKey
@@ -131,21 +131,7 @@ public class WeatherRepository {
         new InsertAsynTask(WeatherDatabase.getInstance(context)).execute(weatherForecast);
     }
 
-    static class InsertAsynTask extends AsyncTask<WeatherForecast,Void,Void> {
-        private WeatherDao weatherDao;
-        InsertAsynTask(WeatherDatabase weatherDatabase)
-        {
-            weatherDao= weatherDatabase.getWeatherDao();
-        }
-        @Override
-        protected Void doInBackground(WeatherForecast... weatherForecasts) {
-            weatherDao.deleteFavouriteItem(weatherForecasts[0].getId());
-            return null;
-        }
-    }
-
-    public Call<AirQuality> getAirQuality(String lat, String lon)
-    {
+    public Call<AirQuality> getAirQuality(String lat, String lon) {
         return weatherApi.getAirQuality(
                 lat,
                 lon,
@@ -154,20 +140,34 @@ public class WeatherRepository {
     }
 
     protected boolean calculateShouldFetch(WeatherForecast data) {
-        if(data ==null) return true;
+        if (data == null) return true;
         Log.d(TAG, "shouldFetch: recipe: " + data.toString());
-        int currentTime = (int)(System.currentTimeMillis() / 1000);
+        int currentTime = (int) (System.currentTimeMillis() / 1000);
         Log.d(TAG, "shouldFetch: current time: " + currentTime);
         Long lastRefresh = data.getTimestamp();
         Log.d(TAG, "shouldFetch: last refresh: " + lastRefresh);
         Log.d(TAG, "shouldFetch: it's been " + ((currentTime - lastRefresh) / 60 / 60 / 24) +
                 " days since this Weather was refreshed. 30 days must elapse before refreshing. ");
-        if((currentTime - data.getTimestamp()) >= Constants.WEATHER_REFRESH_TIME){
+        if ((currentTime - data.getTimestamp()) >= Constants.WEATHER_REFRESH_TIME) {
             Log.d(TAG, "shouldFetch: SHOULD REFRESH Weather with from api ?! " + true);
             return true;
         }
         Log.d(TAG, "shouldFetch: SHOULD REFRESH Weather?! " + false);
         return false;
+    }
+
+    static class InsertAsynTask extends AsyncTask<WeatherForecast, Void, Void> {
+        private WeatherDao weatherDao;
+
+        InsertAsynTask(WeatherDatabase weatherDatabase) {
+            weatherDao = weatherDatabase.getWeatherDao();
+        }
+
+        @Override
+        protected Void doInBackground(WeatherForecast... weatherForecasts) {
+            weatherDao.deleteFavouriteItem(weatherForecasts[0].getId());
+            return null;
+        }
     }
 
 

@@ -13,14 +13,14 @@ public class CombinedMediatorLiveData<A, B> extends MediatorLiveData<Pair<A, B>>
         setValue(Pair.create(a, b));
 
         addSource(ld1, a -> {
-            if(a != null) {
+            if (a != null) {
                 this.a = a;
             }
             setValue(Pair.create(a, b));
         });
 
         addSource(ld2, b -> {
-            if(b != null) {
+            if (b != null) {
                 this.b = b;
             }
             setValue(Pair.create(a, b));
