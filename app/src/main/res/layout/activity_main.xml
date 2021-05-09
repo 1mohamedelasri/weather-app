@@ -5,14 +5,13 @@
     android:id="@+id/main_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:contentInsetLeft="0dp"
-    app:contentInsetStart="0dp"
-    app:contentInsetEnd="0dp"
-    app:contentInsetRight="0dp"
+    android:background="@drawable/w_night"
     android:theme="@style/mainActivityTheme"
-    android:background="@drawable/blue_gradient_style"
+    app:contentInsetEnd="0dp"
+    app:contentInsetLeft="0dp"
+    app:contentInsetRight="0dp"
+    app:contentInsetStart="0dp"
     tools:context=".view.MainActivity">
-
 
 
     <ImageView
@@ -81,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" >
+        app:layout_constraintTop_toTopOf="@+id/guideline3">
 
     </androidx.viewpager.widget.ViewPager>
 </androidx.constraintlayout.widget.ConstraintLayout>

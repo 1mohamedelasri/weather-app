@@ -13,17 +13,9 @@ import retrofit2.http.Query;
 public interface IWeatherApi {
 
 
-
-    @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
-    Call<WeatherForecast> getCurrentLocationForecast(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);
-
+    //User to fetch data without cache
     @GET("data/2.5/forecast?units=metric&cnt=1")
     Call<WeatherForecast> getCurrentWeatherDataOfCity(@Query("q") String city, @Query("APPID") String app_id);
-
-    @GET("data/2.5/forecast/daily/?units=metric&")
-    Call<WeatherForecast> getWeeklyForecast(@Query("q") String city,
-                                            @Query("cnt") String numDays,
-                                            @Query("APPID") String apiKey);
 
     @GET("data/2.5/air_pollution?")
     Call<AirQuality> getAirQuality(@Query("lat") String city,
@@ -31,12 +23,7 @@ public interface IWeatherApi {
                                    @Query("APPID") String apiKey);
 
 
-    @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
-    LiveData<ApiResponse<WeatherForecast>> getCurrentWeeklyDataOfCity(@Query("q") String city, @Query("APPID") String app_id);
-
-    @GET("data/2.5/forecast/daily/?units=metric&cnt=7&")
-    LiveData<ApiResponse<WeatherForecast>> getCurrentLocationWeeklyData(@Query("lat") String lat, @Query("lon") String lon, @Query("APPID") String app_id);
-
+    // Used to fetch data with caching
     @GET("data/2.5/forecast?units=metric")
     LiveData<ApiResponse<WeatherForecast>> getCurrentHourlyDataOfCity(@Query("q") String city, @Query("APPID") String app_id);
 

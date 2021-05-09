@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.Tuple;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.SearchWeatherCity;
@@ -47,8 +48,9 @@ public class SearchFragment extends Fragment {
                 addCityToFav.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
-                                                        mWeatherListViewModel.fetchbyCity("");
+                                                        mWeatherListViewModel.fetchbyCity();
                                                         getParentFragmentManager().popBackStack();
+                                                        mWeatherListViewModel.setlastAddedItemIndex(new Tuple(Tuple.Source.SEARCH,mWeatherListViewModel.getDataSource().getValue().data.size()-1));
                                                         getActivity().finish();
                                                     }
                                                 }
