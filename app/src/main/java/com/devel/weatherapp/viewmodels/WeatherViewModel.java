@@ -79,7 +79,7 @@ public class WeatherViewModel extends AndroidViewModel  {
         return _lastAddedItemIndex;
     }
 
-    public LiveData<WeatherForecast> getCurrentLocationCity() {
+    public LiveData<WeatherForecast> getCurrentLocationWeather() {
         return _currentLocationWeatherCity;
     }
 
@@ -169,8 +169,8 @@ public class WeatherViewModel extends AndroidViewModel  {
                         destinationRepo.setValue(listResource);
                         if(listResource.data != null && type == Fetch.GeoLocation) {
                             int  index = listResource.data.size()-1;
-                            if(index > 0 )
-                            _currentLocationWeatherCity.postValue(listResource.data.get(index));
+                            if(index > -1 )
+                            _currentLocationWeatherCity.postValue(listResource.data.get(0));
                         }
                     }
                     else{

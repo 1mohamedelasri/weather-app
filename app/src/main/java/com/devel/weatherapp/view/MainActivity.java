@@ -7,7 +7,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -31,7 +30,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.Tuple;
-import com.devel.weatherapp.models.Weather;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.models.WeatherList;
 import com.devel.weatherapp.repositories.WeatherRepository;
@@ -53,8 +51,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends LocationBaseActivity {
@@ -69,7 +65,7 @@ public class MainActivity extends LocationBaseActivity {
     private ImageView searchButton;
     private ImageView baselineBtn;
     private WeatherRepository weatherRepository;
-    private AlarmReceiver alarm;
+    private AlarmManager alarm;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -227,23 +223,23 @@ public class MainActivity extends LocationBaseActivity {
             }
         });
 
-        mWeatherListViewModel.getCurrentLocationCity().observe(this, new Observer<WeatherForecast>() {
+        mWeatherListViewModel.getCurrentLocationWeather().observe(this, new Observer<WeatherForecast>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onChanged(WeatherForecast newWeather) {
                 if(newWeather != null &&  newWeather.getDailyForecasts() !=null && newWeather.getDailyForecasts().size() > 2) {
-                    if(newWeather.getDailyForecasts().get(0).getWeathers().get(0).getId() != newWeather.getDailyForecasts().get(1).getWeathers().get(0).getId()) {
+                    Long idCurrentWeather = newWeather.getDailyForecasts().get(0).getWeathers().get(0).getId();
+                    Long idNextHourWeather = newWeather.getDailyForecasts().get(1).getWeathers().get(0).getId();
+                    if(idCurrentWeather != idNextHourWeather) {
                         Calendar calendar = Calendar.getInstance();
-                        calendar.set(Calendar.HOUR_OF_DAY, 15);
-                        calendar.set(Calendar.MINUTE, 5);
-                        calendar.set(Calendar.SECOND, 0);
+                        calendar.set(Calendar.SECOND, 30);
                         Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
                         Gson gson = new Gson();
                         String myJson = gson.toJson(newWeather);
                         intent1.putExtra("newWeather", myJson);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-                        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
-                        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                        alarm = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
+                        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
                     }
                 }

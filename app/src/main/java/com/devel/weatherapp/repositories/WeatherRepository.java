@@ -84,7 +84,6 @@ public class WeatherRepository {
 
     public LiveData<Resource<List<WeatherForecast>>> fetchForecastByLocation(String lat, String lon) {
         return new NetworkBoundResource<List<WeatherForecast>, WeatherForecast>(AppExecutors.getInstance()) {
-
             @Override
             protected void saveCallResult(@NonNull WeatherForecast item) {
                 weatherDao.deleteAll();
@@ -97,7 +96,7 @@ public class WeatherRepository {
             @Override
             protected boolean shouldFetch(@Nullable List<WeatherForecast> data) {
                 //if(shouldFetch(data)) return false;
-                return data == null || data.isEmpty() || calculateShouldFetch(data.get(0));
+                return data == null || data.isEmpty() || computeShouldFetch(data.get(0));
             }
 
             @NonNull
@@ -105,13 +104,11 @@ public class WeatherRepository {
             protected LiveData<List<WeatherForecast>> loadFromDb() {
                 return weatherDao.loadForecast();
             }
-
             @NonNull
             @Override
             protected LiveData<ApiResponse<WeatherForecast>> createCall() {
                 return weatherApi.getCurrentLocationHourlyData(lat,lon, Constants.API_KEY);
             }
-
         }.getAsLiveData();
     }
 
@@ -153,7 +150,7 @@ public class WeatherRepository {
         );
     }
 
-    protected boolean calculateShouldFetch(WeatherForecast data) {
+    protected boolean computeShouldFetch(WeatherForecast data) {
         if(data ==null) return true;
         Log.d(TAG, "shouldFetch: recipe: " + data.toString());
         int currentTime = (int)(System.currentTimeMillis() / 1000);

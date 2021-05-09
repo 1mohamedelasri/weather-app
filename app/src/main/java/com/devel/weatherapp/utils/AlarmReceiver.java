@@ -28,9 +28,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 
         StringBuilder str = new StringBuilder();
-        WeatherList forcast = newWeather.getDailyForecasts().get(0);
+        WeatherList forcast = newWeather.getDailyForecasts().get(1);
         str.append(UtilityHelper.formatTemperature(context,forcast.getMain().getTemp(),true));
-        str.append(" at");
+        str.append(" at ");
         str.append(UtilityHelper.formatHourly(forcast.getDt()));
         str.append(" in ");
         str.append(newWeather.getCity().getName());
