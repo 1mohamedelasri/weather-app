@@ -12,15 +12,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.devel.weatherapp.models.AirQuality;
-import com.devel.weatherapp.models.FavouriteItem;
 import com.devel.weatherapp.models.Tuple;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.repositories.WeatherRepository;
-import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Resource;
 
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,12 +42,13 @@ public class WeatherViewModel extends AndroidViewModel  {
     private MediatorLiveData<Resource<List<WeatherForecast>>> _dataSource = new MediatorLiveData<>();
     private MutableLiveData<AirQuality> _airQuality = new MutableLiveData<>();
     private MutableLiveData<Tuple> _lastAddedItemIndex = new MutableLiveData<>();
+    private MutableLiveData<WeatherForecast> _currentLocationWeatherCity = new MutableLiveData<>();
     // query extras
     private boolean isQueryExhausted;
     private boolean isPerformingQuery;
     private boolean cancelRequest;
     private long requestStartTime;
-
+    private enum Fetch {GeoLocation,City    }
 
     // Observables
     public LiveData<Resource<List<WeatherForecast>>> getDataSource(){
@@ -79,6 +77,14 @@ public class WeatherViewModel extends AndroidViewModel  {
 
     public LiveData<Tuple> getlastAddedItemIndex() {
         return _lastAddedItemIndex;
+    }
+
+    public LiveData<WeatherForecast> getCurrentLocationCity() {
+        return _currentLocationWeatherCity;
+    }
+
+    public void setCurrentLocationCity(WeatherForecast weather) {
+         _currentLocationWeatherCity.postValue(weather);
     }
 
     public void setlastAddedItemIndex(Tuple value) {
@@ -115,15 +121,15 @@ public class WeatherViewModel extends AndroidViewModel  {
 
     public void fetchbyCity(){
         final LiveData<Resource<List<WeatherForecast>>> repositorySource = mWeatherRepository.fetchForecast(_searchedCity.getValue().getCity().getName());
-        fetchWithCaching(_dataSource, repositorySource);
+        fetchWithCaching(_dataSource, repositorySource,Fetch.City);
     }
 
     public void fetchbyLocation(String lat, String lon){
         final LiveData<Resource<List<WeatherForecast>>> repositorySource = mWeatherRepository.fetchForecastByLocation(lat,lon);
-        fetchWithCaching(_dataSource, repositorySource);
+        fetchWithCaching(_dataSource, repositorySource, Fetch.GeoLocation);
     }
 
-    public void fetchWithCaching(MediatorLiveData<Resource<List<WeatherForecast>>> destinationRepo, LiveData<Resource<List<WeatherForecast>>> sourceRepo   ){
+    public void fetchWithCaching(MediatorLiveData<Resource<List<WeatherForecast>>> destinationRepo, LiveData<Resource<List<WeatherForecast>>> sourceRepo,Fetch type){
         requestStartTime = System.currentTimeMillis();
         cancelRequest = false;
         isPerformingQuery = true;
@@ -161,6 +167,8 @@ public class WeatherViewModel extends AndroidViewModel  {
                             destinationRepo.removeSource(sourceRepo);
                         }
                         destinationRepo.setValue(listResource);
+                        if(listResource.data != null && type == Fetch.GeoLocation)
+                            _currentLocationWeatherCity.postValue(listResource.data.get(listResource.data.size()-1));
                     }
                     else{
                         destinationRepo.removeSource(sourceRepo);

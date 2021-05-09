@@ -22,7 +22,7 @@ public interface WeatherDao {
     void insertForecastList(List<WeatherForecast> WeatherForecast);
 
 
-    @Query("SELECT * FROM WeatherForecast")
+    @Query("SELECT * FROM WeatherForecast order by timestamp ASC")
     LiveData<List<WeatherForecast>> loadForecast();
 
     @Query("DELETE FROM WeatherForecast")

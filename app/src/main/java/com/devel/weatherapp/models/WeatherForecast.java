@@ -45,11 +45,15 @@ public class WeatherForecast implements Comparable<WeatherForecast>{
     @Expose
     private Integer cnt;
 
+    @ColumnInfo(name = "list")
     @TypeConverters(ListConverter.class)
     @SerializedName("list")
     @Expose
     private List<WeatherList> dailyForecasts = null;
 
+    @ColumnInfo(name = "timestamp")
+    @SerializedName("timestamp")
+    @Expose
     private Long timestamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());;
 
 

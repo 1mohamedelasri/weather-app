@@ -2,14 +2,19 @@ package com.devel.weatherapp.view;
 
 import android.animation.AnimatorInflater;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,24 +24,25 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
 import com.devel.weatherapp.R;
 import com.devel.weatherapp.models.Tuple;
+import com.devel.weatherapp.models.Weather;
 import com.devel.weatherapp.models.WeatherForecast;
+import com.devel.weatherapp.models.WeatherList;
 import com.devel.weatherapp.repositories.WeatherRepository;
+import com.devel.weatherapp.utils.AlarmReceiver;
 import com.devel.weatherapp.utils.Constants;
 import com.devel.weatherapp.utils.Resource;
 import com.devel.weatherapp.utils.UtilityHelper;
 import com.devel.weatherapp.view.adapters.IntroViewPagerAdapter;
 import com.devel.weatherapp.viewmodels.WeatherViewModel;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 import com.yayandroid.locationmanager.base.LocationBaseActivity;
 import com.yayandroid.locationmanager.configuration.Configurations;
 import com.yayandroid.locationmanager.configuration.LocationConfiguration;
@@ -47,7 +53,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends LocationBaseActivity {
@@ -62,8 +69,9 @@ public class MainActivity extends LocationBaseActivity {
     private ImageView searchButton;
     private ImageView baselineBtn;
     private WeatherRepository weatherRepository;
+    private AlarmReceiver alarm;
 
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,24 +181,14 @@ public class MainActivity extends LocationBaseActivity {
 */
         //onTheTest();
 
+        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
 
-// Create an explicit intent for an Activity in your app
-        Intent intent = new Intent(this, SplashActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        exec.schedule(new Runnable() {
+            public void run() {
+                mWeatherListViewModel.setCurrentLocationCity(new WeatherForecast());
+            }
+        }, 1, TimeUnit.SECONDS);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "22211221")
-                .setSmallIcon(R.drawable.app_icon)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                // Set the intent that will fire when the user taps the notification
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        // notificationId is a unique int for each notification that you must define
-        notificationManager.notify(211211, builder.build());
 
     }
 
@@ -249,17 +247,29 @@ public class MainActivity extends LocationBaseActivity {
                 introViewPagerAdapter.notifyChange();
             }
         });
-    }
 
-    public static void hideSystemUI(Activity activity) {
-        View decorView = activity.getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        mWeatherListViewModel.getCurrentLocationCity().observe(this, new Observer<WeatherForecast>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onChanged(WeatherForecast newWeather) {
+                if(newWeather != null &&  newWeather.getDailyForecasts() !=null && newWeather.getDailyForecasts().size() > 2) {
+                    if(newWeather.getDailyForecasts().get(0).getWeathers().get(0).getId() != newWeather.getDailyForecasts().get(1).getWeathers().get(0).getId()) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.HOUR_OF_DAY, 15);
+                        calendar.set(Calendar.MINUTE, 5);
+                        calendar.set(Calendar.SECOND, 0);
+                        Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
+                        Gson gson = new Gson();
+                        String myJson = gson.toJson(newWeather);
+                        intent1.putExtra("newWeather", myJson);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+                        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
+                        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+                    }
+                }
+            }
+        });
     }
 
 
@@ -360,5 +370,39 @@ public class MainActivity extends LocationBaseActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void sendNotificaiton(WeatherForecast newWeather) {
+
+        StringBuilder str = new StringBuilder();
+        WeatherList forcast = newWeather.getDailyForecasts().get(0);
+        str.append(UtilityHelper.formatTemperature(this,forcast.getMain().getTemp(),true));
+        str.append(" at");
+        str.append(UtilityHelper.formatHourly(forcast.getDt()));
+        str.append(" in ");
+        str.append(newWeather.getCity().getName());
+
+        int notifyID = 1;
+        String CHANNEL_ID = "my_channel_01";// The id of the channel.
+        CharSequence name = "test"; // The user-visible name of the channel.
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+// Create a notification and set the notification channel.
+        Notification notification = new Notification.Builder(MainActivity.this)
+                .setContentTitle(str)
+                .setContentText(UtilityHelper.computeNotificaitonMessage(forcast.getWeathers().get(0).getId()))
+                .setSmallIcon(R.drawable.app_icon)
+                .setChannelId(CHANNEL_ID)
+                .build();
+
+
+        // notificationId is a unique int for each notification that you must define
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.createNotificationChannel(mChannel);
+
+// Issue the notification.
+        mNotificationManager.notify(notifyID , notification);
+
+    }
 
 }

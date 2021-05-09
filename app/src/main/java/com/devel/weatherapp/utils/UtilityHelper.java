@@ -172,6 +172,36 @@ public class UtilityHelper {
         return -1;
     }
 
+    public static String computeNotificaitonMessage(Long weatherId) {
+        // Based on weather code data found at:
+        // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
+
+
+        if (weatherId >= 200 && weatherId <= 232) {
+            return "The weather is stormy, wear your jacket "; // storm
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return "the weather is rainy, don't forget to take your umbrella "; // rain
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return "the weather is rainy, don't forget to take your umbrella"; // rain
+        } else if (weatherId == 511) {
+            return "The weather is snowy, wear your jacket "; //
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return "the weather is rainy, don't forget to take your umbrella"; // rain
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return "The weather is snowy, wear your jacket "; // snow
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return "The weather is foggier, be careful when driving "; // fog
+        } else if (weatherId == 761 || weatherId == 781) {
+            return "The weather is stormy, wear your jacket "; // storm
+        } else if (weatherId == 800) {
+            return "The weather is sunny, enjoy your time going out"; // sunny
+        } else if (weatherId == 801) {
+            return "The weather is cool, enjoy your time going out "; // cool
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return "The weather is cloudy today"; // bad
+        }
+        return "";
+    }
 
     public static int getCardViewColorResourceForNightCondition(Long weatherId) {
         // Based on weather code data found at:

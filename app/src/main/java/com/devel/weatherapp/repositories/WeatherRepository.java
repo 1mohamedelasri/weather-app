@@ -29,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WeatherRepository {
 
-    private static final String TAG = "RecipeRepository";
+    private static final String TAG = "weatherRepository";
 
     private static WeatherRepository instance;
     private WeatherDao weatherDao;
