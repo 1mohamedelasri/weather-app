@@ -171,7 +171,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                     viewHolderAirQuality.o3.setText(String.valueOf(airQuality.getAirList().get(0).component.o3));
                                     viewHolderAirQuality.co.setText(String.valueOf(airQuality.getAirList().get(0).component.co));
                                     //qualityTextView.setText(airQuality.getAirList().get(0).main.getAqi());
-
+                                    viewHolderAirQuality.publishdate.setText(UtilityHelper.formatDate(airQuality.getAirList().get(0).dt));
                                     qualityColor(viewHolderAirQuality.qualityTextView,airQuality.getAirList().get(0).main.getAqi());
                                     viewHolderAirQuality.qualityTextView.setText(whichQuality(airQuality.getAirList().get(0).main.getAqi()));
 
@@ -271,6 +271,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             private TextView o3;
             private TextView co;
             private TextView qualityTextView;
+            private TextView publishdate;
 
             public ViewHolderAirQuality(View itemView) {
                 super(itemView);
@@ -281,6 +282,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 o3      = itemView.findViewById(R.id.o3);
                 co      = itemView.findViewById(R.id.co);
                 qualityTextView = itemView.findViewById(R.id.qualityTextView);
+                publishdate = itemView.findViewById(R.id.publishdate);
                 itemView.setBackgroundResource(UtilityHelper.getCardViewColorResourceForWeatherCondition(favouriteItem.getDailyForecasts().get(0).getWeathers().get(0).getId()));
             }
         }
