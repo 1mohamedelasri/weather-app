@@ -1,5 +1,4 @@
 package com.devel.weatherapp.models;
-
 import com.google.gson.annotations.SerializedName;
 
 public class Sys {

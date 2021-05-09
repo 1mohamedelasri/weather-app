@@ -164,11 +164,11 @@ public class City {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (!(o instanceof City)) return false;
+        if(o == null) return false;
+        if(!(o instanceof City) ) return false;
 
         City other = (City) o;
-        if (this.id == other.id && name.equals(other.name)) return true;
+        if(this.id == other.id && name.equals(other.name))      return true;
 
         return false;
 

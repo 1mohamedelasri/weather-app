@@ -23,8 +23,8 @@ public class SearchFragment extends Fragment {
 
     private WeatherForecast favouriteItem;
     private TextView searchResCity;
-    private TextView searchResCountry;
-    private TextView searchTempText;
+    private TextView    searchResCountry ;
+    private TextView    searchTempText ;
     private ImageButton addCityToFav;
     private ImageView searchWeatherIcon;
     private WeatherViewModel mWeatherListViewModel;
@@ -35,22 +35,22 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragement_notfound, container, false);
-        switch (status) {
+        switch (status){
             case FOUND:
-                view = inflater.inflate(R.layout.fragement_search, container, false);
+                 view = inflater.inflate(R.layout.fragement_search, container, false);
 
                 addCityToFav = view.findViewById(R.id.AddCityToFav);
                 searchResCity = view.findViewById(R.id.searchCityTextView);
                 searchResCountry = view.findViewById(R.id.searchCountyTextView);
                 searchWeatherIcon = view.findViewById(R.id.searchWeatherIcon);
-                searchTempText = view.findViewById(R.id.searchTempTextView);
+                searchTempText =  view.findViewById(R.id.searchTempTextView);
                 mWeatherListViewModel = WeatherViewModel.getInstance(getActivity().getApplication());
                 addCityToFav.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
                                                         mWeatherListViewModel.fetchbyCity();
                                                         getParentFragmentManager().popBackStack();
-                                                        mWeatherListViewModel.setlastAddedItemIndex(new Tuple(Tuple.Source.SEARCH, mWeatherListViewModel.getDataSource().getValue().data.size() - 1));
+                                                        mWeatherListViewModel.setlastAddedItemIndex(new Tuple(Tuple.Source.SEARCH,mWeatherListViewModel.getDataSource().getValue().data.size()-1));
                                                         getActivity().finish();
                                                     }
                                                 }
@@ -58,11 +58,11 @@ public class SearchFragment extends Fragment {
 
                 this.searchResCity.setText((CharSequence) favouriteItem.getCity().getName());
                 this.searchResCountry.setText(UtilityHelper.getCountryName(favouriteItem.getCity().getCountry()));
-                this.searchTempText.setText(UtilityHelper.formatTemperature(context, favouriteItem.getDailyForecasts().get(0).getMain().getTemp(), true));
+                this.searchTempText.setText(UtilityHelper.formatTemperature(context,favouriteItem.getDailyForecasts().get(0).getMain().getTemp(),true));
 
                 break;
             case NOT_FOUND:
-                view = inflater.inflate(R.layout.fragement_notfound, container, false);
+                 view = inflater.inflate(R.layout.fragement_notfound, container, false);
                 break;
             case NONE:
                 view = inflater.inflate(R.layout.fragment_none, container, false);
@@ -72,7 +72,7 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    public void setFavouriteItem(WeatherForecast favouriteItem) {
+    public void setFavouriteItem( WeatherForecast favouriteItem){
         this.favouriteItem = favouriteItem;
     }
 
@@ -81,7 +81,7 @@ public class SearchFragment extends Fragment {
         this.status = status;
     }
 
-    public void setContext(Context cx) {
+    public void setContext(Context cx){
         this.context = cx;
     }
 

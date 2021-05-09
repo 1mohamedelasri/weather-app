@@ -18,8 +18,7 @@ public class ListConverter {
             return Collections.emptyList();
         }
 
-        Type listType = new TypeToken<List<WeatherList>>() {
-        }.getType();
+        Type listType = new TypeToken<List<WeatherList>>() {}.getType();
         return new Gson().fromJson(data, listType);
     }
 

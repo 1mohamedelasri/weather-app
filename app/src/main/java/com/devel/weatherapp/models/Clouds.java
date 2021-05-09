@@ -23,16 +23,16 @@ public class Clouds {
     public Clouds() {
     }
 
-    public Clouds(int all) {
-        this.all = all;
-    }
-
     public long getCloudsId() {
         return cloudsId;
     }
 
     public void setCloudsId(long cloudsId) {
         this.cloudsId = cloudsId;
+    }
+
+    public Clouds(int all) {
+        this.all = all;
     }
 
     public int getAll() {

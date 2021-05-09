@@ -12,21 +12,24 @@ import java.util.concurrent.Executors;
 public class AppExecutors {
 
     private static AppExecutors instance;
-    private final Executor mDiskIO = Executors.newSingleThreadExecutor();
-    private final Executor mMainThreadExecutor = new MainThreadExecutor();
 
-    public static AppExecutors getInstance() {
-        if (instance == null) {
+    public static AppExecutors getInstance(){
+        if(instance == null){
             instance = new AppExecutors();
         }
         return instance;
     }
 
-    public Executor diskIO() {
+    private final Executor mDiskIO = Executors.newSingleThreadExecutor();
+
+    private final Executor mMainThreadExecutor = new MainThreadExecutor();
+
+
+    public Executor diskIO(){
         return mDiskIO;
     }
 
-    public Executor mainThread() {
+    public Executor mainThread(){
         return mMainThreadExecutor;
     }
 

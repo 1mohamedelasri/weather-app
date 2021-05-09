@@ -19,9 +19,9 @@ import com.devel.weatherapp.viewmodels.WeatherViewModel;
 import java.util.List;
 
 public class FavouriteActivity extends AppCompatActivity {
-    private final String TAG = "FavouriteActivity";
-    public FavouritesAdapter recyclerAdapter;
+    private final  String TAG = "FavouriteActivity";
     private RecyclerView recyclerView;
+    public FavouritesAdapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private WeatherViewModel mViewModel;
 
@@ -30,36 +30,36 @@ public class FavouriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
         getSupportActionBar().hide();
-        mViewModel = WeatherViewModel.getInstance(getApplication());
+        mViewModel  = WeatherViewModel.getInstance(getApplication());
 
         recyclerView = (RecyclerView) findViewById(R.id.FavRecyclerView);
         layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerAdapter = new FavouritesAdapter(FavouriteActivity.this, mViewModel);
+        recyclerAdapter = new FavouritesAdapter(FavouriteActivity.this,mViewModel);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setHasFixedSize(true);
 
         mViewModel.getDataSource().observe(this, new Observer<Resource<List<WeatherForecast>>>() {
             @Override
             public void onChanged(@Nullable Resource<List<WeatherForecast>> listResource) {
-                if (listResource != null) {
+                if(listResource != null){
                     Log.d(TAG, "onChanged: status: " + listResource.status);
 
-                    if (listResource.data != null) {
-                        switch (listResource.status) {
-                            case LOADING: {
+                    if(listResource.data != null){
+                        switch (listResource.status){
+                            case LOADING:{
                             }
 
-                            case ERROR: {
-                                Log.e(TAG, "onChanged: cannot refresh the cache.");
-                                Log.e(TAG, "onChanged: ERROR message: " + listResource.message);
+                            case ERROR:{
+                                Log.e(TAG, "onChanged: cannot refresh the cache." );
+                                Log.e(TAG, "onChanged: ERROR message: " + listResource.message );
                                 Log.e(TAG, "onChanged: status: ERROR, #recipes: " + listResource.data.size());
                                 recyclerAdapter.setFavouriteItems(listResource.data);
 
                                 break;
                             }
 
-                            case SUCCESS: {
+                            case SUCCESS:{
                                 Log.d(TAG, "onChanged: cache has been refreshed.");
                                 Log.d(TAG, "onChanged: status: SUCCESS, #Recipes: " + listResource.data.size());
                                 recyclerAdapter.setFavouriteItems(listResource.data);

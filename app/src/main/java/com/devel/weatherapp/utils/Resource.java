@@ -37,16 +37,16 @@ public class Resource<T> {
     }
 
     public void delete(WeatherForecast weatherForecast) {
-        ((List) this.data).remove(weatherForecast);
+        ((List)this.data).remove(weatherForecast);
     }
 
     public void insert(WeatherForecast weatherForecast) {
-        ((List) this.data).add(weatherForecast);
+        ((List)this.data).add(weatherForecast);
     }
 
     public List getSourceData() {
-        return ((List) this.data);
+        return ((List)this.data);
     }
 
-    public enum Status {SUCCESS, ERROR, LOADING}
+    public enum Status { SUCCESS, ERROR, LOADING}
 }

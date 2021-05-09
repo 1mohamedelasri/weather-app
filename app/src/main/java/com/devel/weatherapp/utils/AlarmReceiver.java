@@ -11,8 +11,10 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.devel.weatherapp.R;
+import com.devel.weatherapp.models.Weather;
 import com.devel.weatherapp.models.WeatherForecast;
 import com.devel.weatherapp.models.WeatherList;
+import com.devel.weatherapp.view.MainActivity;
 import com.google.gson.Gson;
 
 public class AlarmReceiver extends BroadcastReceiver {
@@ -27,7 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         StringBuilder str = new StringBuilder();
         WeatherList forcast = newWeather.getDailyForecasts().get(0);
-        str.append(UtilityHelper.formatTemperature(context, forcast.getMain().getTemp(), true));
+        str.append(UtilityHelper.formatTemperature(context,forcast.getMain().getTemp(),true));
         str.append(" at");
         str.append(UtilityHelper.formatHourly(forcast.getDt()));
         str.append(" in ");
@@ -53,7 +55,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         mNotificationManager.createNotificationChannel(mChannel);
 
 // Issue the notification.
-        mNotificationManager.notify(notifyID, notification);
+        mNotificationManager.notify(notifyID , notification);
 
 
     }

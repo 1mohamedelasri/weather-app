@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Entity
-public class WeatherForecast implements Comparable<WeatherForecast> {
+public class WeatherForecast implements Comparable<WeatherForecast>{
 
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = false)
@@ -54,8 +54,9 @@ public class WeatherForecast implements Comparable<WeatherForecast> {
     @ColumnInfo(name = "timestamp")
     @SerializedName("timestamp")
     @Expose
-    private Long timestamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-    ;
+    private Long timestamp = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());;
+
+
 
 
     public City getCity() {
@@ -116,22 +117,22 @@ public class WeatherForecast implements Comparable<WeatherForecast> {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (!(o instanceof WeatherForecast)) return false;
+        if(o == null) return false;
+        if(!(o instanceof WeatherForecast) ) return false;
 
         WeatherForecast other = (WeatherForecast) o;
-        if (this.id != other.id && !city.equals(other.city)) return false;
+        if(this.id != other.id && !city.equals(other.city))      return false;
 
         return true;
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public List<WeatherList> getConvertedDaily() {
+    public List<WeatherList> getConvertedDaily(){
 
         List<WeatherList> dailyWeather = new ArrayList<>();
         final Map<Integer, List<WeatherList>> listMap =
-                this.getDailyForecasts().stream().collect(Collectors.groupingBy(item -> UtilityHelper.timestampToDate(item.getDt()).getDay()));
+                this.getDailyForecasts().stream().collect( Collectors.groupingBy(item -> UtilityHelper.timestampToDate(item.getDt()).getDay()));
 
         Set<Integer> keys = listMap.keySet();
 

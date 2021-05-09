@@ -49,11 +49,11 @@ public class FavouriteItem {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (!(o instanceof FavouriteItem)) return false;
+        if(o == null) return false;
+        if(!(o instanceof FavouriteItem) ) return false;
 
         FavouriteItem other = (FavouriteItem) o;
-        if (this.id != other.id && !city.equals(other.city)) return false;
+        if(this.id != other.id && !city.equals(other.city))      return false;
 
         return true;
 

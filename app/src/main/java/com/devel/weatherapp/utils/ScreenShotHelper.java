@@ -16,10 +16,10 @@ public class ScreenShotHelper {
         return bitmap;
     }
 
-    public static void store(Bitmap bm, String fileName) {
+    public static void store(Bitmap bm, String fileName){
         final String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots";
         File dir = new File(dirPath);
-        if (!dir.exists())
+        if(!dir.exists())
             dir.mkdirs();
         File file = new File(dirPath, fileName);
         try {

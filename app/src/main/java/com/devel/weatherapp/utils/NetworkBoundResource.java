@@ -27,7 +27,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
         init();
     }
 
-    private void init() {
+    private void init(){
 
         // update LiveData for loading status
         results.setValue((Resource<CacheObject>) Resource.loading(null));
@@ -41,10 +41,11 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
                 results.removeSource(dbSource);
 
-                if (shouldFetch(cacheObject)) {
+                if(shouldFetch(cacheObject)){
                     // get data from the network
                     fetchFromNetwork(dbSource);
-                } else {
+                }
+                else{
                     results.addSource(dbSource, new Observer<CacheObject>() {
                         @Override
                         public void onChanged(@Nullable CacheObject cacheObject) {
@@ -62,10 +63,9 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
      * 3) stop observing the local db
      * 4) insert new data into local db
      * 5) begin observing local db again to see the refreshed data from network
-     *
      * @param dbSource
      */
-    private void fetchFromNetwork(final LiveData<CacheObject> dbSource) {
+    private void fetchFromNetwork(final LiveData<CacheObject> dbSource){
 
         Log.d(TAG, "fetchFromNetwork: called.");
 
@@ -92,7 +92,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                        3) ApiEmptyResponse
                  */
 
-                if (requestObjectApiResponse instanceof ApiResponse.ApiSuccessResponse) {
+                if(requestObjectApiResponse instanceof ApiResponse.ApiSuccessResponse){
                     Log.d(TAG, "onChanged: ApiSuccessResponse.");
 
                     appExecutors.diskIO().execute(new Runnable() {
@@ -100,7 +100,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                         public void run() {
 
                             // save the response to the local db
-                            saveCallResult((RequestObject) processResponse((ApiResponse.ApiSuccessResponse) requestObjectApiResponse));
+                            saveCallResult((RequestObject) processResponse((ApiResponse.ApiSuccessResponse)requestObjectApiResponse));
 
                             appExecutors.mainThread().execute(new Runnable() {
                                 @Override
@@ -115,7 +115,8 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                             });
                         }
                     });
-                } else if (requestObjectApiResponse instanceof ApiResponse.ApiEmptyResponse) {
+                }
+                else if(requestObjectApiResponse instanceof ApiResponse.ApiEmptyResponse){
                     Log.d(TAG, "onChanged: ApiEmptyResponse");
                     appExecutors.mainThread().execute(new Runnable() {
                         @Override
@@ -128,7 +129,8 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
                             });
                         }
                     });
-                } else if (requestObjectApiResponse instanceof ApiResponse.ApiErrorResponse) {
+                }
+                else if(requestObjectApiResponse instanceof ApiResponse.ApiErrorResponse){
                     Log.d(TAG, "onChanged: ApiErrorResponse.");
                     results.addSource(dbSource, new Observer<CacheObject>() {
                         @Override
@@ -146,27 +148,27 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
         });
     }
 
-    private CacheObject processResponse(ApiResponse.ApiSuccessResponse response) {
+    private CacheObject processResponse(ApiResponse.ApiSuccessResponse response){
         return (CacheObject) response.getBody();
     }
 
-    private void removeValue(Resource<CacheObject> newValue) {
-        if (results.getValue() != newValue) {
+    private void removeValue(Resource<CacheObject> newValue){
+        if(results.getValue() != newValue){
             results.setValue(newValue);
         }
     }
 
-    private void setValue(Resource<CacheObject> newValue) {
-        if (results.getValue() != newValue) {
+    private void setValue(Resource<CacheObject> newValue){
+        if(results.getValue() != newValue){
             results.setValue(newValue);
         }
     }
 
-    private void addValue(WeatherForecast weatherForecast) {
+    private void addValue(WeatherForecast weatherForecast){
         results.getValue().insert(weatherForecast);
     }
 
-    private void removeValue(WeatherForecast weatherForecast) {
+    private void removeValue(WeatherForecast weatherForecast){
         results.getValue().delete(weatherForecast);
     }
 
@@ -180,22 +182,18 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
     protected abstract boolean shouldFetch(@Nullable CacheObject data);
 
     // Called to get the cached data from the database.
-    @NonNull
-    @MainThread
+    @NonNull @MainThread
     protected abstract LiveData<CacheObject> loadFromDb();
 
     // Called to create the API call.
-    @NonNull
-    @MainThread
+    @NonNull @MainThread
     protected abstract LiveData<ApiResponse<RequestObject>> createCall();
 
     // Returns a LiveData object that represents the resource that's implemented
     // in the base class.
-    public final LiveData<Resource<CacheObject>> getAsLiveData() {
+    public final LiveData<Resource<CacheObject>> getAsLiveData(){
         return results;
-    }
-
-    ;
+    };
 }
 
 

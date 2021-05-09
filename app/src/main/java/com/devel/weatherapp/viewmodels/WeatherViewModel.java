@@ -23,19 +23,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WeatherViewModel extends AndroidViewModel {
+public class WeatherViewModel extends AndroidViewModel  {
 
+    private String TAG ="WeatherViewModel";
     public static final String QUERY_EXHAUSTED = "No more results.";
+
     /**
      * Instantiate the weather repository.
      */
     private static WeatherViewModel instance;
-    private final MutableLiveData<WeatherForecast> _searchedCity = new MutableLiveData<>();
-    private String TAG = "WeatherViewModel";
+
+
     /**
      * Observables data declarations.
      */
     private WeatherRepository mWeatherRepository;
+    private final MutableLiveData<WeatherForecast> _searchedCity= new MutableLiveData<>();
     private MediatorLiveData<Resource<List<WeatherForecast>>> _dataSource = new MediatorLiveData<>();
     private MutableLiveData<AirQuality> _airQuality = new MutableLiveData<>();
     private MutableLiveData<Tuple> _lastAddedItemIndex = new MutableLiveData<>();
@@ -45,7 +48,16 @@ public class WeatherViewModel extends AndroidViewModel {
     private boolean isPerformingQuery;
     private boolean cancelRequest;
     private long requestStartTime;
-    private AirQuality obj;
+    private enum Fetch {GeoLocation,City    }
+
+    // Observables
+    public LiveData<Resource<List<WeatherForecast>>> getDataSource(){
+        return _dataSource;
+    }
+
+    public LiveData<AirQuality> getAirQuality(){
+        return _airQuality;
+    }
 
     public WeatherViewModel(@NonNull Application application) {
         super(application);
@@ -57,15 +69,6 @@ public class WeatherViewModel extends AndroidViewModel {
             instance = new WeatherViewModel(application);
         }
         return instance;
-    }
-
-    // Observables
-    public LiveData<Resource<List<WeatherForecast>>> getDataSource() {
-        return _dataSource;
-    }
-
-    public LiveData<AirQuality> getAirQuality() {
-        return _airQuality;
     }
 
     public LiveData<WeatherForecast> searchedResult() {
@@ -81,14 +84,14 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     public void setCurrentLocationCity(WeatherForecast weather) {
-        _currentLocationWeatherCity.postValue(weather);
+         _currentLocationWeatherCity.postValue(weather);
     }
 
     public void setlastAddedItemIndex(Tuple value) {
-        _lastAddedItemIndex.postValue(value);
+         _lastAddedItemIndex.postValue(value);
     }
 
-    public void insertInFavourtieItems(WeatherForecast wf) {
+    public void insertInFavourtieItems(WeatherForecast wf){
        /* for(WeatherForecast ele : this.getFavourtieItems())
             if(ele.equals(wf)) return;
 
@@ -96,7 +99,7 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
 
-    public void searchWeatherByCity(String city, String apiKey) {
+    public void searchWeatherByCity(String city , String apiKey) {
 
         mWeatherRepository = WeatherRepository.getInstance(getApplication());
 
@@ -116,32 +119,32 @@ public class WeatherViewModel extends AndroidViewModel {
         });
     }
 
-    public void fetchbyCity() {
+    public void fetchbyCity(){
         final LiveData<Resource<List<WeatherForecast>>> repositorySource = mWeatherRepository.fetchForecast(_searchedCity.getValue().getCity().getName());
-        fetchWithCaching(_dataSource, repositorySource, Fetch.City);
+        fetchWithCaching(_dataSource, repositorySource,Fetch.City);
     }
 
-    public void fetchbyLocation(String lat, String lon) {
-        final LiveData<Resource<List<WeatherForecast>>> repositorySource = mWeatherRepository.fetchForecastByLocation(lat, lon);
+    public void fetchbyLocation(String lat, String lon){
+        final LiveData<Resource<List<WeatherForecast>>> repositorySource = mWeatherRepository.fetchForecastByLocation(lat,lon);
         fetchWithCaching(_dataSource, repositorySource, Fetch.GeoLocation);
     }
 
-    public void fetchWithCaching(MediatorLiveData<Resource<List<WeatherForecast>>> destinationRepo, LiveData<Resource<List<WeatherForecast>>> sourceRepo, Fetch type) {
+    public void fetchWithCaching(MediatorLiveData<Resource<List<WeatherForecast>>> destinationRepo, LiveData<Resource<List<WeatherForecast>>> sourceRepo,Fetch type){
         requestStartTime = System.currentTimeMillis();
         cancelRequest = false;
         isPerformingQuery = true;
         destinationRepo.addSource(sourceRepo, new Observer<Resource<List<WeatherForecast>>>() {
             @Override
             public void onChanged(@Nullable Resource<List<WeatherForecast>> listResource) {
-                if (!cancelRequest) {
-                    if (listResource != null) {
-                        if (listResource.status == Resource.Status.SUCCESS) {
+                if(!cancelRequest){
+                    if(listResource != null){
+                        if(listResource.status == Resource.Status.SUCCESS){
                             Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds.");
                             Log.d(TAG, "onChanged: " + listResource.data);
 
                             isPerformingQuery = false;
-                            if (listResource.data != null) {
-                                if (listResource.data.size() == 0) {
+                            if(listResource.data != null){
+                                if(listResource.data.size() == 0 ){
                                     Log.d(TAG, "onChanged: query is exhausted...");
                                     destinationRepo.setValue(
                                             new Resource<List<WeatherForecast>>(
@@ -154,21 +157,27 @@ public class WeatherViewModel extends AndroidViewModel {
                                 }
                             }
                             destinationRepo.removeSource(sourceRepo);
-                        } else if (listResource.status == Resource.Status.ERROR) {
+                        }
+                        else if(listResource.status == Resource.Status.ERROR){
                             Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds.");
                             isPerformingQuery = false;
-                            if (listResource.message.equals(QUERY_EXHAUSTED)) {
+                            if(listResource.message.equals(QUERY_EXHAUSTED)){
                                 isQueryExhausted = true;
                             }
                             destinationRepo.removeSource(sourceRepo);
                         }
                         destinationRepo.setValue(listResource);
-                        if (listResource.data != null && type == Fetch.GeoLocation)
-                            _currentLocationWeatherCity.postValue(listResource.data.get(listResource.data.size() - 1));
-                    } else {
+                        if(listResource.data != null && type == Fetch.GeoLocation) {
+                            int  index = listResource.data.size()-1;
+                            if(index > 0 )
+                            _currentLocationWeatherCity.postValue(listResource.data.get(index));
+                        }
+                    }
+                    else{
                         destinationRepo.removeSource(sourceRepo);
                     }
-                } else {
+                }
+                else{
                     destinationRepo.removeSource(sourceRepo);
                 }
             }
@@ -176,18 +185,19 @@ public class WeatherViewModel extends AndroidViewModel {
 
     }
 
-    public void dropFravourtieItem(WeatherForecast favouriteItem) {
+    public void dropFravourtieItem(WeatherForecast favouriteItem){
         mWeatherRepository.dropFravourtieItem(favouriteItem);
     }
 
-    public Call<AirQuality> getAirQuality(String lat, String lon) {
+    private AirQuality obj;
+    public Call<AirQuality> getAirQuality(String lat , String lon) {
 
         mWeatherRepository = WeatherRepository.getInstance(getApplication());
-        final Call<AirQuality> call = mWeatherRepository.getAirQuality(lat, lon);
+        final Call<AirQuality> call = mWeatherRepository.getAirQuality(lat,lon);
         call.enqueue(new Callback<AirQuality>() {
             @Override
             public void onResponse(Call<AirQuality> call, Response<AirQuality> response) {
-                if (response.body() != null) {
+                if(response.body() != null) {
                     obj = response.body();
                     _airQuality.postValue(response.body());
                 }
@@ -197,12 +207,10 @@ public class WeatherViewModel extends AndroidViewModel {
             @Override
             public void onFailure(Call<AirQuality> call, Throwable t) {
                 _airQuality.postValue(null);
-                Log.d("getAirQuality", t.getMessage());
+                Log.d("getAirQuality",t.getMessage());
             }
         });
         return call;
     }
-
-    private enum Fetch {GeoLocation, City}
 
 }
