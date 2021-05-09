@@ -145,7 +145,6 @@ public class UtilityHelper {
         // Based on weather code data found at:
         // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
 
-
         if (weatherId >= 200 && weatherId <= 232) {
             return R.drawable.corners_bg_cardview;
         } else if (weatherId >= 300 && weatherId <= 321) {
